@@ -1,9 +1,12 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import LoginForm from './LoginForm';
 
-export default function index() {
+// type Props = { searchParams: { returnTo?: string | string[] } };
+
+export default function Login() {
   return (
     <View>
-      <Text>This is your login page</Text>
+      <LoginForm />
     </View>
   );
 }
