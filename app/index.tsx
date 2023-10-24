@@ -54,6 +54,16 @@ export default function App() {
         <Text>Profile</Text>
         {/* </Pressable> */}
       </Link>
+      <Link href="/registration" asChild style={styles.button}>
+        {/* <Pressable> */}
+        <Text>Register</Text>
+        {/* </Pressable> */}
+      </Link>
+      <Link href="/login" asChild style={styles.button}>
+        {/* <Pressable> */}
+        <Text>Login</Text>
+        {/* </Pressable> */}
+      </Link>
       <StatusBar style="auto" />
     </View>
   );
