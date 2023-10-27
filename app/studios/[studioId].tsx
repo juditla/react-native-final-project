@@ -2,6 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { Studio } from '../../types';
+import { apiDomain } from './';
 
 // import { apiDomain } from './';
 
@@ -12,7 +13,7 @@ export default function SingleStudio() {
 
   const getStudioById = async () => {
     try {
-      const response = await fetch('http://localhost:4000/studios/' + studioId);
+      const response = await fetch(`${apiDomain}/studios/${studioId}`);
       const json = await response.json();
       setStudio(json);
     } catch (error) {

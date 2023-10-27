@@ -2,6 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { Artist, Studio } from '../../types';
+import { apiDomain } from '../studios';
 
 // import { apiDomain } from './';
 
@@ -12,7 +13,7 @@ export default function SingleArtist() {
 
   const getArtistById = async () => {
     try {
-      const response = await fetch('http://localhost:4000/artists/' + artistId);
+      const response = await fetch(`${apiDomain}/artists/${artistId}`);
       const json = await response.json();
       setArtist(json);
     } catch (error) {
