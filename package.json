@@ -10,6 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "1.18.2",
     "@types/react-native": "~0.70.6",
     "expo": "~49.0.13",
     "expo-constants": "~14.4.2",
@@ -26,6 +27,7 @@
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.14",
     "eslint-config-upleveled": "^5.1.0",
+    "reactotron-react-native": "^5.0.3",
     "typescript": "^5.1.3"
   }
 }
