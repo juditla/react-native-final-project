@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import { Studio } from '../../types';
 import StudioItem from './StudioItem';
 
@@ -21,22 +21,6 @@ export default function Index() {
       console.error(error);
     }
   };
-
-  // const studioList = studios.map((studio) => {
-  //   return (
-  //     <View style={styles.container} key={`studio-${studio.id}`}>
-  //       <Text>{studio.name}</Text>
-  //       <Link
-  //         href={{
-  //           pathname: `/studios/${studio.id}`,
-  //           params: { id: studio.id },
-  //         }}
-  //       >
-  //         Go to studio
-  //       </Link>
-  //     </View>
-  //   );
-  // });
 
   useEffect(() => {
     getStudios()

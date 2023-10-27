@@ -1,21 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { useEffect } from 'react';
-import { View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
 import { apiDomain } from '../studios';
 import LoginForm from './LoginForm';
 
-// type Props = { searchParams: { returnTo?: string | string[] } };
-
 export default function Login() {
+  const [errorMessage, setErrorMessage] = useState('');
+  // get session from async storage
   const getSessionFromAsyncStorage = async () => {
     const jsonSessionFromAsyncStorage = await AsyncStorage.getItem('session');
-    console.log(jsonSessionFromAsyncStorage);
     return jsonSessionFromAsyncStorage != null
       ? JSON.parse(jsonSessionFromAsyncStorage)
       : null;
   };
-
+  // send token to check if there is a corresponding valid session in database
   const getValidDatabaseSession = async (token: string) => {
     const response = await fetch(`${apiDomain}/sessions`, {
       headers: { 'Content-Type': 'application/json' },
@@ -28,6 +27,7 @@ export default function Login() {
   useEffect(() => {
     getSessionFromAsyncStorage()
       .then((session) => {
+        // check if session is already expired
         const now = new Date();
         const isStoredSessionValid = session.expiresAt > now.toISOString();
         console.log('here', isStoredSessionValid);
@@ -37,10 +37,12 @@ export default function Login() {
             if (isStoredSessionValid && response.ok) {
               console.log('response', response.ok);
               router.push(`/artists`);
+            } else {
+              setErrorMessage('session not valid');
             }
           })
 
-          .catch((error) => console.log(error));
+          .catch((error) => setErrorMessage(error));
       })
       .catch(() => null);
   }, []);
@@ -58,6 +60,7 @@ export default function Login() {
 
   return (
     <View>
+      <Text>{errorMessage}</Text>
       <LoginForm />
     </View>
   );

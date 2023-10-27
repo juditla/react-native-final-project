@@ -13,9 +13,11 @@ export default function ArtistRegistrationForm() {
   const router = useRouter();
 
   async function handleArtistRegistration() {
+    // check if there is a valid session,
     const token = await getSessionFromAsyncStorage();
     if (!token) {
       console.log('no token', token);
+      router.push('/login');
     }
 
     const newArtist = {

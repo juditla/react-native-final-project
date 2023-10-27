@@ -18,6 +18,7 @@ export default function RegistrationForm() {
   const router = useRouter();
 
   async function handleRegistration() {
+    // create new user and send to database
     const newUser = {
       email,
       firstName,
@@ -38,6 +39,7 @@ export default function RegistrationForm() {
       if (!response.ok) {
         setErrorMessage(data.message);
       } else {
+        // if user could be created --> login, create session in database and set token in async storage
         const loginResponse = await fetch(`${apiDomain}/login`, {
           headers: { 'Content-Type': 'application/json' },
           method: 'POST',

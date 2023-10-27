@@ -1,18 +1,28 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export const deleteInvalidSessionFromAsyncStorage = async () => {
+  try {
+    await AsyncStorage.removeItem('session');
+  } catch (error) {
+    return console.log(error);
+  }
+};
+
 export const getSessionFromAsyncStorage = async () => {
   const jsonSessionFromAsyncStorage = await AsyncStorage.getItem('session');
   if (jsonSessionFromAsyncStorage != null) {
-    console.log('here');
     const session = JSON.parse(jsonSessionFromAsyncStorage);
-    console.log(session.sessionToken, Date.parse(session.expiresAt));
     const now = Date.now();
-    console.log(now);
-    return Date.parse(session.expiresAt) > now
-      ? session.sessionToken
-      : undefined;
+    // check if token is still valid
+    if (Date.parse(session.expiresAt) > now) {
+      return session.sessionToken;
+    } else {
+      // call delete session function if not valid but still in async storage
+      await deleteInvalidSessionFromAsyncStorage();
+      return undefined;
+    }
   } else {
-    console.log('there');
+    console.log('no valid session');
     return undefined;
   }
 };
