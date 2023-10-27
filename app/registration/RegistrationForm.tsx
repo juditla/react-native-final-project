@@ -1,6 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router/src/hooks';
 import { useState } from 'react';
-import { Button, Text, TextInput } from 'react-native';
+import { Button, Switch, Text, TextInput } from 'react-native';
 import { apiDomain } from '../studios';
 
 export default function RegistrationForm() {
@@ -9,25 +10,62 @@ export default function RegistrationForm() {
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [errors, setErrors] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isArtist, setIsArtist] = useState(false);
+
+  const toggleSwitch = () => setIsArtist((previousState) => !previousState);
 
   const router = useRouter();
 
   async function handleRegistration() {
+    const newUser = {
+      email,
+      firstName,
+      lastName,
+      password,
+      roleId: isArtist ? 1 : 2,
+    };
+
     const response = await fetch(`${apiDomain}/users`, {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
-      body: JSON.stringify({ email, firstName, lastName, password }),
+      body: JSON.stringify(newUser),
     });
 
-    const data = await response.json();
+    try {
+      const data = await response.json();
 
-    if ('error' in data) {
-      setErrors(data.error);
-      return;
+      if (!response.ok) {
+        setErrorMessage(data.message);
+      } else {
+        const loginResponse = await fetch(`${apiDomain}/login`, {
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await loginResponse.json();
+
+        try {
+          await AsyncStorage.setItem(
+            'session',
+            JSON.stringify({
+              sessionToken: data.token,
+              expiresAt: data.expiresAt,
+            }),
+          );
+          if (isArtist) {
+            router.push(`/registration/artist`);
+          } else {
+            router.push(`/artists`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
-    router.push(`/artists`);
-    // we may have in the future revalidatePath()
   }
   return (
     <>
@@ -77,15 +115,18 @@ export default function RegistrationForm() {
         keyboardType="visible-password"
         autoComplete="password"
       />
+      <Text>Do you want to register as an Artist?</Text>
+
+      <Text> No</Text>
+      <Switch onValueChange={toggleSwitch} value={isArtist} />
+      <Text> Yes</Text>
       <Button
         onPress={async () => await handleRegistration()}
         title="Register"
         color="#841584"
         accessibilityLabel="Register new user"
       />
-      {errors.map((error) => {
-        return <Text key={`error-${error}`}>{error}</Text>;
-      })}
+      <Text>{errorMessage}</Text>
     </>
   );
 }
