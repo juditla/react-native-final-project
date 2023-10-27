@@ -1,5 +1,8 @@
+import '../ReactotronConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -8,6 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { getSessionFromAsyncStorage } from '../util/session';
+import { apiDomain } from './studios';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,6 +31,18 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
+  useEffect(() => {
+    const getAllKeysFromStorage = async () => {
+      const allKeys = await AsyncStorage.getAllKeys();
+
+      for (const key of allKeys) {
+        const item = await AsyncStorage.getItem(key);
+        console.log(`key: ${key}, value: ${JSON.stringify(item)}`);
+      }
+    };
+    getAllKeysFromStorage().catch(() => null);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Stack.Screen
