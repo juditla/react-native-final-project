@@ -1,17 +1,16 @@
 import '../ReactotronConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Link, Stack } from 'expo-router';
+import { Link, router, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
+  Button,
   Pressable,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { getSessionFromAsyncStorage } from '../util/session';
 import { apiDomain } from './studios';
 
 const styles = StyleSheet.create({
@@ -31,6 +30,9 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // just for testing, shows what is currently in AsyncStorage
   useEffect(() => {
     const getAllKeysFromStorage = async () => {
       const allKeys = await AsyncStorage.getAllKeys();
@@ -42,6 +44,37 @@ export default function App() {
     };
     getAllKeysFromStorage().catch(() => null);
   }, []);
+
+  async function handleLogout() {
+    // get session & delete in database
+    try {
+      const sessionJson = await AsyncStorage.getItem('session');
+      const session = sessionJson != null ? JSON.parse(sessionJson) : null;
+
+      if (session) {
+        console.log('i am here', session);
+        const response = await fetch(`${apiDomain}/sessions`, {
+          headers: { 'Content-Type': 'application/json' },
+          method: 'DELETE',
+          body: JSON.stringify({ token: session.sessionToken }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          setErrorMessage(data.message);
+        } else {
+          router.push('/login');
+        }
+      }
+    } catch (error) {
+      console.log(JSON.stringify(error));
+    }
+    // delete session from AsyncStorage
+    try {
+      await AsyncStorage.removeItem('session');
+    } catch (error) {
+      return console.log(error);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -81,6 +114,13 @@ export default function App() {
         <Text>Login</Text>
         {/* </Pressable> */}
       </Link>
+      <Button
+        onPress={async () => await handleLogout()}
+        title="Logout"
+        color="#841584"
+        accessibilityLabel="Login"
+      />
+      <Text>{errorMessage}</Text>
       <StatusBar style="auto" />
     </View>
   );
