@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Button, Text, TextInput } from 'react-native';
@@ -11,7 +12,7 @@ type Props = {
 export default function LoginForm(props: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   async function handleLogin() {
     try {
@@ -20,12 +21,26 @@ export default function LoginForm(props: Props) {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
-
+      console.log('response', JSON.stringify(response, null, 2));
       const data = await response.json();
-
       console.log(data);
 
-      router.push(getSafeReturnToPath(props.returnTo) || `/artists`);
+      if (!response.ok) {
+        setErrorMessage(data.message);
+      } else {
+        try {
+          await AsyncStorage.setItem(
+            'session',
+            JSON.stringify({
+              sessionToken: data.token,
+              expiresAt: data.expiresAt,
+            }),
+          );
+          router.push(getSafeReturnToPath(props.returnTo) || `/artists`);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     } catch (error) {
       console.log(JSON.stringify(error));
     }
@@ -57,6 +72,7 @@ export default function LoginForm(props: Props) {
         color="#841584"
         accessibilityLabel="Login"
       />
+      <Text>{errorMessage}</Text>
     </>
   );
 }
