@@ -2,7 +2,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router/src/hooks';
 import { useState } from 'react';
 import { Button, Switch, Text, TextInput } from 'react-native';
+import { z } from 'zod';
 import { apiDomain } from '../studios';
+
+const registrationSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  firstName: z.string().min(3),
+  lastName: z.string().min(3),
+  roleId: z.number(),
+});
+
+const passwordForm = z
+  .object({
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+  });
 
 export default function RegistrationForm() {
   const [email, setEmail] = useState('');
@@ -27,46 +45,65 @@ export default function RegistrationForm() {
       roleId: isArtist ? 1 : 2,
     };
 
-    const response = await fetch(`${apiDomain}/users`, {
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
-      body: JSON.stringify(newUser),
-    });
-
+    // INPUT VALIDATION
+    // check if password & confirm password are the same
     try {
-      const data = await response.json();
+      passwordForm.safeParse({ password, confirmPassword });
+      console.log('validation passed');
+    } catch (err) {
+      setErrorMessage("The two passwords don't match");
+      console.log(err);
+      return;
+    }
+    // check if user input is correct & only create user with correct input
+    const validatedNewUser = registrationSchema.safeParse(newUser);
+    if (!validatedNewUser.success) {
+      console.log(validatedNewUser.error);
+      setErrorMessage(
+        'Please check your input: is your email in the right format? Is your password at least 8 characters long?',
+      );
+    } else {
+      const response = await fetch(`${apiDomain}/users`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        body: JSON.stringify(newUser),
+      });
 
-      if (!response.ok) {
-        setErrorMessage(data.message);
-      } else {
-        // if user could be created --> login, create session in database and set token in async storage
-        const loginResponse = await fetch(`${apiDomain}/login`, {
-          headers: { 'Content-Type': 'application/json' },
-          method: 'POST',
-          body: JSON.stringify({ email, password }),
-        });
+      try {
+        const data = await response.json();
 
-        const data = await loginResponse.json();
+        if (!response.ok) {
+          setErrorMessage(data.message);
+        } else {
+          // if user could be created --> login, create session in database and set token in async storage
+          const loginResponse = await fetch(`${apiDomain}/login`, {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            body: JSON.stringify({ email, password }),
+          });
 
-        try {
-          await AsyncStorage.setItem(
-            'session',
-            JSON.stringify({
-              sessionToken: data.token,
-              expiresAt: data.expiresAt,
-            }),
-          );
-          if (isArtist) {
-            router.push(`/registration/artist`);
-          } else {
-            router.push(`/artists`);
+          const data = await loginResponse.json();
+
+          try {
+            await AsyncStorage.setItem(
+              'session',
+              JSON.stringify({
+                sessionToken: data.token,
+                expiresAt: data.expiresAt,
+              }),
+            );
+            if (isArtist) {
+              router.push(`/registration/artist`);
+            } else {
+              router.push(`/artists`);
+            }
+          } catch (error) {
+            console.log(error);
           }
-        } catch (error) {
-          console.log(error);
         }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   }
   return (

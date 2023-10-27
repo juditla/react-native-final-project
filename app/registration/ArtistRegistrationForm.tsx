@@ -1,8 +1,15 @@
 import { useRouter } from 'expo-router/src/hooks';
 import { useState } from 'react';
 import { Button, Switch, Text, TextInput } from 'react-native';
+import { z } from 'zod';
 import { getSessionFromAsyncStorage } from '../../util/session';
 import { apiDomain } from '../studios';
+
+const artistRegistrationSchema = z.object({
+  name: z.string().min(3),
+  style: z.string().min(3),
+  description: z.string().min(10),
+});
 
 export default function ArtistRegistrationForm() {
   const [name, setName] = useState('');
@@ -26,23 +33,33 @@ export default function ArtistRegistrationForm() {
       description,
       token,
     };
-
-    const response = await fetch(`${apiDomain}/artists`, {
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
-      body: JSON.stringify(newArtist),
+    const validatedNewArtist = artistRegistrationSchema.safeParse({
+      name,
+      style,
+      description,
     });
+    if (!validatedNewArtist.success) {
+      setErrorMessage(
+        'Name & style must be at least 3 characters, your description should be  a minimum of 10 characters',
+      );
+    } else {
+      const response = await fetch(`${apiDomain}/artists`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        body: JSON.stringify(newArtist),
+      });
 
-    try {
-      const data = await response.json();
+      try {
+        const data = await response.json();
 
-      if (!response.ok) {
-        setErrorMessage(data.message);
-      } else {
-        router.push(`/artists`);
+        if (!response.ok) {
+          setErrorMessage(data.message);
+        } else {
+          router.push(`/artists`);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   }
   return (
