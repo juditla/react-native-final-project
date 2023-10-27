@@ -8,3 +8,11 @@ export type Studio = {
   longitude?: string;
   latitude?: string;
 };
+
+export type Artist = {
+  id: number;
+  name: string;
+  style: string;
+  description: string;
+  studioId?: number;
+};
