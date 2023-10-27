@@ -1,6 +1,6 @@
 import { Link, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { Artist } from '../../types';
 import { apiDomain } from '../studios';
 import ArtistItem from './ArtistItem';
@@ -45,6 +45,11 @@ export default function Index() {
       />
       <View>
         <Text>Artists</Text>
+        <Link href="/" asChild>
+          <Pressable>
+            <Text>Back</Text>
+          </Pressable>
+        </Link>
       </View>
       <FlatList
         data={artists}
