@@ -20,5 +20,5 @@ const returnToSchema = z.string().refine((value) => {
 export function getSafeReturnToPath(path: string | string[] | undefined) {
   const result = returnToSchema.safeParse(path);
   if (!result.success) return undefined;
-  return result.data as string;
+  return result.data;
 }

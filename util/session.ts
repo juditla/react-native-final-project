@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { apiDomain } from '../app/(tabs)/studios';
 
 export const deleteInvalidSessionFromAsyncStorage = async () => {
   try {
@@ -27,14 +28,20 @@ export const getSessionFromAsyncStorage = async () => {
   }
 };
 
-// const getValidDatabaseSession = async (token: string) => {
-//   const response = await fetch(`${apiDomain}/sessions`, {
-//     headers: { 'Content-Type': 'application/json' },
-//     method: 'POST',
-//     body: JSON.stringify({ token: token }),
-//   });
-//   return response;
-// };
+export const getValidDatabaseSession = async (token: string) => {
+  const response = await fetch(`${apiDomain}/sessions`, {
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    body: JSON.stringify({ token: token }),
+  });
+  if (response.ok) {
+    const userFromToken = await response.json();
+
+    return userFromToken;
+  } else {
+    return undefined;
+  }
+};
 
 // getSessionFromAsyncStorage()
 //   .then((session) => {
