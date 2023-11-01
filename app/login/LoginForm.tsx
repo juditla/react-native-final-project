@@ -1,10 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
-import { useState } from 'react';
-import { Button, Text, TextInput } from 'react-native';
+import { Link, router } from 'expo-router';
+import { useContext, useState } from 'react';
+import { Button, Text } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { getSafeReturnToPath } from '../../util/validation';
-import { apiDomain } from '../studios';
+import { apiDomain } from '../old/studios';
+import UserContext from '../UserProvider';
 
 type Props = {
   returnTo?: string | string[];
@@ -19,6 +21,7 @@ export default function LoginForm(props: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const userContext = useContext(UserContext);
 
   async function handleLogin() {
     // input validation
@@ -34,14 +37,13 @@ export default function LoginForm(props: Props) {
           method: 'POST',
           body: JSON.stringify({ email, password }),
         });
-        // console.log('response', JSON.stringify(response, null, 2));
         const data = await response.json();
-        console.log(data);
 
         if (!response.ok) {
           setErrorMessage(data.message);
         } else {
           try {
+            console.log('hier wollen wir hin', JSON.stringify(data));
             await AsyncStorage.setItem(
               'session',
               JSON.stringify({
@@ -49,7 +51,9 @@ export default function LoginForm(props: Props) {
                 expiresAt: data.expiresAt,
               }),
             );
-            router.push(getSafeReturnToPath(props.returnTo) || `/artists`);
+            UserContext.updateUserForSession(data.token, () =>
+              router.replace(`/artists`),
+            );
           } catch (error) {
             console.log(error);
           }
@@ -61,16 +65,17 @@ export default function LoginForm(props: Props) {
   }
   return (
     <>
-      <Text>Email:</Text>
       <TextInput
+        label="Email"
         onChangeText={(val) => setEmail(val)}
         value={email}
         // placeholder="Email"
         keyboardType="email-address"
         autoComplete="email"
       />
-      <Text>Password:</Text>
+      <Text> </Text>
       <TextInput
+        label="Password"
         autoCapitalize="none"
         secureTextEntry={true}
         spellCheck={false}
@@ -81,12 +86,16 @@ export default function LoginForm(props: Props) {
         autoComplete="password"
       />
       <Button
-        onPress={async (event) => await handleLogin()}
+        onPress={async () => await handleLogin()}
         title="Login"
         color="#841584"
         accessibilityLabel="Login"
       />
       <Text>{errorMessage}</Text>
+      <Text>Don't have an account?</Text>
+      <Link href="/registration" asChild>
+        <Button title="Sign up" />
+      </Link>
     </>
   );
 }

@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router/src/hooks';
 import { useState } from 'react';
-import { Button, Switch, Text, TextInput } from 'react-native';
+import { Button, Text } from 'react-native';
+import { Switch, TextInput } from 'react-native-paper';
 import { z } from 'zod';
-import { apiDomain } from '../studios';
+import { apiDomain } from '../old/studios';
 
 const registrationSchema = z.object({
   email: z.string().email(),
@@ -110,7 +111,8 @@ export default function RegistrationForm() {
     <>
       <Text>Email:</Text>
       <TextInput
-        onChangeText={(val) => setEmail(val)}
+        label="Email"
+        onChangeText={(val: string) => setEmail(val)}
         value={email}
         // placeholder="Email"
         keyboardType="email-address"
@@ -118,7 +120,8 @@ export default function RegistrationForm() {
       />
       <Text>First name:</Text>
       <TextInput
-        onChangeText={(val) => setFirstName(val)}
+        label="First name"
+        onChangeText={(val: string) => setFirstName(val)}
         value={firstName}
         // placeholder="First name"
         keyboardType="default"
@@ -126,7 +129,8 @@ export default function RegistrationForm() {
       />
       <Text>Last name:</Text>
       <TextInput
-        onChangeText={(val) => setLastName(val)}
+        label="Last name"
+        onChangeText={(val: string) => setLastName(val)}
         value={lastName}
         // placeholder="Last name"
         keyboardType="default"
@@ -134,10 +138,11 @@ export default function RegistrationForm() {
       />
       <Text>Password:</Text>
       <TextInput
+        label="Password"
         autoCapitalize="none"
         secureTextEntry={true}
         spellCheck={false}
-        onChangeText={(val) => setPassword(val)}
+        onChangeText={(val: string) => setPassword(val)}
         value={password}
         // placeholder=
         keyboardType="visible-password"
@@ -145,10 +150,11 @@ export default function RegistrationForm() {
       />
       <Text>Confirm Password:</Text>
       <TextInput
+        label="Confirm password"
         autoCapitalize="none"
         secureTextEntry={true}
         spellCheck={false}
-        onChangeText={(val) => setConfirmPassword(val)}
+        onChangeText={(val: string) => setConfirmPassword(val)}
         value={confirmPassword}
         // placeholder=
         keyboardType="visible-password"

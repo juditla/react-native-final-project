@@ -1,9 +1,10 @@
 import { useRouter } from 'expo-router/src/hooks';
 import { useState } from 'react';
-import { Button, Switch, Text, TextInput } from 'react-native';
+import { Button, Text } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { getSessionFromAsyncStorage } from '../../util/session';
-import { apiDomain } from '../studios';
+import { apiDomain } from '../old/studios';
 
 const artistRegistrationSchema = z.object({
   name: z.string().min(3),
@@ -66,21 +67,24 @@ export default function ArtistRegistrationForm() {
     <>
       <Text>Your artist name:</Text>
       <TextInput
-        onChangeText={(val) => setName(val)}
+        label="Your artist name"
+        onChangeText={(val: string) => setName(val)}
         value={name}
         // placeholder="Email"
         keyboardType="default"
       />
       <Text>Your style:</Text>
       <TextInput
-        onChangeText={(val) => setStyle(val)}
+        label="Your style"
+        onChangeText={(val: string) => setStyle(val)}
         value={style}
         // placeholder="First name"
         keyboardType="default"
       />
       <Text>Describe yourself</Text>
       <TextInput
-        onChangeText={(val) => setDescription(val)}
+        label="Describe yourself"
+        onChangeText={(val: string) => setDescription(val)}
         value={description}
         // placeholder="Last name"
         keyboardType="default"
