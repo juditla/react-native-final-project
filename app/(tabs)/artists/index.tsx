@@ -13,7 +13,7 @@ const renderItem = (item: { item: Artist }) => (
 export default function Index() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const userContext = useContext(UserContext);
-  console.log(userContext);
+  // console.log(userContext);
   const getArtists = async () => {
     try {
       const response = await fetch(apiDomain + '/artists');
@@ -25,7 +25,7 @@ export default function Index() {
   };
 
   useEffect(() => {
-    console.log('hier bin ich', userContext);
+    // console.log('hier bin ich', userContext);
     if (!userContext?.currentUser?.id) {
       router.replace('/login');
     }
