@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { Studio } from '../../../types';
-import StudioItem from '../../old/studios/StudioItem';
+import StudioItem from '../studios/StudioItem';
 
 export const apiDomain = 'http://localhost:4000';
 

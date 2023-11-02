@@ -21,7 +21,7 @@ export default function StudioItem({ studio }: Props) {
         <Card>
           <Card.Title
             title={studio.name}
-            subtitle={`${studio.address}, ${studio.postalCode} ${studio.city}`}
+            // subtitle={`${studio.address}, ${studio.postalCode} ${studio.city}`}
             // left={LeftContent}
           />
           <Card.Content>
