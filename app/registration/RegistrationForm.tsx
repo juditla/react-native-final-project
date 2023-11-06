@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router/src/hooks';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Text } from 'react-native';
 import { Switch, TextInput } from 'react-native-paper';
 import { z } from 'zod';
-import { apiDomain } from '../old/studios';
+import { apiDomain } from '../(tabs)/studios';
+import UserContext from '../UserProvider';
 
 const registrationSchema = z.object({
   email: z.string().email(),
@@ -31,6 +32,7 @@ export default function RegistrationForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isArtist, setIsArtist] = useState(false);
+  const userContext = useContext(UserContext);
 
   const toggleSwitch = () => setIsArtist((previousState) => !previousState);
 
@@ -84,7 +86,7 @@ export default function RegistrationForm() {
           });
 
           const data = await loginResponse.json();
-
+          console.log('hier sollte session data sein', data);
           try {
             await AsyncStorage.setItem(
               'session',
@@ -93,6 +95,9 @@ export default function RegistrationForm() {
                 expiresAt: data.expiresAt,
               }),
             );
+            if (userContext) {
+              userContext.updateUserForSession(data.token);
+            }
             if (isArtist) {
               router.push(`/registration/artist`);
             } else {
