@@ -2,16 +2,13 @@ import React, { useContext, useState } from 'react';
 import { Text, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { z } from 'zod';
+import { Artist, User } from '../../../types';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 
 type Props = {
-  user: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-  isEditing: boolean;
+  user: User;
+  artist: Artist | undefined;
   setIsEditing: (boolean: boolean) => void;
 };
 
@@ -20,30 +17,36 @@ const userToUpdateSchema = z.object({
   lastName: z.string().min(3),
 });
 
-export default function EditProfile({ user, isEditing, setIsEditing }: Props) {
+const artistToUpdateSchema = z.object({
+  name: z.string().min(3),
+  style: z.string().min(3),
+  description: z.string().min(3),
+});
+
+export default function EditProfile({ user, artist, setIsEditing }: Props) {
   const userContext = useContext(UserContext);
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [errorMessage, setErrorMessage] = useState('');
+  const [artistName, setArtistName] = useState(artist?.name);
+  const [artistStyle, setArtistStyle] = useState(artist?.style);
+  const [artistDescription, setArtistDescription] = useState(
+    artist?.description,
+  );
 
   async function updateUserHandler() {
-    console.log('user', user);
     const userToUpdate = {
       email: user.email,
       firstName,
       lastName,
     };
-    console.log('usertoUpdate', userToUpdate);
     const validatedUserToUpdate = userToUpdateSchema.safeParse({
       firstName,
       lastName,
     });
     if (!validatedUserToUpdate.success) {
       setErrorMessage('First and last name must be at least 3 characters');
-      console.log('hier gelandet');
     } else {
-      console.log('user', user);
-      console.log('toupdate', userToUpdate);
       const response = await fetch(`${apiDomain}/users/${user.id}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'PUT',
@@ -64,30 +67,98 @@ export default function EditProfile({ user, isEditing, setIsEditing }: Props) {
     }
   }
 
+  async function updateArtistHandler() {
+    if (artist) {
+      const artistToUpdate = {
+        name: artistName,
+        style: artistStyle,
+        description: artistDescription,
+      };
+      const validatedArtistToUpdate = artistToUpdateSchema.safeParse({
+        name: artistName,
+        style: artistStyle,
+        description: artistDescription,
+      });
+      if (!validatedArtistToUpdate.success) {
+        setErrorMessage('Artist input not correct');
+      } else {
+        const response = await fetch(`${apiDomain}/artists/${artist.id}`, {
+          headers: { 'Content-Type': 'application/json' },
+          method: 'PUT',
+          body: JSON.stringify(artistToUpdate),
+        });
+
+        try {
+          const data = await response.json();
+
+          if (!response.ok) {
+            setErrorMessage(data.message);
+          } else {
+            setIsEditing(false);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  }
+
   return (
     <View>
-      <Text>Edit your profile </Text>
-      <TextInput
-        label="First name"
-        onChangeText={(val: string) => setFirstName(val)}
-        value={firstName}
-        keyboardType="default"
-        autoComplete="given-name"
-      />
-      <TextInput
-        label="Last name"
-        onChangeText={(val: string) => setLastName(val)}
-        value={lastName}
-        keyboardType="default"
-        autoComplete="given-name"
-      />
-      <Button
-        onPress={async () => {
-          await updateUserHandler();
-        }}
-      >
-        Save
-      </Button>
+      <View>
+        <Text>Edit your profile </Text>
+        <TextInput
+          label="First name"
+          onChangeText={(val: string) => setFirstName(val)}
+          value={firstName}
+          keyboardType="default"
+          autoComplete="given-name"
+        />
+        <TextInput
+          label="Last name"
+          onChangeText={(val: string) => setLastName(val)}
+          value={lastName}
+          keyboardType="default"
+          autoComplete="given-name"
+        />
+        <Button
+          onPress={async () => {
+            await updateUserHandler();
+          }}
+        >
+          Save
+        </Button>
+      </View>
+      {user.roleId === 1 ? (
+        <View>
+          <TextInput
+            label="Artist name"
+            onChangeText={(val: string) => setArtistName(val)}
+            value={artistName}
+            keyboardType="default"
+          />
+          <TextInput
+            label="Style"
+            onChangeText={(val: string) => setArtistStyle(val)}
+            value={artistStyle}
+            keyboardType="default"
+          />
+          <TextInput
+            label="Descriptione"
+            onChangeText={(val: string) => setArtistDescription(val)}
+            value={artistDescription}
+            keyboardType="default"
+          />
+          <Button
+            onPress={async () => {
+              await updateArtistHandler();
+            }}
+          >
+            Save Artist Profile
+          </Button>
+        </View>
+      ) : undefined}
+
       {errorMessage}
     </View>
   );
