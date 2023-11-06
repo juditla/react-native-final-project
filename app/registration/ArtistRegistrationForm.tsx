@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Button, Text } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { z } from 'zod';
+import { apiDomain } from '../(tabs)/studios';
 import { getSessionFromAsyncStorage } from '../../util/session';
-import { apiDomain } from '../old/studios';
 
 const artistRegistrationSchema = z.object({
   name: z.string().min(3),

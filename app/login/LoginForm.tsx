@@ -4,8 +4,8 @@ import { useContext, useState } from 'react';
 import { Button, Text } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { z } from 'zod';
+import { apiDomain } from '../(tabs)/studios';
 import { getSafeReturnToPath } from '../../util/validation';
-import { apiDomain } from '../old/studios';
 import UserContext from '../UserProvider';
 
 type Props = {
@@ -43,7 +43,6 @@ export default function LoginForm(props: Props) {
           setErrorMessage(data.message);
         } else {
           try {
-            console.log('hier wollen wir hin', JSON.stringify(data));
             await AsyncStorage.setItem(
               'session',
               JSON.stringify({
@@ -51,9 +50,11 @@ export default function LoginForm(props: Props) {
                 expiresAt: data.expiresAt,
               }),
             );
-            UserContext.updateUserForSession(data.token, () =>
-              router.replace(`/artists`),
-            );
+            if (userContext) {
+              userContext.updateUserForSession(data.token, () =>
+                router.replace(`/artists`),
+              );
+            }
           } catch (error) {
             console.log(error);
           }
@@ -91,7 +92,7 @@ export default function LoginForm(props: Props) {
         color="#841584"
         accessibilityLabel="Login"
       />
-      <Text>{errorMessage}</Text>
+      {/* <Text>{errorMessage}</Text> */}
       <Text>Don't have an account?</Text>
       <Link href="/registration" asChild>
         <Button title="Sign up" />
