@@ -29,10 +29,13 @@ export default function Index() {
   }, []);
 
   return (
-    <FlatList
-      data={studios}
-      renderItem={renderItem}
-      keyExtractor={(studio: Studio) => studio.id.toString()}
-    />
+    <View>
+      {/* <FlatList
+        data={studios}
+        renderItem={renderItem}
+        keyExtractor={(studio: Studio) => studio.id.toString()}
+      /> */}
+      <Text>Studio feature coming soon...</Text>
+    </View>
   );
 }
