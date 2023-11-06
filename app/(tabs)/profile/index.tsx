@@ -1,7 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
+import { Artist, User } from '../../../types';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 import EditProfile from './EditProfile';
@@ -10,37 +9,51 @@ import ShowProfile from './ShowProfile';
 export default function Index() {
   const userContext = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<User>();
+  const [artist, setArtist] = useState<Artist | undefined>();
 
   useEffect(() => {
-    const getUserById = async () => {
+    const getArtistByUserId = async (id: number) => {
       try {
-        const response = await fetch(
-          `${apiDomain}/users/${userContext.currentUser.id}`,
-        );
+        const response = await fetch(`${apiDomain}/artists/${id}`);
         const json = await response.json();
-        setUser(json);
+        setArtist(json);
       } catch (error) {
         console.error(error);
       }
     };
-    getUserById()
-      .then()
-      .catch((error) => error);
-  }, [userContext, isEditing]);
 
-  console.log(user);
+    const getUserById = async (id: number) => {
+      try {
+        const response = await fetch(`${apiDomain}/users/${id}`);
+        const json = await response.json();
+        setUser(json);
+        if (user?.roleId === 1) {
+          console.log('getting here');
+          getArtistByUserId(user.id)
+            .then()
+            .catch((error) => error);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (userContext && userContext.currentUser) {
+      getUserById(userContext.currentUser.id)
+        .then()
+        .catch((error) => error);
+    }
+  }, [userContext, isEditing, user?.id, user?.roleId]);
+
+  console.log('artisto', artist);
+  if (!user) {
+    return <Text>Loading...</Text>;
+  }
+
   return isEditing ? (
-    <EditProfile
-      user={user}
-      isEditing={isEditing}
-      setIsEditing={setIsEditing}
-    />
+    <EditProfile artist={artist} user={user} setIsEditing={setIsEditing} />
   ) : (
-    <ShowProfile
-      user={user}
-      isEditing={isEditing}
-      setIsEditing={setIsEditing}
-    />
+    <ShowProfile artist={artist} user={user} setIsEditing={setIsEditing} />
   );
 }

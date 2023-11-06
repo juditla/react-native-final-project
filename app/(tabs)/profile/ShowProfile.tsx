@@ -4,15 +4,17 @@ import { router } from 'expo-router';
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Icon, Text } from 'react-native-paper';
+import { Artist, User } from '../../../types';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
+import ArtistView from './ArtistView';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   title: {
     fontSize: 20,
@@ -35,13 +37,13 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  user: undefined;
-  isEditing: boolean;
+  user: User;
+  artist: Artist | undefined;
   setIsEditing: (boolean: boolean) => void;
 };
 
-export default function ShowProfile({ user, isEditing, setIsEditing }: Props) {
-  const userContext = useContext(UserContext);
+export default function ShowProfile({ user, artist, setIsEditing }: Props) {
+  // const userContext = useContext(UserContext);
 
   async function handleLogout() {
     // get session & delete in database
@@ -50,7 +52,6 @@ export default function ShowProfile({ user, isEditing, setIsEditing }: Props) {
       const session = sessionJson != null ? JSON.parse(sessionJson) : null;
 
       if (session) {
-        console.log('i am here', session);
         const response = await fetch(`${apiDomain}/sessions`, {
           headers: { 'Content-Type': 'application/json' },
           method: 'DELETE',
@@ -88,10 +89,21 @@ export default function ShowProfile({ user, isEditing, setIsEditing }: Props) {
           }}
         />
         <Text variant="headlineMedium">Hello, {user.firstName}</Text>
-        <Text variant="bodySmall">User since 10/12</Text>
+        <Text variant="bodySmall">
+          User since {user.createDate.slice(0, 10)}
+        </Text>
         <Button onPress={() => handleLogout()}>
           <Text>Logout</Text>
         </Button>
+        {user.roleId === 1 && artist ? (
+          <ArtistView artist={artist} />
+        ) : undefined}
+
+        {/* was solte hier sein?
+      - artist name,  description, style, studio
+      - Liste mit bildern - kleines bild + name des bildes + m
+      - Bild hinzufügen
+      - dafür muss ich auch artist holen  */}
       </View>
     </>
   );
