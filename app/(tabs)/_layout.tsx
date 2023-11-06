@@ -22,7 +22,13 @@ const TabIconProfile = ({ focused }: IconBoolean) => (
 
 export default function Layout() {
   return (
-    <Tabs initialRouteName="artists">
+    <Tabs
+      initialRouteName="artists"
+      screenOptions={{
+        tabBarLabel: 'Artists',
+        tabBarActiveTintColor: 'black',
+      }}
+    >
       <Tabs.Screen
         name="artists"
         options={{
