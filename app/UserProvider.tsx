@@ -8,19 +8,20 @@ type CurrentUser = {
   firstName: string;
   roleId: number;
   id: number;
-  updateUserForSession: (token: string) => void;
 };
 
-const UserContext = createContext(undefined);
-// const userContext = createContext<UserContext | undefined; setCurrentUser:
-//     | Dispatch<SetStateAction<undefined>>
-//     | ((currentUser: UserContext) => void);
-// } | null>(null);
+type UserContext = {
+  currentUser: CurrentUser | null;
+  updateUserForSession: (token: string, callback?: () => void) => void;
+  setCurrentUser: (currentUser: CurrentUser) => void;
+};
+
+const UserContext = createContext<UserContext | undefined>(undefined);
 
 type Props = { children: ReactNode };
 
 export function UserProvider({ children }: Props) {
-  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>();
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
   const updateUserForSession = (token: string, callback?: () => void) => {
     getValidDatabaseSession(token)
@@ -33,6 +34,7 @@ export function UserProvider({ children }: Props) {
         }
       })
       .catch((error) => {
+        console.log(' error while checking database session');
         console.log(error);
       });
   };
@@ -42,15 +44,15 @@ export function UserProvider({ children }: Props) {
       // aus AsyncStorage token holen, wenn es das nicht gibt --> nicht logged in
       const token = await getSessionFromAsyncStorage();
       if (token) {
-        console.log(token);
         updateUserForSession(token);
       }
     };
 
-    checkLoggedIn().catch((error) => console.log(error));
+    checkLoggedIn().catch((error) => {
+      console.log('error while checking if logged in');
+      console.log(error);
+    });
   }, []);
-
-  console.log('usercontext', currentUser);
 
   return (
     <UserContext.Provider
