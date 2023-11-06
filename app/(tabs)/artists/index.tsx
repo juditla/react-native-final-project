@@ -2,9 +2,9 @@ import { router, Stack } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Artist } from '../../../types';
-import ArtistItem from '../../old/artists/ArtistItem';
-import { apiDomain } from '../../old/studios';
 import UserContext from '../../UserProvider';
+import { apiDomain } from '../studios';
+import ArtistItem from './ArtistItem';
 
 const renderItem = (item: { item: Artist }) => (
   <ArtistItem artist={item.item} />
@@ -13,19 +13,17 @@ const renderItem = (item: { item: Artist }) => (
 export default function Index() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const userContext = useContext(UserContext);
-  // console.log(userContext);
-  const getArtists = async () => {
-    try {
-      const response = await fetch(apiDomain + '/artists');
-      const json = await response.json();
-      setArtists(json);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
-    // console.log('hier bin ich', userContext);
+    const getArtists = async () => {
+      try {
+        const response = await fetch(apiDomain + '/artists');
+        const json = await response.json();
+        setArtists(json);
+      } catch (error) {
+        console.error(error);
+      }
+    };
     if (!userContext?.currentUser?.id) {
       router.replace('/login');
     }
