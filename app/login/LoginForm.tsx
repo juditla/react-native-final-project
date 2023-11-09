@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, router } from 'expo-router';
 import { useContext, useState } from 'react';
-import { Button, Text } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { apiDomain } from '../(tabs)/studios';
@@ -66,6 +66,17 @@ export default function LoginForm(props: Props) {
   }
   return (
     <>
+      <View style={styles.container}>
+        <View style={styles.Middle}>
+          <Text style={styles.LoginText}>Login</Text>
+        </View>
+        <View style={styles.text2}>
+          <Text>Don't have an account? </Text>
+          <TouchableOpacity onPress={() => router.replace('/registration')}>
+            <Text style={styles.signupText}> Sign up</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       <TextInput
         label="Email"
         onChangeText={(val) => setEmail(val)}
@@ -74,7 +85,6 @@ export default function LoginForm(props: Props) {
         keyboardType="email-address"
         autoComplete="email"
       />
-      <Text> </Text>
       <TextInput
         label="Password"
         autoCapitalize="none"
@@ -89,10 +99,9 @@ export default function LoginForm(props: Props) {
       <Button
         onPress={async () => await handleLogin()}
         title="Login"
-        color="#841584"
         accessibilityLabel="Login"
       />
-      {/* <Text>{errorMessage}</Text> */}
+      <Text>{errorMessage}</Text>
       <Text>Don't have an account?</Text>
       <Link href="/registration" asChild>
         <Button title="Sign up" />
@@ -100,3 +109,67 @@ export default function LoginForm(props: Props) {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  LoginText: {
+    marginTop: 100,
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  Middle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text2: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: 5,
+  },
+  signupText: {
+    fontWeight: 'bold',
+  },
+  emailField: {
+    marginTop: 30,
+    marginLeft: 15,
+  },
+  emailInput: {
+    marginTop: 10,
+    marginRight: 5,
+  },
+  buttonStyle: {
+    marginTop: 30,
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  buttonStyleX: {
+    marginTop: 12,
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  buttonDesign: {
+    backgroundColor: '#026efd',
+  },
+  lineStyle: {
+    flexDirection: 'row',
+    marginTop: 30,
+    marginLeft: 15,
+    marginRight: 15,
+    alignItems: 'center',
+  },
+  imageStyle: {
+    width: 80,
+    height: 80,
+    marginLeft: 20,
+  },
+  boxStyle: {
+    flexDirection: 'row',
+    marginTop: 30,
+    marginLeft: 15,
+    marginRight: 15,
+    justifyContent: 'space-around',
+  },
+});
