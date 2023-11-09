@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router/src/hooks';
 import { useContext, useState } from 'react';
-import { Button, Text } from 'react-native';
+import { Button, Text, TouchableOpacity, View } from 'react-native';
 import { Switch, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { apiDomain } from '../(tabs)/studios';
@@ -86,7 +86,7 @@ export default function RegistrationForm() {
           });
 
           const data = await loginResponse.json();
-          console.log('hier sollte session data sein', data);
+
           try {
             await AsyncStorage.setItem(
               'session',
@@ -95,13 +95,15 @@ export default function RegistrationForm() {
                 expiresAt: data.expiresAt,
               }),
             );
+            console.log(userContext);
             if (userContext) {
-              userContext.updateUserForSession(data.token);
-            }
-            if (isArtist) {
-              router.push(`/registration/artist`);
-            } else {
-              router.push(`/artists`);
+              userContext.updateUserForSession(data.token, () => {
+                if (isArtist) {
+                  router.push(`/registration/artist`);
+                } else {
+                  router.push(`/artists`);
+                }
+              });
             }
           } catch (error) {
             console.log(error);
@@ -176,6 +178,12 @@ export default function RegistrationForm() {
         color="#841584"
         accessibilityLabel="Register new user"
       />
+      <View>
+        <Text>Already have an account? </Text>
+        <TouchableOpacity onPress={() => router.replace('/login')}>
+          <Text> Log in</Text>
+        </TouchableOpacity>
+      </View>
       <Text>{errorMessage}</Text>
     </>
   );
