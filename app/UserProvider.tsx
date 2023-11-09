@@ -13,7 +13,7 @@ type CurrentUser = {
 type UserContext = {
   currentUser: CurrentUser | null;
   updateUserForSession: (token: string, callback?: () => void) => void;
-  setCurrentUser: (currentUser: CurrentUser) => void;
+  setCurrentUser: (currentUser: CurrentUser | null) => void;
 };
 
 const UserContext = createContext<UserContext | undefined>(undefined);
