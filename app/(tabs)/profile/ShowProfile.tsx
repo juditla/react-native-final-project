@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Icon, Text } from 'react-native-paper';
 import { Artist, User } from '../../../types';
@@ -43,7 +43,7 @@ type Props = {
 };
 
 export default function ShowProfile({ user, artist, setIsEditing }: Props) {
-  // const userContext = useContext(UserContext);
+  const userContext = useContext(UserContext);
 
   async function handleLogout() {
     // get session & delete in database
@@ -66,6 +66,7 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
       }
     } catch (error) {
       console.log(JSON.stringify(error));
+      router.push('/login');
     }
     // delete session from AsyncStorage
     try {
@@ -73,6 +74,7 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
     } catch (error) {
       return console.log('could not delete async storage');
     }
+    userContext?.setCurrentUser(null);
   }
   return (
     <>
@@ -85,10 +87,11 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
         <Image
           style={styles.image}
           source={{
-            uri: 'https://i.pinimg.com/originals/69/a2/0f/69a20f93a18f403b613fe60678ae5801.jpg',
+            uri: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
           }}
         />
         <Text variant="headlineMedium">Hello, {user.firstName}</Text>
+        <Text variant="titleMedium">{user.email}</Text>
         <Text variant="bodySmall">
           User since {user.createDate.slice(0, 10)}
         </Text>
@@ -97,13 +100,14 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
         </Button>
         {user.roleId === 1 && artist ? (
           <ArtistView artist={artist} />
-        ) : undefined}
-
-        {/* was solte hier sein?
-      - artist name,  description, style, studio
-      - Liste mit bildern - kleines bild + name des bildes + m
-      - Bild hinzufügen
-      - dafür muss ich auch artist holen  */}
+        ) : (
+          <View>
+            <Text>Have you become an tattoo artist?</Text>
+            <Button onPress={() => router.push(`/registration/artist`)}>
+              Create tattoo artist account
+            </Button>
+          </View>
+        )}
       </View>
     </>
   );
