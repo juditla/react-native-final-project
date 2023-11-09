@@ -1,10 +1,11 @@
 import { useRouter } from 'expo-router/src/hooks';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Text } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { apiDomain } from '../(tabs)/studios';
 import { getSessionFromAsyncStorage } from '../../util/session';
+import UserContext from '../UserProvider';
 
 const artistRegistrationSchema = z.object({
   name: z.string().min(3),
@@ -17,6 +18,7 @@ export default function ArtistRegistrationForm() {
   const [style, setStyle] = useState('');
   const [description, setDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const userContext = useContext(UserContext);
 
   const router = useRouter();
 
@@ -56,7 +58,11 @@ export default function ArtistRegistrationForm() {
         if (!response.ok) {
           setErrorMessage(data.message);
         } else {
-          router.push(`/artists`);
+          if (userContext) {
+            userContext.updateUserForSession(token, () =>
+              router.push(`/artists`),
+            );
+          }
         }
       } catch (error) {
         console.log(error);
