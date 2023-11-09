@@ -13,6 +13,11 @@ const styles = StyleSheet.create({
 });
 
 export default function ArtistItem({ artist }: Props) {
+  let pictureUri =
+    'https://media.istockphoto.com/id/944433918/photo/back-tattoo-of-a-woman.jpg?s=612x612&w=0&k=20&c=d7CnC4esWn-VlnmETYoxvODoiubywnb9VXju5r1pVx8=';
+  if (artist.tattooImages && artist.tattooImages[0]) {
+    pictureUri = artist.tattooImages[0].picture;
+  }
   return (
     <View style={styles.container}>
       <Card style={styles.container}>
@@ -20,7 +25,7 @@ export default function ArtistItem({ artist }: Props) {
         <Card.Cover
           style={styles.container}
           source={{
-            uri: 'https://media.istockphoto.com/id/944433918/photo/back-tattoo-of-a-woman.jpg?s=612x612&w=0&k=20&c=d7CnC4esWn-VlnmETYoxvODoiubywnb9VXju5r1pVx8=',
+            uri: pictureUri,
           }}
         />
         <Card.Actions>
