@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React, { useContext, useState } from 'react';
 import { Text, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
@@ -34,6 +35,28 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
     artist?.description,
   );
 
+  async function deletionHandler(id: number, databaseToDeleteFrom: string) {
+    const deletionResponse = await fetch(
+      `${apiDomain}/${databaseToDeleteFrom}/${id}`,
+      {
+        method: 'DELETE',
+      },
+    );
+    if (!deletionResponse.ok) {
+      setErrorMessage(
+        `There was a problem deleting your ${databaseToDeleteFrom.slice(
+          0,
+          -1,
+        )}`,
+      );
+    } else {
+      if (databaseToDeleteFrom === 'users') {
+        router.push('/login'); //   go to login page? ist dann eh nicht mehr angemeldet?
+      } else {
+        setIsEditing(false);
+      }
+    }
+  }
   async function updateUserHandler() {
     const userToUpdate = {
       email: user.email,
@@ -106,7 +129,7 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
   return (
     <View>
       <View>
-        <Text>Edit your profile </Text>
+        <Text>Edit your profile</Text>
         <TextInput
           label="First name"
           onChangeText={(val: string) => setFirstName(val)}
@@ -127,6 +150,13 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
           }}
         >
           Save
+        </Button>
+        <Button
+          onPress={async () => {
+            await deletionHandler(user.id, 'users');
+          }}
+        >
+          Delete profile
         </Button>
       </View>
       {user.roleId === 1 ? (
@@ -155,6 +185,13 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
             }}
           >
             Save Artist Profile
+          </Button>
+          <Button
+            onPress={async () => {
+              await deletionHandler(artist?.id, 'artists');
+            }}
+          >
+            Delete artist profile
           </Button>
         </View>
       ) : undefined}
