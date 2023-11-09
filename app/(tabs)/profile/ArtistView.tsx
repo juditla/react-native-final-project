@@ -1,17 +1,8 @@
 import { Image } from 'expo-image';
-// import * as Permissions from 'expo-permissions';
 import React, { useState } from 'react';
-import {
-  Alert,
-  FlatList,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
-import { Artist, TattooImage } from '../../../types';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button } from 'react-native-paper';
+import { Artist } from '../../../types';
 import { apiDomain } from '../studios';
 import ImageUploader from './ImageUploader';
 
@@ -36,21 +27,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const deleteImageHandler = async (id: number) => {
-  const delteImageResponse = await fetch(`${apiDomain}/tattooimages/${id}`, {
-    // headers: { 'Content-Type': 'application/json' },
-    method: 'DELETE',
-  });
-};
-
 export default function ArtistView({ artist }: Props) {
   const [tattooImages, setTattooImages] = useState(artist.tattooImages);
-  // console.log(artist);
-  // console.log(artist.tattooImages);
+
+  const deleteImageHandler = async (id: number) => {
+    const delteImageResponse = await fetch(`${apiDomain}/tattooimages/${id}`, {
+      method: 'DELETE',
+    });
+    const deletedImage = await delteImageResponse.json();
+    const newTattooImages = tattooImages?.filter(
+      (image) => image.id !== deletedImage.id,
+    );
+    setTattooImages(newTattooImages);
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
         {tattooImages?.map((image) => {
+          console.log(image);
           return (
             <View style={styles.imageContainer} key={`image-${image.id}`}>
               <Image style={styles.image} source={image.picture} />
