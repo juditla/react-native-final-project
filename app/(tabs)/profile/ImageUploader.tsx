@@ -29,8 +29,9 @@ export default function ImageUploader({
       method: 'POST',
       body: JSON.stringify({ base64Image, id }),
     });
-    console.log('response', await response.json());
-    setTattooImages([...tattooImages, response.json()]);
+    const newImage = await response.json();
+    setTattooImages([...tattooImages, newImage]);
+
     return response;
   };
 
