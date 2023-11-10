@@ -97,15 +97,17 @@ export default function SingleArtist() {
               await conversationHandler(
                 userContext?.currentUser?.id,
                 Number(artist.id),
-              ).then((conversation) => {
-                router.push({
-                  pathname: `/messages/${conversation[0].id}`,
-                  params: {
-                    conversationId: conversation[0].id,
-                    conversationPartner: artist.name,
-                  },
-                });
-              })
+              )
+                .then((conversation) => {
+                  router.push({
+                    pathname: `/messages/${conversation.id}`,
+                    params: {
+                      conversationId: conversation.id,
+                      conversationPartner: artist.name,
+                    },
+                  });
+                })
+                .catch((error) => error)
             }
           >
             Start a conversation
