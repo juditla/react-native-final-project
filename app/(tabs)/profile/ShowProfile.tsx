@@ -74,7 +74,7 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
     } catch (error) {
       return console.log('could not delete async storage');
     }
-    userContext?.setCurrentUser(null);
+    // userContext?.setCurrentUser(null);
   }
   return (
     <>

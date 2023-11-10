@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
 import React, { useContext, useState } from 'react';
 import { Text, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, Switch, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { Artist, User } from '../../../types';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
+import ChangePassword from './ChangePassword';
 
 type Props = {
   user: User;
@@ -34,6 +35,7 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
   const [artistDescription, setArtistDescription] = useState(
     artist?.description,
   );
+  const [changePassword, setChangePassword] = useState(false);
 
   async function deletionHandler(id: number, databaseToDeleteFrom: string) {
     const deletionResponse = await fetch(
@@ -144,6 +146,14 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
           keyboardType="default"
           autoComplete="given-name"
         />
+        <View>
+          <Text>Change Password?</Text>
+          <Switch
+            value={changePassword}
+            onValueChange={() => setChangePassword(!changePassword)}
+          />
+        </View>
+        {changePassword ? <ChangePassword user={user} /> : undefined}
         <Button
           onPress={async () => {
             await updateUserHandler();
