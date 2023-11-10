@@ -11,7 +11,6 @@ SplashScreen.preventAutoHideAsync().catch((error) => console.log(error));
 
 export default function App() {
   const [isAppReady, setIsAppReady] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const userContext = useContext(UserContext);
 
   useEffect(() => {
@@ -42,7 +41,6 @@ export default function App() {
   if (isAppReady) {
     return <Redirect href="artists" />;
   } else {
-    return;
-    <Text>Loadingoading</Text>;
+    return <Text>Loading</Text>;
   }
 }
