@@ -153,7 +153,9 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
             onValueChange={() => setChangePassword(!changePassword)}
           />
         </View>
-        {changePassword ? <ChangePassword user={user} /> : undefined}
+        {changePassword ? (
+          <ChangePassword user={user} setChangePassword={setChangePassword} />
+        ) : undefined}
         <Button
           onPress={async () => {
             await updateUserHandler();
