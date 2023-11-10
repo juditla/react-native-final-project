@@ -1,7 +1,8 @@
 import { Link, router, useFocusEffect } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 
@@ -22,13 +23,26 @@ type Conversation = {
 
 const styles = StyleSheet.create({
   conversationContainer: {
-    // display: 'flex',
+    display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
     marginLeft: 10,
     marginRight: 10,
-    padding: 5,
+    padding: 10,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 10,
+    borderRadius: 10,
+  },
+  emptyContainer: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
   },
 });
 
@@ -57,36 +71,46 @@ export default function Index() {
       .catch((error) => error);
   }, [userContext]);
 
-  // useFocusEffect(() => {
-  //   getConversations()
-  //     .then()
-  //     .catch((error) => error);
-  // });
+  useFocusEffect(
+    useCallback(() => {
+      getConversations()
+        .then()
+        .catch((error) => error);
+    }, []),
+  );
 
   return (
-    <View>
-      {conversations
-        ? conversations.map((item) => {
-            const conversationPartner =
-              item.owner.id === userContext?.currentUser.id
-                ? item.participant.firstName
-                : item.owner.firstName;
-            return (
-              <View style={styles.conversationContainer} key={`key-${item.id}`}>
-                <Text>{conversationPartner}</Text>
-                <Link
-                  href={{
-                    pathname: `messages/${item.id}`,
-                    params: { conversationId: item.id, conversationPartner },
-                  }}
-                  asChild
-                >
-                  <Button>{'>'}</Button>
-                </Link>
-              </View>
-            );
-          })
-        : undefined}
+    <View style={styles.container}>
+      {conversations.length > 0 ? (
+        conversations.map((item) => {
+          const conversationPartner =
+            item.owner.id === userContext?.currentUser.id
+              ? item.participant.firstName
+              : item.owner.firstName;
+          return (
+            // <View style={styles.conversationContainer} key={`key-${item.id}`}>
+            <TouchableOpacity
+              style={styles.conversationContainer}
+              key={`key-${item.id}`}
+              onPress={() =>
+                router.push({
+                  pathname: `messages/${item.id}`,
+                  params: { conversationId: item.id, conversationPartner },
+                })
+              }
+            >
+              <Text>{conversationPartner}</Text>
+              <Text>{'>'}</Text>
+            </TouchableOpacity>
+            // </View>
+          );
+        })
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Icon name="sad-outline" size={30} />
+          <Text>You have no conversations yet...</Text>
+        </View>
+      )}
     </View>
   );
 }
