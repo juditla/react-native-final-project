@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import { apiDomain } from '../(tabs)/studios';
-import UserContext from '../UserProvider';
+import { apiDomain } from '../../(tabs)/studios';
+import UserContext from '../../UserProvider';
 import LoginForm from './LoginForm';
 
 export default function Login() {

@@ -4,8 +4,8 @@ import { useContext, useState } from 'react';
 import { Button, Text, TouchableOpacity, View } from 'react-native';
 import { Switch, TextInput } from 'react-native-paper';
 import { z } from 'zod';
-import { apiDomain } from '../(tabs)/studios';
-import UserContext from '../UserProvider';
+import { apiDomain } from '../../(tabs)/studios';
+import UserContext from '../../UserProvider';
 
 const registrationSchema = z.object({
   email: z.string().email(),
@@ -33,6 +33,7 @@ export default function RegistrationForm() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isArtist, setIsArtist] = useState(false);
   const userContext = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const toggleSwitch = () => setIsArtist((previousState) => !previousState);
 
@@ -147,11 +148,16 @@ export default function RegistrationForm() {
       <TextInput
         label="Password"
         autoCapitalize="none"
-        secureTextEntry={true}
         spellCheck={false}
         onChangeText={(val: string) => setPassword(val)}
         value={password}
-        // placeholder=
+        right={
+          <TextInput.Icon
+            onPress={() => setShowPassword(!showPassword)}
+            icon={showPassword ? 'eye-off' : 'eye'}
+          />
+        }
+        secureTextEntry={!showPassword}
         keyboardType="visible-password"
         autoComplete="password"
       />
@@ -159,11 +165,16 @@ export default function RegistrationForm() {
       <TextInput
         label="Confirm password"
         autoCapitalize="none"
-        secureTextEntry={true}
         spellCheck={false}
         onChangeText={(val: string) => setConfirmPassword(val)}
         value={confirmPassword}
-        // placeholder=
+        right={
+          <TextInput.Icon
+            onPress={() => setShowPassword(!showPassword)}
+            icon={showPassword ? 'eye-off' : 'eye'}
+          />
+        }
+        secureTextEntry={!showPassword}
         keyboardType="visible-password"
         autoComplete="password"
       />

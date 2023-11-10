@@ -3,25 +3,22 @@ import { Link, router } from 'expo-router';
 import { useContext, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { z } from 'zod';
-import { apiDomain } from '../(tabs)/studios';
-import { getSafeReturnToPath } from '../../util/validation';
-import UserContext from '../UserProvider';
-
-type Props = {
-  returnTo?: string | string[];
-};
+import { apiDomain } from '../../(tabs)/studios';
+import UserContext from '../../UserProvider';
 
 const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-export default function LoginForm(props: Props) {
+export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const userContext = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleLogin() {
     // input validation
@@ -81,19 +78,22 @@ export default function LoginForm(props: Props) {
         label="Email"
         onChangeText={(val) => setEmail(val)}
         value={email}
-        // placeholder="Email"
         keyboardType="email-address"
         autoComplete="email"
       />
       <TextInput
-        label="Password"
-        autoCapitalize="none"
-        secureTextEntry={true}
         spellCheck={false}
-        onChangeText={(val) => setPassword(val)}
+        label="Password"
+        right={
+          <TextInput.Icon
+            onPress={() => setShowPassword(!showPassword)}
+            icon={showPassword ? 'eye-off' : 'eye'}
+          />
+        }
+        secureTextEntry={!showPassword}
         value={password}
-        // placeholder=
-        keyboardType="visible-password"
+        onChangeText={(val) => setPassword(val)}
+        autoCapitalize="none"
         autoComplete="password"
       />
       <Button

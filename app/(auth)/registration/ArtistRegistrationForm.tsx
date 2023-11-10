@@ -3,9 +3,9 @@ import { useContext, useState } from 'react';
 import { Button, Text } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { z } from 'zod';
-import { apiDomain } from '../(tabs)/studios';
-import { getSessionFromAsyncStorage } from '../../util/session';
-import UserContext from '../UserProvider';
+import { apiDomain } from '../../(tabs)/studios';
+import { getSessionFromAsyncStorage } from '../../../util/session';
+import UserContext from '../../UserProvider';
 
 const artistRegistrationSchema = z.object({
   name: z.string().min(3),
@@ -60,7 +60,7 @@ export default function ArtistRegistrationForm() {
         } else {
           if (userContext) {
             userContext.updateUserForSession(token, () =>
-              router.push(`/artists`),
+              router.push(`/profile`),
             );
           }
         }
