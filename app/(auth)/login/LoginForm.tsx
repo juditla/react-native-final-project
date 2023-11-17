@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, router } from 'expo-router';
 import { useContext, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { StyleSheet, View } from 'react-native';
+import { Button, HelperText, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { apiDomain } from '../../(tabs)/studios';
 import UserContext from '../../UserProvider';
@@ -13,10 +12,27 @@ const loginSchema = z.object({
   password: z.string().min(8),
 });
 
+const styles = StyleSheet.create({
+  wrapper: {
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 15,
+    borderRadius: 15,
+  },
+  registrationWrapper: {
+    marginTop: 10,
+  },
+  inputStyle: {
+    borderRadius: 15,
+  },
+});
+
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isError, setIsError] = useState(false);
   const userContext = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,9 +40,8 @@ export default function LoginForm() {
     // input validation
     const validatedLogin = loginSchema.safeParse({ email, password });
     if (!validatedLogin.success) {
-      setErrorMessage(
-        "The input doesn't match the expected InputDeviceInfo. Email must be in a valid FormData, password must be at least 8 characters long",
-      );
+      setErrorMessage('E-Mail or password invalid');
+      setIsError(true);
     } else {
       try {
         const response = await fetch(`${apiDomain}/login`, {
@@ -38,6 +53,7 @@ export default function LoginForm() {
 
         if (!response.ok) {
           setErrorMessage(data.message);
+          setIsError(true);
         } else {
           try {
             await AsyncStorage.setItem(
@@ -62,114 +78,69 @@ export default function LoginForm() {
     }
   }
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.Middle}>
-          <Text style={styles.LoginText}>Login</Text>
-        </View>
-        <View style={styles.text2}>
-          <Text>Don't have an account? </Text>
-          <TouchableOpacity onPress={() => router.replace('/registration')}>
-            <Text style={styles.signupText}> Sign up</Text>
-          </TouchableOpacity>
-        </View>
+    <View>
+      <View style={styles.wrapper}>
+        <Text variant="displayMedium">Welcome to</Text>
+        <Text variant="displayLarge">Inkspire</Text>
+        <Text variant="headlineSmall">find your local tattoo artist</Text>
       </View>
-      <TextInput
-        label="Email"
-        onChangeText={(val) => setEmail(val)}
-        value={email}
-        keyboardType="email-address"
-        autoComplete="email"
-      />
-      <TextInput
-        spellCheck={false}
-        label="Password"
-        right={
-          <TextInput.Icon
-            onPress={() => setShowPassword(!showPassword)}
-            icon={showPassword ? 'eye-off' : 'eye'}
-          />
-        }
-        secureTextEntry={!showPassword}
-        value={password}
-        onChangeText={(val) => setPassword(val)}
-        autoCapitalize="none"
-        autoComplete="password"
-      />
+      <View style={styles.wrapper}>
+        <TextInput
+          label="Email"
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          error={isError ? true : false}
+          onChangeText={(val) => setEmail(val)}
+          value={email}
+          keyboardType="email-address"
+          autoComplete="email"
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="Password"
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          error={isError ? true : false}
+          spellCheck={false}
+          right={
+            <TextInput.Icon
+              onPress={() => setShowPassword(!showPassword)}
+              icon={showPassword ? 'eye-off' : 'eye'}
+            />
+          }
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={(val) => setPassword(val)}
+          autoCapitalize="none"
+          autoComplete="password"
+        />
+        <HelperText type="error" visible={isError ? true : false}>
+          {errorMessage}
+        </HelperText>
+      </View>
       <Button
+        style={styles.button}
+        mode="contained"
         onPress={async () => await handleLogin()}
-        title="Login"
         accessibilityLabel="Login"
-      />
-      <Text>{errorMessage}</Text>
-      <Text>Don't have an account?</Text>
-      <Link href="/registration" asChild>
-        <Button title="Sign up" />
-      </Link>
-    </>
+        buttonColor="black"
+        textColor="white"
+      >
+        Login
+      </Button>
+      <View style={styles.registrationWrapper}>
+        <Text style={{ textAlign: 'center' }}>Don't have an account?</Text>
+        <Link href="/registration" asChild>
+          <Button mode="text" textColor="black">
+            Sign up
+          </Button>
+        </Link>
+      </View>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  LoginText: {
-    marginTop: 100,
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  Middle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text2: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingTop: 5,
-  },
-  signupText: {
-    fontWeight: 'bold',
-  },
-  emailField: {
-    marginTop: 30,
-    marginLeft: 15,
-  },
-  emailInput: {
-    marginTop: 10,
-    marginRight: 5,
-  },
-  buttonStyle: {
-    marginTop: 30,
-    marginLeft: 15,
-    marginRight: 15,
-  },
-  buttonStyleX: {
-    marginTop: 12,
-    marginLeft: 15,
-    marginRight: 15,
-  },
-  buttonDesign: {
-    backgroundColor: '#026efd',
-  },
-  lineStyle: {
-    flexDirection: 'row',
-    marginTop: 30,
-    marginLeft: 15,
-    marginRight: 15,
-    alignItems: 'center',
-  },
-  imageStyle: {
-    width: 80,
-    height: 80,
-    marginLeft: 20,
-  },
-  boxStyle: {
-    flexDirection: 'row',
-    marginTop: 30,
-    marginLeft: 15,
-    marginRight: 15,
-    justifyContent: 'space-around',
-  },
-});
