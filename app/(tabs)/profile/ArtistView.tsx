@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Button, Icon, Text } from 'react-native-paper';
 import { Artist } from '../../../types';
 import { apiDomain } from '../studios';
 import ImageUploader from './ImageUploader';
@@ -12,18 +12,35 @@ type Props = {
 
 const styles = StyleSheet.create({
   image: {
-    height: '100%',
-    width: '50%',
+    height: 200,
+    width: 200,
+    borderRadius: 5,
   },
   container: {
     flex: 1,
     padding: 10,
+    gap: 10,
   },
   imageContainer: {
     flexDirection: 'row',
-    padding: 10,
-    width: '100%',
-    height: '50%',
+    padding: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    // borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: 'white',
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  imageSection: {
+    marginTop: 5,
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
   },
 });
 
@@ -41,31 +58,34 @@ export default function ArtistView({ artist }: Props) {
     setTattooImages(newTattooImages);
   };
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {tattooImages?.map((image) => {
-          console.log(image);
-          return (
-            <View style={styles.imageContainer} key={`image-${image.id}`}>
-              <Image style={styles.image} source={image.picture} />
-              <Button
-                onPress={async () => {
-                  await deleteImageHandler(image.id);
-                }}
-              >
-                X
-              </Button>
-            </View>
-          );
-        })}
-        <View>
-          <ImageUploader
-            setTattooImages={setTattooImages}
-            artistId={artist.id}
-            tattooImages={tattooImages}
-          />
+    <View style={styles.imageSection}>
+      <ImageUploader
+        setTattooImages={setTattooImages}
+        artistId={artist.id}
+        tattooImages={tattooImages}
+      />
+      <View>
+        <View style={styles.container}>
+          <Text variant="bodyLarge" style={{ marginLeft: 10 }}>
+            Your images
+          </Text>
+          {tattooImages?.map((image) => {
+            console.log(image);
+            return (
+              <View style={styles.imageContainer} key={`image-${image.id}`}>
+                <Image style={styles.image} source={image.picture} />
+                <TouchableOpacity
+                  onPress={async () => {
+                    await deleteImageHandler(image.id);
+                  }}
+                >
+                  <Icon source="trash-can-outline" size={25} />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }

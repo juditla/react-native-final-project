@@ -1,6 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Button, Icon, Text } from 'react-native-paper';
 import { TattooImage } from '../../../types';
 import { apiDomain } from '../studios';
 
@@ -13,6 +14,12 @@ type Props = {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    alignItems: 'center',
+    // alignSelf: 'center',
+    marginLeft: 20,
+  },
+  iconButton: {
+    padding: 10,
   },
 });
 
@@ -44,8 +51,6 @@ export default function ImageUploader({
       base64: true,
     });
 
-    // console.log(result);
-
     if (!result.canceled && result.assets[0]?.base64) {
       await handleUpload(result.assets[0].base64, artistId);
     }
@@ -71,9 +76,13 @@ export default function ImageUploader({
 
   return (
     <View style={styles.container}>
-      <Text>New picture</Text>
-      <Button title="Gallery" onPress={pickImage} />
-      <Button title="Camera" onPress={takePicture} />
+      <Text variant="bodyLarge">Upload new picture</Text>
+      <TouchableOpacity style={styles.iconButton} onPress={() => pickImage()}>
+        <Icon source="image-multiple" size={25} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.iconButton} onPress={() => takePicture()}>
+        <Icon source="camera" size={25} />
+      </TouchableOpacity>
       <Text>{errorMessage}</Text>
     </View>
   );

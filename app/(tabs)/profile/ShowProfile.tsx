@@ -2,7 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Button, Icon, Text } from 'react-native-paper';
 import { Artist, User } from '../../../types';
 import UserContext from '../../UserProvider';
@@ -11,10 +17,7 @@ import ArtistView from './ArtistView';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    // flex: 1,
   },
   title: {
     fontSize: 20,
@@ -22,17 +25,41 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {
-    height: '20%',
-    width: '30%',
+    height: 100,
+    width: 100,
     borderRadius: 60,
   },
   editContainer: {
-    // flex: 0.1,
-    backgroundColor: '#ffffff',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     flexDirection: 'column-reverse',
-    padding: 20,
+    margin: 10,
+  },
+  profileSection: {
+    margin: 20,
+    // borderWidth: 1,
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+
+    borderColor: 'black',
+    borderRadius: 5,
+    padding: 10,
+    backgroundColor: 'white',
+  },
+  profileContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  addArtistProfileContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoutContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
   },
 });
 
@@ -77,38 +104,46 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
     // userContext?.setCurrentUser(null);
   }
   return (
-    <>
-      <View style={styles.editContainer}>
-        <Button onPress={() => setIsEditing(true)}>
-          <Icon source="pencil" size={20} />
-        </Button>
-      </View>
-      <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source={{
-            uri: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
-          }}
-        />
-        <Text variant="headlineMedium">Hello, {user.firstName}</Text>
-        <Text variant="titleMedium">{user.email}</Text>
-        <Text variant="bodySmall">
-          User since {user.createDate.slice(0, 10)}
-        </Text>
-        <Button onPress={() => handleLogout()}>
-          <Text>Logout</Text>
-        </Button>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.profileSection}>
+          <View style={styles.editContainer}>
+            <TouchableOpacity onPress={() => setIsEditing(true)}>
+              <Icon source="pencil" size={20} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.profileContainer}>
+            <Image
+              style={styles.image}
+              source={{
+                uri: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
+              }}
+            />
+            <Text variant="headlineLarge">Hello, {user.firstName}</Text>
+            <Text variant="titleMedium">{user.email}</Text>
+            <Text variant="bodySmall">
+              User since {user.createDate.slice(0, 10)}
+            </Text>
+            <TouchableOpacity
+              style={styles.logoutContainer}
+              onPress={() => handleLogout()}
+            >
+              <Text>Logout </Text>
+              <Icon source="logout" size={20} />
+            </TouchableOpacity>
+          </View>
+        </View>
         {user.roleId === 1 && artist ? (
           <ArtistView artist={artist} />
         ) : (
-          <View>
+          <View style={styles.addArtistProfileContainer}>
             <Text>Have you become an tattoo artist?</Text>
             <Button onPress={() => router.push(`/registration/artist`)}>
               Create tattoo artist account
             </Button>
           </View>
         )}
-      </View>
-    </>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
