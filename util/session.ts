@@ -42,20 +42,3 @@ export const getValidDatabaseSession = async (token: string) => {
     return undefined;
   }
 };
-
-// getSessionFromAsyncStorage()
-//   .then((session) => {
-//     const now = new Date();
-//     const isStoredSessionValid = session.expiresAt > now.toISOString();
-//     console.log('here', isStoredSessionValid);
-//     getValidDatabaseSession(session.sessionToken)
-//       .then((response) => {
-//         if (isStoredSessionValid && response.ok) {
-//           console.log('response', response.ok);
-//           router.push(`/artists`);
-//         }
-//       })
-
-//       .catch((error) => console.log(error));
-//   })
-//   .catch(() => null);
