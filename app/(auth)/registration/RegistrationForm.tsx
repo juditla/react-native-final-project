@@ -1,11 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Link } from 'expo-router';
 import { useRouter } from 'expo-router/src/hooks';
 import { useContext, useState } from 'react';
-import { Button, Text, TouchableOpacity, View } from 'react-native';
-import { Switch, TextInput } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import {
+  Button,
+  HelperText,
+  Switch,
+  Text,
+  TextInput,
+} from 'react-native-paper';
 import { z } from 'zod';
 import { apiDomain } from '../../(tabs)/studios';
 import UserContext from '../../UserProvider';
+
+type ErrorPath = null | 'password' | 'firstName' | 'lastName' | 'email';
 
 const registrationSchema = z.object({
   email: z.string().email(),
@@ -24,6 +33,31 @@ const passwordForm = z
     message: "Passwords don't match",
   });
 
+const styles = StyleSheet.create({
+  container: {
+    padding: 30,
+  },
+  wrapper: {
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 25,
+    borderRadius: 15,
+  },
+  loginWrapper: {
+    marginTop: 10,
+  },
+  inputStyle: {
+    borderRadius: 15,
+  },
+  artistRegistration: {
+    marginTop: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+});
+
 export default function RegistrationForm() {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -34,8 +68,7 @@ export default function RegistrationForm() {
   const [isArtist, setIsArtist] = useState(false);
   const userContext = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
-
-  const toggleSwitch = () => setIsArtist((previousState) => !previousState);
+  const [errorPath, setErrorPath] = useState<ErrorPath>(null);
 
   const router = useRouter();
 
@@ -53,8 +86,8 @@ export default function RegistrationForm() {
     // check if password & confirm password are the same
     try {
       passwordForm.safeParse({ password, confirmPassword });
-      console.log('validation passed');
     } catch (err) {
+      setErrorPath('password');
       setErrorMessage("The two passwords don't match");
       console.log(err);
       return;
@@ -62,10 +95,8 @@ export default function RegistrationForm() {
     // check if user input is correct & only create user with correct input
     const validatedNewUser = registrationSchema.safeParse(newUser);
     if (!validatedNewUser.success) {
-      console.log(validatedNewUser.error);
-      setErrorMessage(
-        'Please check your input: is your email in the right format? Is your password at least 8 characters long?',
-      );
+      setErrorPath(validatedNewUser.error.issues[0].path[0]);
+      setErrorMessage(validatedNewUser.error.issues[0].message);
     } else {
       const response = await fetch(`${apiDomain}/users`, {
         headers: { 'Content-Type': 'application/json' },
@@ -116,86 +147,126 @@ export default function RegistrationForm() {
     }
   }
   return (
-    <>
-      <Text>Email:</Text>
-      <TextInput
-        label="Email"
-        onChangeText={(val: string) => setEmail(val)}
-        value={email}
-        // placeholder="Email"
-        keyboardType="email-address"
-        autoComplete="email"
-      />
-      <Text>First name:</Text>
-      <TextInput
-        label="First name"
-        onChangeText={(val: string) => setFirstName(val)}
-        value={firstName}
-        // placeholder="First name"
-        keyboardType="default"
-        autoComplete="given-name"
-      />
-      <Text>Last name:</Text>
-      <TextInput
-        label="Last name"
-        onChangeText={(val: string) => setLastName(val)}
-        value={lastName}
-        // placeholder="Last name"
-        keyboardType="default"
-        autoComplete="family-name"
-      />
-      <Text>Password:</Text>
-      <TextInput
-        label="Password"
-        autoCapitalize="none"
-        spellCheck={false}
-        onChangeText={(val: string) => setPassword(val)}
-        value={password}
-        right={
-          <TextInput.Icon
-            onPress={() => setShowPassword(!showPassword)}
-            icon={showPassword ? 'eye-off' : 'eye'}
-          />
-        }
-        secureTextEntry={!showPassword}
-        keyboardType="visible-password"
-        autoComplete="password"
-      />
-      <Text>Confirm Password:</Text>
-      <TextInput
-        label="Confirm password"
-        autoCapitalize="none"
-        spellCheck={false}
-        onChangeText={(val: string) => setConfirmPassword(val)}
-        value={confirmPassword}
-        right={
-          <TextInput.Icon
-            onPress={() => setShowPassword(!showPassword)}
-            icon={showPassword ? 'eye-off' : 'eye'}
-          />
-        }
-        secureTextEntry={!showPassword}
-        keyboardType="visible-password"
-        autoComplete="password"
-      />
-      <Text>Do you want to register as an Artist?</Text>
-
-      <Text> No</Text>
-      <Switch onValueChange={toggleSwitch} value={isArtist} />
-      <Text> Yes</Text>
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
+        <Text variant="displayMedium">Create account</Text>
+      </View>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="Email"
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          onChangeText={(val: string) => setEmail(val)}
+          value={email}
+          keyboardType="email-address"
+          autoComplete="email"
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="First name"
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          onChangeText={(val: string) => setFirstName(val)}
+          value={firstName}
+          keyboardType="default"
+          autoComplete="given-name"
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="Last name"
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          onChangeText={(val: string) => setLastName(val)}
+          value={lastName}
+          // placeholder="Last name"
+          keyboardType="default"
+          autoComplete="family-name"
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="Password"
+          autoCapitalize="none"
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          spellCheck={false}
+          onChangeText={(val: string) => setPassword(val)}
+          value={password}
+          right={
+            <TextInput.Icon
+              onPress={() => setShowPassword(!showPassword)}
+              icon={showPassword ? 'eye-off' : 'eye'}
+            />
+          }
+          secureTextEntry={!showPassword}
+          keyboardType="visible-password"
+          autoComplete="password"
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="Confirm password"
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          autoCapitalize="none"
+          spellCheck={false}
+          onChangeText={(val: string) => setConfirmPassword(val)}
+          value={confirmPassword}
+          right={
+            <TextInput.Icon
+              onPress={() => setShowPassword(!showPassword)}
+              icon={showPassword ? 'eye-off' : 'eye'}
+            />
+          }
+          secureTextEntry={!showPassword}
+          keyboardType="visible-password"
+          autoComplete="password"
+        />
+      </View>
+      <View style={styles.artistRegistration}>
+        <Text>Register as a tattoo artist?</Text>
+        <Switch
+          value={isArtist}
+          onValueChange={() => setIsArtist(!isArtist)}
+          color="black"
+        />
+      </View>
       <Button
         onPress={async () => await handleRegistration()}
-        title="Register"
-        color="#841584"
+        style={styles.button}
+        mode="contained"
+        buttonColor="black"
+        textColor="white"
         accessibilityLabel="Register new user"
-      />
-      <View>
-        <Text>Already have an account? </Text>
-        <TouchableOpacity onPress={() => router.replace('/login')}>
-          <Text> Log in</Text>
-        </TouchableOpacity>
+      >
+        Register
+      </Button>
+      <View style={styles.loginWrapper}>
+        <Text style={{ textAlign: 'center' }}>Already have an account? </Text>
+        <Link href="/login" asChild>
+          <Button mode="text" textColor="black">
+            Log in
+          </Button>
+        </Link>
       </View>
-      <Text>{errorMessage}</Text>
-    </>
+      <HelperText
+        style={{ textAlign: 'center', fontSize: 18, marginTop: 20 }}
+        type="error"
+      >
+        {errorMessage}
+      </HelperText>
+    </View>
   );
 }
