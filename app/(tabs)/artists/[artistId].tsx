@@ -1,14 +1,14 @@
 import { Image } from 'expo-image';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Button, Icon, Text } from 'react-native-paper';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import { Artist } from '../../../types';
 import { getSessionFromAsyncStorage } from '../../../util/session';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 
-// import { apiDomain } from './';
 type Props = {
   params: {
     id: number;
@@ -20,20 +20,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  artistContainer: { flex: 1, margin: 20, gap: 10 },
   image: {
     height: 200,
-    width: '95%',
-    margin: 10,
+    width: '100%',
+    // marginTop: 5,
+    marginBottom: 10,
     borderRadius: 5,
   },
-  scrollViewContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    margin: 'auto',
+  imageContainer: {
+    width: '100%',
+    // flex: 1,
+    // flexDirection: 'column',
+    // alignItems: 'center',
+  },
+  contentContainer: {
+    backgroundColor: 'white',
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    padding: 15,
+    borderRadius: 5,
+    gap: 5,
   },
   scrollView: {
-    // flex: 1,
-    margin: 10,
+    width: '100%',
+    alignItems: 'center',
+    // margin: 10,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    gap: 5,
+  },
+  noArtistContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 20,
+  },
+
+  buttonContainer: {
+    color: 'white',
+    gap: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginTop: 10,
   },
 });
 
@@ -81,39 +114,83 @@ export default function SingleArtist() {
 
   if (artist) {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Stack.Screen
           options={{
-            headerShown: false,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'transparent',
+            },
+            headerBackTitle: '',
+            headerTintColor: 'black',
+            headerTitle: artist.name.toUpperCase(),
           }}
         />
-        <View style={styles.container}>
-          <Text>Hi this is Artist</Text>
-          <Text>{artist.name}</Text>
-          <Text>{artist.style}</Text>
-          <Text>{artist.description}</Text>
-          <Button
-            onPress={async () =>
-              await conversationHandler(
-                userContext?.currentUser?.id,
-                Number(artist.id),
-              )
-                .then((conversation) => {
-                  router.push({
-                    pathname: `/messages/${conversation.id}`,
-                    params: {
-                      conversationId: conversation.id,
-                      conversationPartner: artist.name,
-                    },
-                  });
-                })
-                .catch((error) => error)
-            }
-          >
-            Start a conversation
-          </Button>
-          <View style={styles.scrollViewContainer}>
-            <ScrollView horizontal={false} style={styles.scrollView}>
+        <View style={styles.artistContainer}>
+          <View style={styles.contentContainer}>
+            <View style={styles.rowContainer}>
+              <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
+                Style:
+              </Text>
+              <Text variant="bodyLarge" style={{ color: 'grey' }}>
+                {artist.style.toLowerCase()}
+              </Text>
+            </View>
+            <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
+              Studio:
+            </Text>
+            <Text variant="bodyLarge" style={{ color: 'grey' }}>
+              hier kommt das studio hin
+            </Text>
+            {/* <TouchableOpacity
+              // style={styles.buttonContainer}
+
+            > */}
+            <Button
+              style={styles.buttonContainer}
+              // buttonColor="#474554"
+              onPress={async () =>
+                await conversationHandler(
+                  userContext?.currentUser?.id,
+                  Number(artist.id),
+                )
+                  .then((conversation) => {
+                    router.push({
+                      pathname: `/messages/${conversation.id}`,
+                      params: {
+                        conversationId: conversation.id,
+                        conversationPartner: artist.name,
+                      },
+                    });
+                  })
+                  .catch((error) => error)
+              }
+              mode="outlined"
+              textColor="#474554"
+            >
+              CONNECT{'  '}
+              <IonIcon
+                name="chatbubble-ellipses-outline"
+                color="#474554"
+                size={15}
+                style={{ marginLeft: 5 }}
+              />
+            </Button>
+            {/* </TouchableOpacity> */}
+          </View>
+          <View style={styles.contentContainer}>
+            <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
+              About:
+            </Text>
+            <Text variant="bodyLarge" style={{ color: 'grey' }}>
+              {artist.description}
+            </Text>
+          </View>
+          <View style={styles.imageContainer}>
+            <Text variant="bodyLarge" style={{ textTransform: 'uppercase' }}>
+              My art
+            </Text>
+            <View style={styles.scrollView}>
               {artist.tattooImages?.map((image) => {
                 return (
                   <Image
@@ -123,15 +200,18 @@ export default function SingleArtist() {
                   />
                 );
               })}
-            </ScrollView>
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   } else {
     return (
-      <View>
-        <Text>Sorry we could not find that tattoo artist...</Text>
+      <View style={styles.noArtistContainer}>
+        <Icon size={30} source="emoticon-sad-outline" />
+        <Text style={{ fontSize: 20 }}>
+          Sorry we could not find that tattoo artist...
+        </Text>
       </View>
     );
   }
