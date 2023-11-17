@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import React, { useContext, useState } from 'react';
-import { Text, View } from 'react-native';
-import { Button, Switch, TextInput } from 'react-native-paper';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Button, Switch, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { Artist, User } from '../../../types';
 import UserContext from '../../UserProvider';
@@ -23,6 +24,31 @@ const artistToUpdateSchema = z.object({
   name: z.string().min(3),
   style: z.string().min(3),
   description: z.string().min(3),
+});
+
+const styles = StyleSheet.create({
+  container: {
+    // padding: 30,
+    margin: 30,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    marginTop: 15,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  wrapper: {
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 25,
+    // marginLeft: 10,
+    // marginRight: 10,
+    borderRadius: 15,
+  },
+  inputStyle: {
+    borderRadius: 15,
+  },
 });
 
 export default function EditProfile({ user, artist, setIsEditing }: Props) {
@@ -129,28 +155,43 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
   }
 
   return (
-    <View>
-      <View>
-        <Text>Edit your profile</Text>
-        <TextInput
-          label="First name"
-          onChangeText={(val: string) => setFirstName(val)}
-          value={firstName}
-          keyboardType="default"
-          autoComplete="given-name"
-        />
-        <TextInput
-          label="Last name"
-          onChangeText={(val: string) => setLastName(val)}
-          value={lastName}
-          keyboardType="default"
-          autoComplete="given-name"
-        />
-        <View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.wrapper}>
+          <Text variant="headlineMedium">Edit your profile</Text>
+        </View>
+        <View style={styles.wrapper}>
+          <TextInput
+            label="First name"
+            mode="outlined"
+            activeOutlineColor="black"
+            outlineColor="grey"
+            outlineStyle={styles.inputStyle}
+            onChangeText={(val: string) => setFirstName(val)}
+            value={firstName}
+            keyboardType="default"
+            autoComplete="given-name"
+          />
+        </View>
+        <View style={styles.wrapper}>
+          <TextInput
+            label="Last name"
+            mode="outlined"
+            activeOutlineColor="black"
+            outlineColor="grey"
+            outlineStyle={styles.inputStyle}
+            onChangeText={(val: string) => setLastName(val)}
+            value={lastName}
+            keyboardType="default"
+            autoComplete="given-name"
+          />
+        </View>
+        <View style={styles.rowContainer}>
           <Text>Change Password?</Text>
           <Switch
             value={changePassword}
             onValueChange={() => setChangePassword(!changePassword)}
+            color="black"
           />
         </View>
         {changePassword ? (
@@ -160,55 +201,90 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
           onPress={async () => {
             await updateUserHandler();
           }}
+          mode="contained"
+          buttonColor="black"
+          textColor="white"
+          style={styles.button}
         >
           Save
         </Button>
         <Button
+          icon="trash-can-outline"
           onPress={async () => {
             await deletionHandler(user.id, 'users');
           }}
+          style={styles.button}
+          mode="outlined"
+          textColor="black"
         >
           Delete profile
         </Button>
-      </View>
-      {user.roleId === 1 ? (
-        <View>
-          <TextInput
-            label="Artist name"
-            onChangeText={(val: string) => setArtistName(val)}
-            value={artistName}
-            keyboardType="default"
-          />
-          <TextInput
-            label="Style"
-            onChangeText={(val: string) => setArtistStyle(val)}
-            value={artistStyle}
-            keyboardType="default"
-          />
-          <TextInput
-            label="Descriptione"
-            onChangeText={(val: string) => setArtistDescription(val)}
-            value={artistDescription}
-            keyboardType="default"
-          />
-          <Button
-            onPress={async () => {
-              await updateArtistHandler();
-            }}
-          >
-            Save Artist Profile
-          </Button>
-          <Button
-            onPress={async () => {
-              await deletionHandler(artist?.id, 'artists');
-            }}
-          >
-            Delete artist profile
-          </Button>
-        </View>
-      ) : undefined}
+        {user.roleId === 1 ? (
+          <View>
+            <View style={styles.wrapper}>
+              <TextInput
+                label="Artist name"
+                mode="outlined"
+                activeOutlineColor="black"
+                outlineColor="grey"
+                outlineStyle={styles.inputStyle}
+                onChangeText={(val: string) => setArtistName(val)}
+                value={artistName}
+                keyboardType="default"
+              />
+            </View>
+            <View style={styles.wrapper}>
+              <TextInput
+                label="Style"
+                mode="outlined"
+                activeOutlineColor="black"
+                outlineColor="grey"
+                outlineStyle={styles.inputStyle}
+                onChangeText={(val: string) => setArtistStyle(val)}
+                value={artistStyle}
+                keyboardType="default"
+              />
+            </View>
+            <View style={styles.wrapper}>
+              <TextInput
+                label="Description"
+                mode="outlined"
+                activeOutlineColor="black"
+                outlineColor="grey"
+                outlineStyle={styles.inputStyle}
+                onChangeText={(val: string) => setArtistDescription(val)}
+                value={artistDescription}
+                keyboardType="default"
+                multiline={true}
+              />
+            </View>
+            <Button
+              onPress={async () => {
+                await updateArtistHandler();
+              }}
+              mode="contained"
+              buttonColor="#474554"
+              textColor="white"
+              style={styles.button}
+            >
+              Save Artist Profile
+            </Button>
+            <Button
+              icon="trash-can-outline"
+              onPress={async () => {
+                await deletionHandler(artist?.id, 'artists');
+              }}
+              style={styles.button}
+              mode="outlined"
+              textColor="black"
+            >
+              Delete artist profile
+            </Button>
+          </View>
+        ) : undefined}
 
-      {errorMessage}
-    </View>
+        {errorMessage}
+      </ScrollView>
+    </SafeAreaView>
   );
 }

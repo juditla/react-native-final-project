@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Message } from 'react-native-gifted-chat';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
@@ -11,6 +11,22 @@ type Props = {
   user: User;
   setChangePassword: (boolean: boolean) => void;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    //
+  },
+  wrapper: {
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 25,
+    borderRadius: 15,
+  },
+  inputStyle: {
+    borderRadius: 15,
+  },
+});
 
 const passwordForm = z
   .object({
@@ -73,56 +89,82 @@ export default function ChangePassword({ user, setChangePassword }: Props) {
     }
   }
   return (
-    <View>
-      <TextInput
-        label="Old password"
-        autoCapitalize="none"
-        spellCheck={false}
-        onChangeText={(val: string) => setOldPassword(val)}
-        value={oldPassword}
-        right={
-          <TextInput.Icon
-            onPress={() => setShowOldPassword(!showOldPassword)}
-            icon={showOldPassword ? 'eye-off' : 'eye'}
-          />
-        }
-        secureTextEntry={!showOldPassword}
-        keyboardType="visible-password"
-        autoComplete="password"
-      />
-      <TextInput
-        label="New password"
-        autoCapitalize="none"
-        spellCheck={false}
-        onChangeText={(val: string) => setNewPassword(val)}
-        value={newPassword}
-        right={
-          <TextInput.Icon
-            onPress={() => setShowNewPassword(!showNewPassword)}
-            icon={showNewPassword ? 'eye-off' : 'eye'}
-          />
-        }
-        secureTextEntry={!showNewPassword}
-        keyboardType="visible-password"
-        autoComplete="password"
-      />
-      <TextInput
-        label="Confirm new password"
-        autoCapitalize="none"
-        spellCheck={false}
-        onChangeText={(val: string) => setConfirmNewPassword(val)}
-        value={confirmNewPassword}
-        right={
-          <TextInput.Icon
-            onPress={() => setShowNewPassword(!showNewPassword)}
-            icon={showNewPassword ? 'eye-off' : 'eye'}
-          />
-        }
-        secureTextEntry={!showNewPassword}
-        keyboardType="visible-password"
-        autoComplete="password"
-      />
-      <Button onPress={() => changePasswordHandler()}>Change Password</Button>
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="Old password"
+          autoCapitalize="none"
+          spellCheck={false}
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          onChangeText={(val: string) => setOldPassword(val)}
+          value={oldPassword}
+          right={
+            <TextInput.Icon
+              onPress={() => setShowOldPassword(!showOldPassword)}
+              icon={showOldPassword ? 'eye-off' : 'eye'}
+            />
+          }
+          secureTextEntry={!showOldPassword}
+          keyboardType="visible-password"
+          autoComplete="password"
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="New password"
+          autoCapitalize="none"
+          spellCheck={false}
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          onChangeText={(val: string) => setNewPassword(val)}
+          value={newPassword}
+          right={
+            <TextInput.Icon
+              onPress={() => setShowNewPassword(!showNewPassword)}
+              icon={showNewPassword ? 'eye-off' : 'eye'}
+            />
+          }
+          secureTextEntry={!showNewPassword}
+          keyboardType="visible-password"
+          autoComplete="password"
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <TextInput
+          label="Confirm new password"
+          autoCapitalize="none"
+          spellCheck={false}
+          mode="outlined"
+          activeOutlineColor="black"
+          outlineColor="grey"
+          outlineStyle={styles.inputStyle}
+          onChangeText={(val: string) => setConfirmNewPassword(val)}
+          value={confirmNewPassword}
+          right={
+            <TextInput.Icon
+              onPress={() => setShowNewPassword(!showNewPassword)}
+              icon={showNewPassword ? 'eye-off' : 'eye'}
+            />
+          }
+          secureTextEntry={!showNewPassword}
+          keyboardType="visible-password"
+          autoComplete="password"
+        />
+      </View>
+      <Button
+        onPress={() => changePasswordHandler()}
+        mode="contained"
+        buttonColor="black"
+        textColor="white"
+        style={styles.button}
+      >
+        Change Password
+      </Button>
       <Text>{errorMessage}</Text>
     </View>
   );
