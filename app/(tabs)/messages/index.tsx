@@ -1,7 +1,7 @@
-import { Link, router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
@@ -26,14 +26,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginLeft: 10,
-    marginRight: 10,
-    padding: 10,
+    // marginLeft: 5,
+    // marginRight: 5,
+    padding: 15,
     alignItems: 'center',
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'grey',
-    marginTop: 10,
-    borderRadius: 10,
+    // marginTop: 10,
+    // borderRadius: 10,
+    borderBottomWidth: 2,
+    backgroundColor: 'white',
   },
   emptyContainer: {
     flex: 1,
@@ -43,6 +45,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    // margin: 20,
+  },
+  wrapper: {
+    marginBottom: 15,
+    margin: 10,
+    marginLeft: 20,
+    marginRight: 20,
   },
 });
 
@@ -80,11 +89,17 @@ export default function Index() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.wrapper}>
+        <Text variant="headlineMedium">Messages</Text>
+      </View>
       {conversations.length > 0 ? (
         conversations.map((item) => {
           const conversationPartner =
-            item.owner.id === userContext?.currentUser.id
+            item.owner.id === userContext?.currentUser.id &&
+            item.participant.id === userContext.currentUser.id
+              ? `${item.owner.firstName} - Yourself`
+              : item.owner.id === userContext?.currentUser.id
               ? item.participant.firstName
               : item.owner.firstName;
           return (
@@ -99,8 +114,8 @@ export default function Index() {
                 })
               }
             >
-              <Text>{conversationPartner}</Text>
-              <Text>{'>'}</Text>
+              <Text variant="titleMedium">{conversationPartner}</Text>
+              <Text variant="titleMedium">{'>'}</Text>
             </TouchableOpacity>
             // </View>
           );
@@ -111,6 +126,6 @@ export default function Index() {
           <Text>You have no conversations yet...</Text>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
