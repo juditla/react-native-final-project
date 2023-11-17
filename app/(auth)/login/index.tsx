@@ -1,10 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { apiDomain } from '../../(tabs)/studios';
 import UserContext from '../../UserProvider';
 import LoginForm from './LoginForm';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+});
 
 export default function Login() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -51,21 +60,9 @@ export default function Login() {
       })
       .catch(() => null);
   }, []);
-  // const jsonValue = await AsyncStorage.getItem('my-key');
-  // return jsonValue
-
-  // 2. Check if the sessionToken cookie is still valid
-  // const validSession =
-  //   sessionToken &&
-  //   (await getValidSessionByToken(sessionTokenCookie.value));
-
-  // // 3. If the sessionToken cookie is valid, redirect to home
-
-  // if (validSessionsession) router.redirect('/');
 
   return (
-    <View>
-      <Text>{errorMessage}</Text>
+    <View style={styles.container}>
       <LoginForm />
     </View>
   );
