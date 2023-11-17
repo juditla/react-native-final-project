@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { Button, Card, Text } from 'react-native-paper';
+import { Button, Card, Paragraph, Text, Title } from 'react-native-paper';
 import { Artist } from '../../../types';
 
 type Props = {
@@ -8,7 +8,22 @@ type Props = {
 };
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
+    borderRadius: 5,
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  linkStyle: {
+    color: 'black',
+  },
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
   },
 });
 
@@ -21,24 +36,32 @@ export default function ArtistItem({ artist }: Props) {
   return (
     <View style={styles.container}>
       <Card style={styles.container}>
-        <Card.Title title={artist.name} />
+        {/* <Card.Title title={artist.name} /> */}
         <Card.Cover
           style={styles.container}
           source={{
             uri: pictureUri,
           }}
         />
-        <Card.Actions>
-          <Link
-            href={{
-              pathname: `artists/${artist.userId}`,
-              params: { artistId: artist.userId },
-            }}
-            asChild
-          >
-            <Button>Go to artist</Button>
-          </Link>
-        </Card.Actions>
+        <View style={styles.cardContent}>
+          <Card.Content>
+            <Title>{artist.name.toUpperCase()}</Title>
+            <Paragraph>{artist.style.toLowerCase()}</Paragraph>
+          </Card.Content>
+          <Card.Actions>
+            <Link
+              href={{
+                pathname: `artists/${artist.userId}`,
+                params: { artistId: artist.userId },
+              }}
+              asChild
+            >
+              <Button mode="outlined" textColor="#474554">
+                Go to artist
+              </Button>
+            </Link>
+          </Card.Actions>
+        </View>
       </Card>
     </View>
   );
