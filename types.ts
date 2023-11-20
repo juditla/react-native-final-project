@@ -7,6 +7,8 @@ export type Studio = {
   ownerId: number;
   longitude?: string;
   latitude?: string;
+  tattooImages?: [TattooImage];
+  artist: [Artist];
 };
 
 export type Artist = {
@@ -17,6 +19,10 @@ export type Artist = {
   description: string;
   studioId?: number;
   tattooImages?: [TattooImage];
+  user: {
+    avatar: string;
+    firstName: string;
+  };
 };
 
 export type User = {
@@ -26,6 +32,7 @@ export type User = {
   lastName: string;
   roleId: number;
   createDate: string;
+  avatar: string;
 };
 
 export type TattooImage = {
