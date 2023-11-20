@@ -66,7 +66,7 @@ export default function ArtistRegistrationForm() {
       style,
       description,
     });
-    if (!validatedNewArtist.success) {
+    if (!validatedNewArtist.success && validatedNewArtist.error.issues[0]) {
       setErrorMessage(
         `${validatedNewArtist.error.issues[0].path[0]}: ${validatedNewArtist.error.issues[0].message}`,
       );

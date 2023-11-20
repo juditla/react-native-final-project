@@ -1,4 +1,4 @@
-import { Stack, Tabs } from 'expo-router';
+import { Stack } from 'expo-router';
 import { UserProvider } from './UserProvider';
 
 export default function Layout() {
@@ -6,6 +6,7 @@ export default function Layout() {
     <UserProvider>
       <Stack
         screenOptions={{
+          headerShown: false,
           headerStyle: {
             backgroundColor: 'grey',
           },
@@ -22,6 +23,13 @@ export default function Layout() {
             headerBackTitleVisible: false,
           }}
         />
+        {/* <Stack.Screen
+          name="(auth)"
+          options={{
+            headerTitle: '',
+            headerBackTitleVisible: false,
+          }}
+        /> */}
       </Stack>
     </UserProvider>
   );

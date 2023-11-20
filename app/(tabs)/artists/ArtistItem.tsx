@@ -20,6 +20,12 @@ const styles = StyleSheet.create({
   linkStyle: {
     color: 'black',
   },
+  cardContainer: {
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
   cardContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -57,7 +63,7 @@ export default function ArtistItem({ artist }: Props) {
               asChild
             >
               <Button mode="outlined" textColor="#474554">
-                Go to artist
+                See more
               </Button>
             </Link>
           </Card.Actions>

@@ -1,3 +1,4 @@
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { router, Stack } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
 export default function Index() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const userContext = useContext(UserContext);
+  const bottomTabHeight = useBottomTabBarHeight();
 
   useEffect(() => {
     const getArtists = async () => {
@@ -67,6 +69,7 @@ export default function Index() {
         data={artists}
         renderItem={renderItem}
         keyExtractor={(artist: Artist) => artist.id.toString()}
+        contentContainerStyle={{ paddingBottom: bottomTabHeight }}
       />
     </SafeAreaView>
   );

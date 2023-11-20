@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,7 +12,6 @@ import {
 } from 'react-native';
 import { Button, Icon, Text } from 'react-native-paper';
 import { Artist, User } from '../../../types';
-import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 import ArtistView from './ArtistView';
 
@@ -70,7 +70,37 @@ type Props = {
 };
 
 export default function ShowProfile({ user, artist, setIsEditing }: Props) {
-  const userContext = useContext(UserContext);
+  const [profilePicture, setProfilePicture] = useState(
+    user.avatar
+      ? user.avatar
+      : 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
+  );
+
+  const handleUpload = async (base64Image: string, id: number) => {
+    const response = await fetch(`${apiDomain}/users/profilepicture`, {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'PUT',
+      body: JSON.stringify({ base64Image, id }),
+    });
+    const newImage = await response.json();
+    setProfilePicture(newImage.avatar);
+
+    return response;
+  };
+
+  async function changeProfilePicture() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.1,
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets[0]?.base64) {
+      await handleUpload(result.assets[0].base64, user.id);
+    }
+  }
 
   async function handleLogout() {
     // get session & delete in database
@@ -116,9 +146,13 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
             <Image
               style={styles.image}
               source={{
-                uri: 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
+                uri: profilePicture,
               }}
             />
+            <TouchableOpacity onPress={() => changeProfilePicture()}>
+              <Icon source="circle-edit-outline" size={25} />
+            </TouchableOpacity>
+
             <Text variant="headlineLarge">Hello, {user.firstName}</Text>
             <Text variant="titleMedium">{user.email}</Text>
             <Text variant="bodySmall">

@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Link, router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, Icon, Text } from 'react-native-paper';
@@ -53,6 +53,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
   },
+  specialRowContainer: {
+    flexDirection: 'row',
+    gap: 5,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   noArtistContainer: {
     flex: 1,
     alignItems: 'center',
@@ -67,11 +73,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-end',
     marginTop: 10,
+    borderRadius: 10,
+    backgroundColor: 'black',
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
 });
 
 export default function SingleArtist() {
-  // this is unfortunately the userId of the artist, changing this (either name or value) has led to multiple problems
+  // bug: this is unfortunately the userId of the artist, changing this (either name or value) has led to multiple problems
   const { artistId } = useLocalSearchParams();
   const [artist, setArtist] = useState<Artist>();
   const userContext = useContext(UserContext);
@@ -96,7 +108,7 @@ export default function SingleArtist() {
       console.error(error);
     }
   }
-
+  console.log('artist', artist);
   useEffect(() => {
     const getArtistByUserId = async () => {
       try {
@@ -128,6 +140,47 @@ export default function SingleArtist() {
         />
         <View style={styles.artistContainer}>
           <View style={styles.contentContainer}>
+            <View style={styles.specialRowContainer}>
+              <Image
+                source={{
+                  uri: artist.user.avatar,
+                }}
+                style={{ height: 50, width: 50, borderRadius: 60 }}
+              />
+              <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
+                {artist.user.firstName.toUpperCase()}
+              </Text>
+              <Button
+                style={styles.buttonContainer}
+                // buttonColor="#474554"
+                onPress={async () =>
+                  await conversationHandler(
+                    userContext?.currentUser?.id,
+                    Number(artist.id),
+                  )
+                    .then((conversation) => {
+                      router.push({
+                        pathname: `/messages/${conversation.id}`,
+                        params: {
+                          conversationId: conversation.id,
+                          conversationPartner: artist.name,
+                        },
+                      });
+                    })
+                    .catch((error) => error)
+                }
+                mode="outlined"
+                textColor="#474554"
+              >
+                CONNECT{'  '}
+                <IonIcon
+                  name="chatbubble-ellipses-outline"
+                  color="#474554"
+                  size={15}
+                  style={{ marginLeft: 5 }}
+                />
+              </Button>
+            </View>
             <View style={styles.rowContainer}>
               <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
                 Style:
@@ -136,47 +189,16 @@ export default function SingleArtist() {
                 {artist.style.toLowerCase()}
               </Text>
             </View>
-            <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
-              Studio:
-            </Text>
-            <Text variant="bodyLarge" style={{ color: 'grey' }}>
-              hier kommt das studio hin
-            </Text>
-            {/* <TouchableOpacity
-              // style={styles.buttonContainer}
-
-            > */}
-            <Button
-              style={styles.buttonContainer}
-              // buttonColor="#474554"
-              onPress={async () =>
-                await conversationHandler(
-                  userContext?.currentUser?.id,
-                  Number(artist.id),
-                )
-                  .then((conversation) => {
-                    router.push({
-                      pathname: `/messages/${conversation.id}`,
-                      params: {
-                        conversationId: conversation.id,
-                        conversationPartner: artist.name,
-                      },
-                    });
-                  })
-                  .catch((error) => error)
-              }
-              mode="outlined"
-              textColor="#474554"
-            >
-              CONNECT{'  '}
-              <IonIcon
-                name="chatbubble-ellipses-outline"
-                color="#474554"
-                size={15}
-                style={{ marginLeft: 5 }}
-              />
-            </Button>
-            {/* </TouchableOpacity> */}
+            <View style={styles.rowContainer}>
+              <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
+                Studio:
+              </Text>
+              <Link href={`/studios/${artist.studioId}`}>
+                <Text variant="bodyLarge" style={{ color: 'grey' }}>
+                  {artist.studio.name}
+                </Text>
+              </Link>
+            </View>
           </View>
           <View style={styles.contentContainer}>
             <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">

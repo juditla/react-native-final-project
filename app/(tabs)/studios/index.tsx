@@ -1,9 +1,28 @@
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { Stack } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Icon, Text } from 'react-native-paper';
 import { Studio } from '../../../types';
 import StudioItem from '../studios/StudioItem';
 
 export const apiDomain = 'http://localhost:4000';
+
+const styles = StyleSheet.create({
+  container: {
+    // marginLeft: 10,
+    // marginRight: 10,
+    marginTop: 10,
+  },
+  rowContainer: {
+    margin: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: 20,
+    marginRight: 20,
+  },
+});
 
 const renderItem = (item: { item: Studio }) => (
   <StudioItem studio={item.item} />
@@ -11,6 +30,7 @@ const renderItem = (item: { item: Studio }) => (
 
 export default function Index() {
   const [studios, setStudios] = useState<Studio[]>([]);
+  const bottomTabHeight = useBottomTabBarHeight();
 
   const getStudios = async () => {
     try {
@@ -29,13 +49,23 @@ export default function Index() {
   }, []);
 
   return (
-    <View>
-      {/* <FlatList
+    <SafeAreaView style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      />
+      <View style={styles.rowContainer}>
+        <Text variant="headlineMedium">Studios</Text>
+        <Icon source="filter-variant" size={25} />
+        {/* <FilterComponent /> */}
+      </View>
+      <FlatList
         data={studios}
         renderItem={renderItem}
         keyExtractor={(studio: Studio) => studio.id.toString()}
-      /> */}
-      <Text>Studio feature coming soon...</Text>
-    </View>
+        contentContainerStyle={{ paddingBottom: bottomTabHeight }}
+      />
+    </SafeAreaView>
   );
 }

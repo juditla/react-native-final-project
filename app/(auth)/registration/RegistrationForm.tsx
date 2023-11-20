@@ -14,8 +14,6 @@ import { z } from 'zod';
 import { apiDomain } from '../../(tabs)/studios';
 import UserContext from '../../UserProvider';
 
-type ErrorPath = null | 'password' | 'firstName' | 'lastName' | 'email';
-
 const registrationSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
@@ -68,7 +66,6 @@ export default function RegistrationForm() {
   const [isArtist, setIsArtist] = useState(false);
   const userContext = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [errorPath, setErrorPath] = useState<ErrorPath>(null);
 
   const router = useRouter();
 
@@ -87,15 +84,13 @@ export default function RegistrationForm() {
     try {
       passwordForm.safeParse({ password, confirmPassword });
     } catch (err) {
-      setErrorPath('password');
       setErrorMessage("The two passwords don't match");
       console.log(err);
       return;
     }
     // check if user input is correct & only create user with correct input
     const validatedNewUser = registrationSchema.safeParse(newUser);
-    if (!validatedNewUser.success) {
-      setErrorPath(validatedNewUser.error.issues[0].path[0]);
+    if (!validatedNewUser.success && validatedNewUser.error.issues[0]) {
       setErrorMessage(validatedNewUser.error.issues[0].message);
     } else {
       const response = await fetch(`${apiDomain}/users`, {
@@ -127,14 +122,9 @@ export default function RegistrationForm() {
                 expiresAt: data.expiresAt,
               }),
             );
-            console.log(userContext);
             if (userContext) {
               userContext.updateUserForSession(data.token, () => {
-                if (isArtist) {
-                  router.push(`/registration/artist`);
-                } else {
-                  router.push(`/artists`);
-                }
+                router.push(`/registration/profilePicture`);
               });
             }
           } catch (error) {

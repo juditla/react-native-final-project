@@ -9,7 +9,6 @@ import { apiDomain } from '../studios';
 
 type Props = {
   user: User;
-  setChangePassword: (boolean: boolean) => void;
 };
 
 const styles = StyleSheet.create({
@@ -37,7 +36,7 @@ const passwordForm = z
     message: "Passwords don't match",
   });
 
-export default function ChangePassword({ user, setChangePassword }: Props) {
+export default function ChangePassword({ user }: Props) {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [oldPassword, setOldPassword] = useState<string>('');

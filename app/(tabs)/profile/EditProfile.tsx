@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
 });
 
 export default function EditProfile({ user, artist, setIsEditing }: Props) {
-  const userContext = useContext(UserContext);
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [errorMessage, setErrorMessage] = useState('');
@@ -194,9 +193,7 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
             color="black"
           />
         </View>
-        {changePassword ? (
-          <ChangePassword user={user} setChangePassword={setChangePassword} />
-        ) : undefined}
+        {changePassword ? <ChangePassword user={user} /> : undefined}
         <Button
           onPress={async () => {
             await updateUserHandler();

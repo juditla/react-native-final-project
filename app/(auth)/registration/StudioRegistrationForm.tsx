@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router/src/hooks';
 import { useState } from 'react';
-import { Button, Switch, Text, TextInput } from 'react-native';
+import { Button, Text, TextInput } from 'react-native';
 import { apiDomain } from '../../(tabs)/studios';
 import { getSessionFromAsyncStorage } from '../../../util/session';
 

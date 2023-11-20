@@ -1,6 +1,13 @@
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { Avatar, Button, Card, Text } from 'react-native-paper';
+import {
+  Avatar,
+  Button,
+  Card,
+  Paragraph,
+  Text,
+  Title,
+} from 'react-native-paper';
 import { Studio } from '../../../types';
 
 type Props = {
@@ -9,58 +16,61 @@ type Props = {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
+    borderRadius: 5,
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  linkStyle: {
+    color: 'black',
+  },
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
   },
 });
-
 export default function StudioItem({ studio }: Props) {
-  // const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
+  let pictureUri =
+    'https://media.istockphoto.com/id/944433918/photo/back-tattoo-of-a-woman.jpg?s=612x612&w=0&k=20&c=d7CnC4esWn-VlnmETYoxvODoiubywnb9VXju5r1pVx8=';
+  if (studio.tattooImages && studio.tattooImages[0]) {
+    pictureUri = studio.tattooImages[0].picture;
+  }
   return (
-    <>
-      <View style={styles.container}>
-        <Card>
-          <Card.Title
-            title={studio.name}
-            // subtitle={`${studio.address}, ${studio.postalCode} ${studio.city}`}
-            // left={LeftContent}
-          />
-          <Card.Content>
-            {/* <Text variant="titleLarge">{studio.name}</Text> */}
-            {/* <Text variant="bodyMedium">{studio.address}</Text>
-          <Text variant="bodyMedium">
-            {studio.postalCode} {studio.city}
-          </Text> */}
-          </Card.Content>
-          <Card.Cover
-            source={{
-              uri: 'https://media.istockphoto.com/id/944433918/photo/back-tattoo-of-a-woman.jpg?s=612x612&w=0&k=20&c=d7CnC4esWn-VlnmETYoxvODoiubywnb9VXju5r1pVx8=',
-            }}
-          />
-          <Card.Actions>
-            <Button
-              onPress={() => {
-                router.push({
-                  pathname: `/studios/${studio.id}`,
-                  params: { id: Number(studio.id) },
-                });
-              }}
-            >
-              Go to studio
-            </Button>
-          </Card.Actions>
-        </Card>
-      </View>
-      {/* <View style={styles.container}>
-        <Text>{studio.name}</Text>
-        <Link
-          href={{
-            pathname: `/studios/${studio.id}`,
-            params: { id: studio.id },
+    <View style={styles.container}>
+      <Card style={styles.container}>
+        <Card.Cover
+          style={styles.container}
+          source={{
+            uri: pictureUri,
           }}
-        >
-          Go to studio
-        </Link>
-      </View> */}
-    </>
+        />
+        <View style={styles.cardContent}>
+          <Card.Content>
+            <Title>{studio.name.toUpperCase()}</Title>
+            <Paragraph>
+              {studio.postalCode} {studio.city}
+            </Paragraph>
+          </Card.Content>
+          <Card.Actions>
+            <Link
+              href={{
+                pathname: `/studios/${studio.id}`,
+                params: { studioId: studio.id },
+              }}
+              asChild
+            >
+              <Button mode="outlined" textColor="#474554">
+                Go to studio
+              </Button>
+            </Link>
+          </Card.Actions>
+        </View>
+      </Card>
+    </View>
   );
 }

@@ -1,8 +1,11 @@
+import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { convertDate } from '../../../util/convertDate';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 
@@ -14,10 +17,12 @@ type Conversation = {
   owner: {
     id: number;
     firstName: string;
+    avatar: string;
   };
   participant: {
     id: number;
     firstName: string;
+    avatar: string;
   };
 };
 
@@ -34,8 +39,8 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     // marginTop: 10,
     // borderRadius: 10,
-    borderBottomWidth: 2,
-    backgroundColor: 'white',
+    // borderBottomWidth: 2,
+    // backgroundColor: 'white',
   },
   emptyContainer: {
     flex: 1,
@@ -93,39 +98,75 @@ export default function Index() {
       <View style={styles.wrapper}>
         <Text variant="headlineMedium">Messages</Text>
       </View>
-      {conversations.length > 0 ? (
-        conversations.map((item) => {
-          const conversationPartner =
-            item.owner.id === userContext?.currentUser.id &&
-            item.participant.id === userContext.currentUser.id
-              ? `${item.owner.firstName} - Yourself`
-              : item.owner.id === userContext?.currentUser.id
-              ? item.participant.firstName
-              : item.owner.firstName;
-          return (
-            // <View style={styles.conversationContainer} key={`key-${item.id}`}>
-            <TouchableOpacity
-              style={styles.conversationContainer}
-              key={`key-${item.id}`}
-              onPress={() =>
-                router.push({
-                  pathname: `messages/${item.id}`,
-                  params: { conversationId: item.id, conversationPartner },
-                })
-              }
-            >
-              <Text variant="titleMedium">{conversationPartner}</Text>
-              <Text variant="titleMedium">{'>'}</Text>
-            </TouchableOpacity>
-            // </View>
-          );
-        })
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Icon name="sad-outline" size={30} />
-          <Text>You have no conversations yet...</Text>
-        </View>
-      )}
+      <ScrollView>
+        {conversations.length > 0 ? (
+          conversations.map((item) => {
+            console.log('item:', item);
+            console.log('item.message', item.message[0]);
+            const conversationPartner =
+              item.owner.id === userContext?.currentUser.id
+                ? // &&
+                  // item.participant.id === userContext.currentUser.id
+                  // ? `${item.owner.firstName} - Yourself`
+                  // : item.owner.id === userContext?.currentUser.id
+                  item.participant
+                : item.owner;
+            return (
+              // <View style={styles.conversationContainer} key={`key-${item.id}`}>
+              <TouchableOpacity
+                style={styles.conversationContainer}
+                key={`key-${item.id}`}
+                onPress={() =>
+                  router.push({
+                    pathname: `messages/${item.id}`,
+                    params: {
+                      conversationId: item.id,
+                      conversationPartner: conversationPartner.firstName,
+                    },
+                  })
+                }
+              >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 10,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri: conversationPartner.avatar
+                        ? conversationPartner.avatar
+                        : 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
+                    }}
+                    style={{ height: 50, width: 50, borderRadius: 60 }}
+                  />
+                  <View>
+                    <Text variant="titleMedium">
+                      {conversationPartner.firstName}
+                    </Text>
+                    <Text variant="titleSmall" style={{ color: 'grey' }}>
+                      {item.message[0] ? item.message[0].text : ''}
+                    </Text>
+                  </View>
+                </View>
+                <Text variant="titleSmall" style={{ color: 'grey' }}>
+                  {item.message[0]
+                    ? convertDate(item.message[0].createDate)
+                    : ''}
+                </Text>
+              </TouchableOpacity>
+
+              // </View>
+            );
+          })
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Icon name="sad-outline" size={30} />
+            <Text>You have no conversations yet...</Text>
+          </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
