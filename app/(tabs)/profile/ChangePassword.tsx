@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Message } from 'react-native-gifted-chat';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { User } from '../../../types';
@@ -51,8 +50,7 @@ export default function ChangePassword({ user }: Props) {
         newPassword,
         confirmNewPassword,
       });
-      console.log('validatedpassword', validatedPassword);
-      if (validatedPassword.error) {
+      if (!validatedPassword.success) {
         return setErrorMessage(
           'New password and confirm new password must match and be at least 8 characters long',
         );
@@ -60,7 +58,6 @@ export default function ChangePassword({ user }: Props) {
     } catch (error) {
       console.log(error);
     }
-    console.log('Userid', user.id);
     // get token from session
     const token = await getSessionFromAsyncStorage();
 

@@ -1,7 +1,7 @@
 import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Bubble, GiftedChat, Time } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat, IMessage, Time } from 'react-native-gifted-chat';
 import { User } from '../../../types';
 import modifyMessage from '../../../util/modifyMessage';
 import sortArrayByDate from '../../../util/sortArrayByDate';
@@ -17,16 +17,16 @@ export type Message = {
   sender: User;
 };
 
-type GiftedChatMessage = [
-  {
-    _id: string;
-    createdAt: Date;
-    text: string;
-    user: {
-      _id: number;
-    };
-  },
-];
+// type GiftedChatMessage = [
+//   {
+//     _id: string;
+//     createdAt: Date;
+//     text: string;
+//     user: {
+//       _id: number;
+//     };
+//   },
+// ];
 
 const styles = StyleSheet.create({
   chatContainer: {
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function modifyAndSortMessagesArray(array: Message[]): MessageForGiftedChat[] {
+function modifyAndSortMessagesArray(array: IMessage[]): IMessage[] {
   const modifiedMessageArray = array.map((message) => {
     console.log(message);
     return modifyMessage(message);
@@ -46,10 +46,10 @@ function modifyAndSortMessagesArray(array: Message[]): MessageForGiftedChat[] {
 
 export default function SingleConversation() {
   const { conversationId, conversationPartner } = useLocalSearchParams();
-  const [messages, setMessages] = useState<MessageForGiftedChat[] | []>([]);
+  const [messages, setMessages] = useState<IMessage[] | []>([]);
   const userContext = useContext(UserContext);
 
-  async function sendMessageHandler(newMessageArray: GiftedChatMessage) {
+  async function sendMessageHandler(newMessageArray: IMessage[]) {
     try {
       const messageResponse = await fetch(`${apiDomain}/messages`, {
         headers: { 'Content-Type': 'application/json' },

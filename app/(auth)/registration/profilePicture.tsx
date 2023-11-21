@@ -22,18 +22,22 @@ export default function ProfilePicture() {
   const router = useRouter();
 
   const handleUpload = async (base64Image: string, id: number) => {
-    const response = await fetch(
-      `${apiDomain}/users/profilepicture/${userContext?.currentUser?.id}`,
-      {
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
-        body: JSON.stringify({ base64Image, id }),
-      },
-    );
-    const newImage = await response.json();
-    setProfilePicture(newImage);
+    try {
+      const response = await fetch(
+        `${apiDomain}/users/profilepicture/${userContext?.currentUser?.id}`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST',
+          body: JSON.stringify({ base64Image, id }),
+        },
+      );
+      const newImage = await response.json();
+      setProfilePicture(newImage);
 
-    return response;
+      return response;
+    } catch (error) {
+      setErrorMessage('Something went wrong uploading the picture');
+    }
   };
 
   const pickImage = async () => {
@@ -46,7 +50,7 @@ export default function ProfilePicture() {
     });
 
     if (!result.canceled && result.assets[0]?.base64) {
-      await handleUpload(result.assets[0].base64, userContext?.currentUser?.id);
+      await handleUpload(result.assets[0].base64, userContext!.currentUser!.id);
     }
   };
 
