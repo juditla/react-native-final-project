@@ -49,13 +49,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
   },
+  artistRowContainer: {
+    flexDirection: 'row',
+    gap: 10,
+  },
   noStudioContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 20,
   },
-
   buttonContainer: {
     color: 'white',
     gap: 5,
@@ -63,6 +66,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-end',
     marginTop: 10,
+    borderRadius: 10,
+    backgroundColor: 'black',
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    marginLeft: 75,
   },
 });
 
@@ -104,6 +114,9 @@ export default function SingleStudio() {
           />
           <View style={styles.studioContainer}>
             <View style={styles.contentContainer}>
+              <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
+                {studio.name.toUpperCase()}
+              </Text>
               <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
                 Location:
               </Text>
@@ -115,8 +128,8 @@ export default function SingleStudio() {
               </Text>
               <Button
                 mode="outlined"
+                textColor="white"
                 style={styles.buttonContainer}
-                // buttonColor="#474554"
                 onPress={() => {
                   router.push(
                     `https://www.google.com/maps/search/?api=1&query=${studio.address}+${studio.postalCode}+${studio.city}`,
@@ -126,7 +139,7 @@ export default function SingleStudio() {
                 FIND ON MAP{'  '}
                 <Icon
                   source="google-maps"
-                  color="#474554"
+                  color="white"
                   size={15}
                   // style={{ marginLeft: 5 }}
                 />
@@ -136,40 +149,53 @@ export default function SingleStudio() {
               <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
                 Artists:
               </Text>
-              {studio.artist.length > 0
-                ? studio.artist.map((artist) => {
-                    return (
-                      <Link
-                        key={`artistid-${studio.artistId}`}
-                        style={{
-                          flexDirection: 'row',
-                          gap: 10,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                        href={{
-                          pathname: `artists/${artist.userId}`,
-                          params: { artistId: artist.userId },
-                        }}
-                      >
-                        <Image
-                          source={{
-                            uri: artist.user.avatar,
+              <View>
+                {studio.artist.length > 0
+                  ? studio.artist.map((artist, index) => {
+                      return (
+                        <Link
+                          key={`artistid-${artist.id}`}
+                          style={
+                            {
+                              //   flexDirection: 'row',
+                              // gap: 10,
+                              //   alignItems: 'center',
+                              //   justifyContent: 'center',
+                            }
+                          }
+                          href={{
+                            pathname: `artists/${artist.userId}`,
+                            params: { artistId: artist.userId },
                           }}
-                          style={{ height: 50, width: 50, borderRadius: 60 }}
-                        />
+                        >
+                          <Image
+                            source={{
+                              uri: artist.user.avatar,
+                            }}
+                            style={{
+                              height: 50,
+                              width: 50,
+                              borderRadius: 50,
+                            }}
+                          />
 
-                        <Text variant="titleMedium">{artist.name}</Text>
-                        <Text variant="titleSmall" style={{ color: 'grey' }}>
-                          {artist.style}
-                        </Text>
-                      </Link>
-                      // </TouchableOpacity>
-                    );
-                  })
-                : 'no artists'}
+                          <Text variant="titleMedium">{artist.name}</Text>
+                          <Text variant="titleSmall" style={{ color: 'grey' }}>
+                            {artist.style}
+                          </Text>
+                        </Link>
+                      );
+                    })
+                  : 'no artists'}
+              </View>
             </View>
           </View>
+          {/* <View style={styles.contentContainer}>
+            <Image source={{
+              uri:
+            }}
+            style={{ height: 50, width: 50 }} />
+          </View> */}
         </SafeAreaView>
       </ScrollView>
     );
