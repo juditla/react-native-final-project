@@ -1,11 +1,10 @@
 import { router } from 'expo-router';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button, Switch, Text, TextInput } from 'react-native-paper';
 import { z } from 'zod';
 import { Artist, User } from '../../../types';
-import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 import ChangePassword from './ChangePassword';
 
@@ -28,7 +27,6 @@ const artistToUpdateSchema = z.object({
 
 const styles = StyleSheet.create({
   container: {
-    // padding: 30,
     margin: 30,
   },
   rowContainer: {
@@ -42,8 +40,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 25,
-    // marginLeft: 10,
-    // marginRight: 10,
     borderRadius: 15,
   },
   inputStyle: {
@@ -260,7 +256,7 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
                 await updateArtistHandler();
               }}
               mode="contained"
-              buttonColor="#474554"
+              buttonColor="black"
               textColor="white"
               style={styles.button}
             >
@@ -269,7 +265,7 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
             <Button
               icon="trash-can-outline"
               onPress={async () => {
-                await deletionHandler(artist?.id, 'artists');
+                await deletionHandler(artist!.id, 'artists');
               }}
               style={styles.button}
               mode="outlined"

@@ -1,5 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Icon, Text } from 'react-native-paper';
 import { TattooImage } from '../../../types';
@@ -7,15 +7,14 @@ import { apiDomain } from '../studios';
 
 type Props = {
   artistId: number;
-  setTattooImages: (tattooImages: TattooImage[]) => void;
-  tattooImages: TattooImage[];
+  setTattooImages: Dispatch<SetStateAction<[TattooImage] | undefined>>;
+  tattooImages: TattooImage[] | undefined;
 };
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    // alignSelf: 'center',
     marginLeft: 20,
   },
   iconButton: {

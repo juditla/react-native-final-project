@@ -1,7 +1,7 @@
 import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Avatar, Bubble, GiftedChat, Time } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat, Time } from 'react-native-gifted-chat';
 import { User } from '../../../types';
 import modifyMessage from '../../../util/modifyMessage';
 import sortArrayByDate from '../../../util/sortArrayByDate';
@@ -107,6 +107,7 @@ export default function SingleConversation() {
           headerStyle: {
             backgroundColor: 'transparent',
           },
+          headerBackTitleVisible: false,
         }}
       />
       <GiftedChat

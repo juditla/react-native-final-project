@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Button, Icon, Text } from 'react-native-paper';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Icon, Text } from 'react-native-paper';
 import { Artist } from '../../../types';
 import { apiDomain } from '../studios';
 import ImageUploader from './ImageUploader';
@@ -13,7 +13,7 @@ type Props = {
 const styles = StyleSheet.create({
   image: {
     height: 200,
-    width: 200,
+    width: '90%',
     borderRadius: 5,
   },
   container: {
@@ -23,13 +23,12 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flexDirection: 'row',
-    padding: 20,
+    padding: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 20,
+    gap: 10,
     marginLeft: 10,
     marginRight: 10,
-    // borderWidth: 1,
     borderRadius: 5,
     backgroundColor: 'white',
     shadowColor: '#171717',
