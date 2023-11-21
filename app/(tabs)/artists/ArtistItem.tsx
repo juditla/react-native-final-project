@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { Button, Card, Paragraph, Text, Title } from 'react-native-paper';
+import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import { Artist } from '../../../types';
 
 type Props = {
@@ -30,6 +30,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
+  },
+  button: {
+    borderRadius: 10,
   },
 });
 
@@ -62,7 +65,7 @@ export default function ArtistItem({ artist }: Props) {
               }}
               asChild
             >
-              <Button mode="outlined" textColor="#474554">
+              <Button style={styles.button} mode="outlined" textColor="black">
                 See more
               </Button>
             </Link>

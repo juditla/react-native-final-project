@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 10,
   },
+  button: {
+    borderRadius: 10,
+  },
 });
 export default function StudioItem({ studio }: Props) {
   let pictureUri =
@@ -64,8 +67,8 @@ export default function StudioItem({ studio }: Props) {
               }}
               asChild
             >
-              <Button mode="outlined" textColor="#474554">
-                Go to studio
+              <Button style={styles.button} mode="outlined" textColor="black">
+                See more
               </Button>
             </Link>
           </Card.Actions>
