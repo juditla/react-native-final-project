@@ -112,14 +112,14 @@ export default function RegistrationForm() {
             body: JSON.stringify({ email, password }),
           });
 
-          const data = await loginResponse.json();
+          const loginData = await loginResponse.json();
 
           try {
             await AsyncStorage.setItem(
               'session',
               JSON.stringify({
-                sessionToken: data.token,
-                expiresAt: data.expiresAt,
+                sessionToken: loginData.token,
+                expiresAt: loginData.expiresAt,
               }),
             );
             if (userContext) {
