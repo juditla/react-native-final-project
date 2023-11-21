@@ -7,7 +7,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Button, Icon, Text } from 'react-native-paper';
 import { Studio } from '../../../types';
 import { apiDomain } from './';
@@ -20,7 +19,6 @@ const styles = StyleSheet.create({
   image: {
     height: 200,
     width: '100%',
-    // marginTop: 5,
     marginBottom: 10,
     borderRadius: 5,
   },
@@ -43,7 +41,6 @@ const styles = StyleSheet.create({
   scrollView: {
     width: '100%',
     alignItems: 'center',
-    // margin: 10,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -77,11 +74,9 @@ const styles = StyleSheet.create({
 });
 
 export default function SingleStudio() {
-  // const { studioId } = useLocalSearchParams();
   const { studioId } = useLocalSearchParams();
   const [studio, setStudio] = useState<Studio>();
 
-  console.log('studio', studio?.artist);
   const getStudioById = async () => {
     try {
       const response = await fetch(`${apiDomain}/studios/${studioId}`);
@@ -137,12 +132,7 @@ export default function SingleStudio() {
                 }}
               >
                 FIND ON MAP{'  '}
-                <Icon
-                  source="google-maps"
-                  color="white"
-                  size={15}
-                  // style={{ marginLeft: 5 }}
-                />
+                <Icon source="google-maps" color="white" size={15} />
               </Button>
             </View>
             <View style={styles.contentContainer}>
@@ -151,7 +141,7 @@ export default function SingleStudio() {
               </Text>
               <View>
                 {studio.artist.length > 0
-                  ? studio.artist.map((artist, index) => {
+                  ? studio.artist.map((artist) => {
                       return (
                         <Link
                           key={`artistid-${artist.id}`}
@@ -190,12 +180,6 @@ export default function SingleStudio() {
               </View>
             </View>
           </View>
-          {/* <View style={styles.contentContainer}>
-            <Image source={{
-              uri:
-            }}
-            style={{ height: 50, width: 50 }} />
-          </View> */}
         </SafeAreaView>
       </ScrollView>
     );

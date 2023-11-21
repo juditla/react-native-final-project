@@ -33,16 +33,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    // marginLeft: 5,
-    // marginRight: 5,
     padding: 15,
     alignItems: 'center',
-    // borderWidth: 1,
     borderColor: 'grey',
-    // marginTop: 10,
-    // borderRadius: 10,
-    // borderBottomWidth: 2,
-    // backgroundColor: 'white',
   },
   emptyContainer: {
     flex: 1,
@@ -52,7 +45,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // margin: 20,
   },
   wrapper: {
     marginBottom: 15,

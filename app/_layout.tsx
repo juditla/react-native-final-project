@@ -23,13 +23,6 @@ export default function Layout() {
             headerBackTitleVisible: false,
           }}
         />
-        {/* <Stack.Screen
-          name="(auth)"
-          options={{
-            headerTitle: '',
-            headerBackTitleVisible: false,
-          }}
-        /> */}
       </Stack>
     </UserProvider>
   );

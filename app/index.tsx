@@ -2,16 +2,14 @@ import '../ReactotronConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Redirect } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text } from 'react-native-paper';
-import UserContext from './UserProvider';
 
 // keeps Splash Screen visible during fetching
 SplashScreen.preventAutoHideAsync().catch((error) => console.log(error));
 
 export default function App() {
   const [isAppReady, setIsAppReady] = useState(false);
-  const userContext = useContext(UserContext);
 
   useEffect(() => {
     // just for testing, shows what is currently in AsyncStorage

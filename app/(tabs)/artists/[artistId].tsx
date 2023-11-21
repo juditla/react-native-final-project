@@ -1,20 +1,13 @@
 import { Image } from 'expo-image';
 import { Link, router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Divider, Icon, Text } from 'react-native-paper';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { Artist } from '../../../types';
 import { getSessionFromAsyncStorage } from '../../../util/session';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
-
-type Props = {
-  params: {
-    id: number;
-    // artistId: number
-  };
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -97,7 +90,10 @@ export default function SingleArtist() {
   const [artist, setArtist] = useState<Artist>();
   const userContext = useContext(UserContext);
 
-  async function conversationHandler(userId: number, artistId: number) {
+  async function conversationHandler(
+    userId: number,
+    artistToStartConversationWithId: number,
+  ) {
     const token = await getSessionFromAsyncStorage();
     try {
       const conversationResponse = await fetch(`${apiDomain}/conversations`, {
@@ -105,7 +101,7 @@ export default function SingleArtist() {
         method: 'POST',
         body: JSON.stringify({
           userId,
-          artistId,
+          artistToStartConversationWithId,
           token,
         }),
       });

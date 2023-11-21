@@ -8,7 +8,7 @@ export default function ArtistRegistrationForm() {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
-  const [postalCode, setpostalCode] = useState('');
+  const [postalCode, setPostalCode] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const router = useRouter();
@@ -50,28 +50,24 @@ export default function ArtistRegistrationForm() {
       <TextInput
         onChangeText={(val) => setName(val)}
         value={name}
-        // placeholder="Email"
         keyboardType="default"
       />
       <Text>Address:</Text>
       <TextInput
         onChangeText={(val) => setAddress(val)}
         value={address}
-        // placeholder="First name"
         keyboardType="default"
       />
       <Text>Describe yourself</Text>
       <TextInput
-        onChangeText={(val) => setpostalCode(val)}
+        onChangeText={(val) => setPostalCode(val)}
         value={postalCode}
-        // placeholder="Last name"
         keyboardType="number-pad"
         multiline={true}
       />
       <TextInput
         onChangeText={(val) => setCity(val)}
         value={city}
-        // placeholder="Last name"
         keyboardType="default"
         multiline={true}
       />

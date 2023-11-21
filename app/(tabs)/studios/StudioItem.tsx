@@ -1,13 +1,6 @@
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import {
-  Avatar,
-  Button,
-  Card,
-  Paragraph,
-  Text,
-  Title,
-} from 'react-native-paper';
+import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import { Studio } from '../../../types';
 
 type Props = {

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useContext, useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { apiDomain } from '../../(tabs)/studios';
 import UserContext from '../../UserProvider';
 import LoginForm from './LoginForm';
@@ -12,11 +12,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
 });
 
 export default function Login() {
-  const [errorMessage, setErrorMessage] = useState('');
   const userContext = useContext(UserContext);
   // get session from async storage
 
@@ -51,12 +49,10 @@ export default function Login() {
                   router.replace(`/artists`),
                 );
               }
-            } else {
-              setErrorMessage('session not valid');
             }
           })
 
-          .catch((error) => setErrorMessage(error));
+          .catch((error) => console.log(error));
       })
       .catch(() => null);
   }, []);
