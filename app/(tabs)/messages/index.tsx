@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { convertDate } from '../../../util/convertDate';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
+import { Message } from './[conversationId]';
 
 type Conversation = {
   id: number;
@@ -24,6 +25,7 @@ type Conversation = {
     firstName: string;
     avatar: string;
   };
+  message: [Message];
 };
 
 const styles = StyleSheet.create({
@@ -101,10 +103,8 @@ export default function Index() {
       <ScrollView>
         {conversations.length > 0 ? (
           conversations.map((item) => {
-            console.log('item:', item);
-            console.log('item.message', item.message[0]);
             const conversationPartner =
-              item.owner.id === userContext?.currentUser.id
+              item.owner.id === userContext!.currentUser!.id
                 ? // &&
                   // item.participant.id === userContext.currentUser.id
                   // ? `${item.owner.firstName} - Yourself`
@@ -112,7 +112,6 @@ export default function Index() {
                   item.participant
                 : item.owner;
             return (
-              // <View style={styles.conversationContainer} key={`key-${item.id}`}>
               <TouchableOpacity
                 style={styles.conversationContainer}
                 key={`key-${item.id}`}
@@ -146,14 +145,12 @@ export default function Index() {
                       {conversationPartner.firstName}
                     </Text>
                     <Text variant="titleSmall" style={{ color: 'grey' }}>
-                      {item.message[0] ? item.message[0].text : ''}
+                      {item.message[0].text}
                     </Text>
                   </View>
                 </View>
                 <Text variant="titleSmall" style={{ color: 'grey' }}>
-                  {item.message[0]
-                    ? convertDate(item.message[0].createDate)
-                    : ''}
+                  {convertDate(item.message[0].createDate)}
                 </Text>
               </TouchableOpacity>
 
