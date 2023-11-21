@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { Link, router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Button, Icon, Text } from 'react-native-paper';
+import { Button, Divider, Icon, Text } from 'react-native-paper';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { Artist } from '../../../types';
 import { getSessionFromAsyncStorage } from '../../../util/session';
@@ -24,15 +24,12 @@ const styles = StyleSheet.create({
   image: {
     height: 200,
     width: '100%',
-    // marginTop: 5,
-    marginBottom: 10,
+    marginTop: 15,
+    marginBottom: 15,
     borderRadius: 5,
   },
   imageContainer: {
     width: '100%',
-    // flex: 1,
-    // flexDirection: 'column',
-    // alignItems: 'center',
   },
   contentContainer: {
     backgroundColor: 'white',
@@ -47,7 +44,15 @@ const styles = StyleSheet.create({
   scrollView: {
     width: '100%',
     alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 5,
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
     // margin: 10,
+    gap: 5,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -55,9 +60,10 @@ const styles = StyleSheet.create({
   },
   specialRowContainer: {
     flexDirection: 'row',
-    gap: 5,
-    justifyContent: 'space-between',
+    gap: 20,
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    marginBottom: 10,
   },
   noArtistContainer: {
     flex: 1,
@@ -65,8 +71,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
   },
-
   buttonContainer: {
+    alignItems: 'flex-end',
+  },
+  button: {
     color: 'white',
     gap: 5,
     justifyContent: 'center',
@@ -79,6 +87,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
+    marginLeft: 75,
   },
 });
 
@@ -145,41 +154,16 @@ export default function SingleArtist() {
                 source={{
                   uri: artist.user.avatar,
                 }}
-                style={{ height: 50, width: 50, borderRadius: 60 }}
+                style={{ height: 70, width: 70, borderRadius: 60 }}
               />
-              <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
-                {artist.user.firstName.toUpperCase()}
-              </Text>
-              <Button
-                style={styles.buttonContainer}
-                // buttonColor="#474554"
-                onPress={async () =>
-                  await conversationHandler(
-                    userContext?.currentUser?.id,
-                    Number(artist.id),
-                  )
-                    .then((conversation) => {
-                      router.push({
-                        pathname: `/messages/${conversation.id}`,
-                        params: {
-                          conversationId: conversation.id,
-                          conversationPartner: artist.name,
-                        },
-                      });
-                    })
-                    .catch((error) => error)
-                }
-                mode="outlined"
-                textColor="#474554"
-              >
-                CONNECT{'  '}
-                <IonIcon
-                  name="chatbubble-ellipses-outline"
-                  color="#474554"
-                  size={15}
-                  style={{ marginLeft: 5 }}
-                />
-              </Button>
+              <View>
+                <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
+                  {artist.user.firstName.toUpperCase()}
+                </Text>
+                <Text variant="bodyLarge" style={{ color: 'grey' }}>
+                  alias '{artist.name}''
+                </Text>
+              </View>
             </View>
             <View style={styles.rowContainer}>
               <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
@@ -190,14 +174,49 @@ export default function SingleArtist() {
               </Text>
             </View>
             <View style={styles.rowContainer}>
-              <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
-                Studio:
-              </Text>
-              <Link href={`/studios/${artist.studioId}`}>
-                <Text variant="bodyLarge" style={{ color: 'grey' }}>
-                  {artist.studio.name}
+              <View>
+                <Text
+                  style={{ textTransform: 'uppercase' }}
+                  variant="bodyLarge"
+                >
+                  Studio:
                 </Text>
-              </Link>
+                <Link href={`/studios/${artist.studioId}`}>
+                  <Text variant="bodyLarge" style={{ color: 'grey' }}>
+                    {artist.studio.name}
+                  </Text>
+                </Link>
+              </View>
+              <Button
+                style={styles.button}
+                // buttonColor="#474554"
+                onPress={async () =>
+                  await conversationHandler(
+                    userContext!.currentUser!.id,
+                    Number(artist.id),
+                  )
+                    .then((conversation) => {
+                      router.push({
+                        pathname: `/messages/${conversation.id}`,
+                        params: {
+                          conversationId: conversation.id,
+                          conversationPartner: artist.user.firstName,
+                        },
+                      });
+                    })
+                    .catch((error) => error)
+                }
+                mode="outlined"
+                textColor="white"
+              >
+                CONNECT{'  '}
+                <IonIcon
+                  name="chatbubble-ellipses-outline"
+                  color="white"
+                  size={15}
+                  style={{ marginLeft: 5 }}
+                />
+              </Button>
             </View>
           </View>
           <View style={styles.contentContainer}>
@@ -209,17 +228,20 @@ export default function SingleArtist() {
             </Text>
           </View>
           <View style={styles.imageContainer}>
-            <Text variant="bodyLarge" style={{ textTransform: 'uppercase' }}>
-              My art
-            </Text>
             <View style={styles.scrollView}>
+              <Text
+                variant="bodyLarge"
+                style={{ textTransform: 'uppercase', alignSelf: 'flex-start' }}
+              >
+                My art:
+              </Text>
+              {/* <Divider horizontalInset={true} bold={true} /> */}
               {artist.tattooImages?.map((image) => {
                 return (
-                  <Image
-                    style={styles.image}
-                    key={`image-${image.id}`}
-                    source={image.picture}
-                  />
+                  <View style={styles.imageContainer} key={`image-${image.id}`}>
+                    <Image style={styles.image} source={image.picture} />
+                    <Divider horizontalInset={true} bold={true} />
+                  </View>
                 );
               })}
             </View>
