@@ -23,6 +23,7 @@ export type Artist = {
     avatar: string;
     firstName: string;
   };
+  studio: Studio;
 };
 
 export type User = {
