@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
   },
   profileSection: {
     margin: 20,
-    // borderWidth: 1,
     shadowColor: '#171717',
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
@@ -45,7 +44,6 @@ const styles = StyleSheet.create({
 
     borderColor: 'black',
     borderRadius: 5,
-    padding: 10,
     backgroundColor: 'white',
   },
   profileContainer: {
@@ -131,30 +129,36 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
     } catch (error) {
       return console.log('could not delete async storage');
     }
-    // userContext?.setCurrentUser(null);
   }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.profileSection}>
-          <View style={styles.editContainer}>
-            <TouchableOpacity onPress={() => setIsEditing(true)}>
+          <View style={styles.profileContainer}>
+            <TouchableOpacity
+              style={{
+                alignSelf: 'flex-end',
+                paddingTop: 10,
+                paddingRight: 10,
+              }}
+              onPress={() => setIsEditing(true)}
+            >
               <Icon source="pencil" size={20} />
             </TouchableOpacity>
-          </View>
-          <View style={styles.profileContainer}>
             <Image
               style={styles.image}
               source={{
                 uri: profilePicture,
               }}
             />
-            <TouchableOpacity onPress={() => changeProfilePicture()}>
-              <Icon source="circle-edit-outline" size={25} />
+            <TouchableOpacity
+              onPress={() => changeProfilePicture()}
+              style={{ position: 'absolute', right: 110, top: 100 }}
+            >
+              <Icon source="cached" size={25} />
             </TouchableOpacity>
 
             <Text variant="headlineLarge">Hello, {user.firstName}</Text>
-            <Text variant="titleMedium">{user.email}</Text>
             <Text variant="bodySmall">
               User since {user.createDate.slice(0, 10)}
             </Text>
