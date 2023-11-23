@@ -7,8 +7,8 @@ export type Studio = {
   ownerId: number;
   longitude?: string;
   latitude?: string;
-  tattooImages?: [TattooImage];
-  artist: [Artist];
+  tattooImages?: TattooImage[];
+  artist: Artist[];
 };
 
 export type Artist = {
@@ -18,12 +18,12 @@ export type Artist = {
   style: string;
   description: string;
   studioId?: number;
-  tattooImages?: [TattooImage];
+  tattooImages?: TattooImage[];
   user: {
     avatar: string;
     firstName: string;
   };
-  studio: Studio;
+  studio?: Studio;
 };
 
 export type User = {
@@ -42,4 +42,9 @@ export type TattooImage = {
   picture: string;
   artistId: number;
   style: string;
+};
+
+export type StudioImage = {
+  id: number;
+  picutre: string;
 };
