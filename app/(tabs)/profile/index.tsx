@@ -47,7 +47,6 @@ export default function Index() {
     }
   }, [userContext, isEditing, user?.id, user?.roleId]);
 
-  console.log('artisto', artist);
   if (!user) {
     return <Text>Loading...</Text>;
   }
