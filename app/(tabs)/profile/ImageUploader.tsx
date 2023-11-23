@@ -7,15 +7,26 @@ import { apiDomain } from '../studios';
 
 type Props = {
   artistId: number;
-  setTattooImages: Dispatch<SetStateAction<[TattooImage] | undefined>>;
+  setTattooImages: Dispatch<SetStateAction<TattooImage[] | undefined>>;
   tattooImages: TattooImage[] | undefined;
 };
 
 const styles = StyleSheet.create({
   container: {
+    // flex: 1,
+    padding: 15,
+    gap: 20,
+    // width: '100%',
+    backgroundColor: 'white',
+    marginHorizontal: 20,
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    borderRadius: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 20,
+    marginVertical: 10,
   },
   iconButton: {
     padding: 10,
@@ -36,8 +47,12 @@ export default function ImageUploader({
       body: JSON.stringify({ base64Image, id }),
     });
     const newImage = await response.json();
-    setTattooImages([...tattooImages, newImage]);
 
+    if (tattooImages) {
+      setTattooImages([...tattooImages, newImage]);
+    } else {
+      setTattooImages([newImage]);
+    }
     return response;
   };
 
@@ -75,7 +90,7 @@ export default function ImageUploader({
 
   return (
     <View style={styles.container}>
-      <Text variant="bodyLarge">Upload new picture</Text>
+      <Text variant="bodyLarge"> upload new picture</Text>
       <TouchableOpacity style={styles.iconButton} onPress={() => pickImage()}>
         <Icon source="image-multiple" size={25} />
       </TouchableOpacity>
