@@ -11,7 +11,7 @@ import { apiDomain } from '../studios';
 export type Message = {
   id: number;
   senderId: number;
-  coinversationtId: number;
+  conversationtId: number;
   createDate: string;
   text: string;
   sender: User;
@@ -28,6 +28,11 @@ export type Message = {
 //   },
 // ];
 
+type SearchParams = {
+  conversationId: string;
+  conversationPartner: string;
+};
+
 const styles = StyleSheet.create({
   chatContainer: {
     display: 'flex',
@@ -35,9 +40,8 @@ const styles = StyleSheet.create({
   },
 });
 
-function modifyAndSortMessagesArray(array: IMessage[]): IMessage[] {
+function modifyAndSortMessagesArray(array: Message[]): IMessage[] {
   const modifiedMessageArray = array.map((message) => {
-    console.log(message);
     return modifyMessage(message);
   });
   console.log(modifiedMessageArray);
@@ -45,13 +49,17 @@ function modifyAndSortMessagesArray(array: IMessage[]): IMessage[] {
 }
 
 export default function SingleConversation() {
-  const { conversationId, conversationPartner } = useLocalSearchParams();
+  const { conversationId, conversationPartner } =
+    useLocalSearchParams<SearchParams>();
   const [messages, setMessages] = useState<IMessage[] | []>([]);
   const userContext = useContext(UserContext);
 
   async function sendMessageHandler(newMessageArray: IMessage[]) {
     try {
-      const messageResponse = await fetch(`${apiDomain}/messages`, {
+      if (!newMessageArray[0]) {
+        throw new Error('Ups should not happen, but no message');
+      }
+      await fetch(`${apiDomain}/messages`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         body: JSON.stringify({
@@ -60,7 +68,6 @@ export default function SingleConversation() {
           conversationId: Number(conversationId),
         }),
       });
-      const returnedMessage = await messageResponse.json();
     } catch (error) {
       console.error(error);
     }
@@ -82,7 +89,7 @@ export default function SingleConversation() {
       .catch((error) => error);
   }, [conversationId]);
 
-  const onSend = useCallback(async (message = []) => {
+  const onSend = useCallback(async (message: IMessage[]) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, message),
     );
@@ -115,7 +122,7 @@ export default function SingleConversation() {
         messages={messages}
         onSend={(message) => onSend(message)}
         user={{
-          _id: userContext?.currentUser?.id,
+          _id: userContext!.currentUser!.id,
         }}
         renderBubble={(props) => {
           return (
