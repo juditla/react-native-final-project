@@ -90,7 +90,12 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
-        <Text variant="headlineMedium">Messages</Text>
+        <Text
+          variant="headlineMedium"
+          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+        >
+          Messages
+        </Text>
       </View>
       <ScrollView>
         {conversations.length > 0 ? (

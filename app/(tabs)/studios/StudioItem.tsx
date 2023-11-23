@@ -4,7 +4,7 @@ import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import { Studio } from '../../../types';
 
 type Props = {
-  studio: Studio;
+  studio: Studio & { picture: string, id: number};
 };
 
 const styles = StyleSheet.create({
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
 export default function StudioItem({ studio }: Props) {
   let pictureUri =
     'https://media.istockphoto.com/id/944433918/photo/back-tattoo-of-a-woman.jpg?s=612x612&w=0&k=20&c=d7CnC4esWn-VlnmETYoxvODoiubywnb9VXju5r1pVx8=';
-  if (studio.tattooImages && studio.tattooImages[0]) {
-    pictureUri = studio.tattooImages[0].picture;
+  if (studio.picture) {
+    pictureUri = studio.picture;
   }
   return (
     <View style={styles.container}>
@@ -47,7 +47,9 @@ export default function StudioItem({ studio }: Props) {
         />
         <View style={styles.cardContent}>
           <Card.Content>
-            <Title>{studio.name.toUpperCase()}</Title>
+            <Title style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}>
+              {studio.name.toUpperCase()}
+            </Title>
             <Paragraph>
               {studio.postalCode} {studio.city}
             </Paragraph>

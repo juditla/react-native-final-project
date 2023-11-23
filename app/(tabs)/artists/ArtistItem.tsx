@@ -1,4 +1,5 @@
 import { Link } from 'expo-router';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import { Artist } from '../../../types';
@@ -6,6 +7,7 @@ import { Artist } from '../../../types';
 type Props = {
   artist: Artist;
 };
+
 const styles = StyleSheet.create({
   container: {
     marginLeft: 10,
@@ -54,7 +56,9 @@ export default function ArtistItem({ artist }: Props) {
         />
         <View style={styles.cardContent}>
           <Card.Content>
-            <Title>{artist.name.toUpperCase()}</Title>
+            <Title style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}>
+              {artist.name.toUpperCase()}
+            </Title>
             <Paragraph>{artist.style.toLowerCase()}</Paragraph>
           </Card.Content>
           <Card.Actions>

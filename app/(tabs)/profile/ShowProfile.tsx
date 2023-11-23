@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   profileSection: {
-    margin: 20,
+    marginHorizontal: 20,
     shadowColor: '#171717',
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
@@ -53,6 +53,17 @@ const styles = StyleSheet.create({
   addArtistProfileContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 20,
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    marginVertical: 20,
+    borderColor: 'black',
+    borderRadius: 5,
+    backgroundColor: 'white',
+    padding: 25,
+    gap: 15,
   },
   logoutContainer: {
     flexDirection: 'row',
@@ -158,7 +169,12 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
               <Icon source="cached" size={25} />
             </TouchableOpacity>
 
-            <Text variant="headlineLarge">Hello, {user.firstName}</Text>
+            <Text
+              variant="headlineLarge"
+              style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+            >
+              Hello, {user.firstName}
+            </Text>
             <Text variant="bodySmall">
               User since {user.createDate.slice(0, 10)}
             </Text>
@@ -175,8 +191,12 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
           <ArtistView artist={artist} />
         ) : (
           <View style={styles.addArtistProfileContainer}>
-            <Text>Have you become an tattoo artist?</Text>
-            <Button onPress={() => router.push(`/registration/artist`)}>
+            <Text>Have you become a tattoo artist?</Text>
+            <Button
+              mode="contained"
+              buttonColor="black"
+              onPress={() => router.push(`/registration/artist`)}
+            >
               Create tattoo artist account
             </Button>
           </View>

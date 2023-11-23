@@ -153,7 +153,12 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.wrapper}>
-          <Text variant="headlineMedium">Edit your profile</Text>
+          <Text
+            variant="headlineMedium"
+            style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+          >
+            Edit your profile
+          </Text>
         </View>
         <View style={styles.wrapper}>
           <TextInput

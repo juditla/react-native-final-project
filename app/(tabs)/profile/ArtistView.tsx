@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Icon, Text } from 'react-native-paper';
+import { Divider, Icon, Text } from 'react-native-paper';
 import { Artist } from '../../../types';
 import { apiDomain } from '../studios';
 import ImageUploader from './ImageUploader';
@@ -19,25 +19,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    gap: 10,
-  },
-  imageContainer: {
-    flexDirection: 'row',
-    padding: 15,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 10,
-    marginLeft: 10,
-    marginRight: 10,
-    borderRadius: 5,
+    gap: 20,
+    // width: '100%',
     backgroundColor: 'white',
+    marginHorizontal: 20,
     shadowColor: '#171717',
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    // padding: 15,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 10,
+    marginLeft: 5,
+    marginRight: 10,
+    borderRadius: 5,
   },
   imageSection: {
-    marginTop: 5,
+    // marginTop: 5,
     alignItems: 'stretch',
     justifyContent: 'space-around',
   },
@@ -65,24 +69,38 @@ export default function ArtistView({ artist }: Props) {
       />
       <View>
         <View style={styles.container}>
-          <Text variant="bodyLarge" style={{ marginLeft: 10 }}>
-            Your images
+          <Text
+            variant="bodyLarge"
+            style={{
+              marginLeft: 10,
+              fontFamily: 'MontserratAlternates_600SemiBold',
+            }}
+          >
+            your images
           </Text>
-          {tattooImages?.map((image) => {
-            console.log(image);
-            return (
-              <View style={styles.imageContainer} key={`image-${image.id}`}>
-                <Image style={styles.image} source={image.picture} />
-                <TouchableOpacity
-                  onPress={async () => {
-                    await deleteImageHandler(image.id);
-                  }}
-                >
-                  <Icon source="trash-can-outline" size={25} />
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+          {tattooImages && tattooImages.length === 0 ? (
+            <Text style={{ marginLeft: 10 }}>
+              you don't have any images yet..
+            </Text>
+          ) : (
+            tattooImages?.map((image) => {
+              return (
+                <View style={{ gap: 20 }} key={`image-${image.id}`}>
+                  <View style={styles.imageContainer}>
+                    <Image style={styles.image} source={image.picture} />
+                    <TouchableOpacity
+                      onPress={async () => {
+                        await deleteImageHandler(image.id);
+                      }}
+                    >
+                      <Icon source="trash-can-outline" size={25} />
+                    </TouchableOpacity>
+                  </View>
+                  <Divider horizontalInset={true} bold={true} />
+                </View>
+              );
+            })
+          )}
         </View>
       </View>
     </View>
