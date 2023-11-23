@@ -14,6 +14,7 @@ type UserContext = {
   currentUser: CurrentUser | null;
   updateUserForSession: (token: string, callback?: () => void) => void;
   setCurrentUser: (currentUser: CurrentUser | null) => void;
+  isInitialLoadingFinished: boolean;
 };
 
 const UserContext = createContext<UserContext | undefined>(undefined);
@@ -22,10 +23,13 @@ type Props = { children: ReactNode };
 
 export function UserProvider({ children }: Props) {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+  const [isInitialLoadingFinished, setIsInitialLoadingFinished] =
+    useState(false);
 
   const updateUserForSession = (token: string, callback?: () => void) => {
     getValidDatabaseSession(token)
       .then((user) => {
+        console.log('user in getvalidata', user);
         if (user) {
           setCurrentUser(user);
           if (callback) {
@@ -34,8 +38,13 @@ export function UserProvider({ children }: Props) {
         }
       })
       .catch((error) => {
-        console.log(' error while checking database session');
         console.log(error);
+      })
+      .finally(() => {
+        console.log('landing here');
+        if (!isInitialLoadingFinished) {
+          setIsInitialLoadingFinished(true);
+        }
       });
   };
 
@@ -45,18 +54,24 @@ export function UserProvider({ children }: Props) {
       const token = await getSessionFromAsyncStorage();
       if (token) {
         updateUserForSession(token);
+      } else {
+        setIsInitialLoadingFinished(true);
       }
     };
 
     checkLoggedIn().catch((error) => {
-      console.log('error while checking if logged in');
       console.log(error);
     });
   }, []);
 
   return (
     <UserContext.Provider
-      value={{ currentUser: currentUser, setCurrentUser, updateUserForSession }}
+      value={{
+        currentUser: currentUser,
+        setCurrentUser,
+        updateUserForSession,
+        isInitialLoadingFinished,
+      }}
     >
       {children}
     </UserContext.Provider>
