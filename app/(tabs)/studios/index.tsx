@@ -10,8 +10,6 @@ export const apiDomain = 'http://localhost:4000';
 
 const styles = StyleSheet.create({
   container: {
-    // marginLeft: 10,
-    // marginRight: 10,
     marginTop: 10,
   },
   rowContainer: {
@@ -42,6 +40,8 @@ export default function Index() {
     }
   };
 
+  console.log('studios', studios);
+
   useEffect(() => {
     getStudios()
       .then()
@@ -56,7 +56,12 @@ export default function Index() {
         }}
       />
       <View style={styles.rowContainer}>
-        <Text variant="headlineMedium">Studios</Text>
+        <Text
+          variant="headlineMedium"
+          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+        >
+          Studios
+        </Text>
         <Icon source="filter-variant" size={25} />
         {/* <FilterComponent /> */}
       </View>

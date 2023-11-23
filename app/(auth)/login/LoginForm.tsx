@@ -80,8 +80,13 @@ export default function LoginForm() {
   return (
     <View>
       <View style={styles.wrapper}>
-        <Text variant="displayMedium">Welcome to</Text>
-        <Text variant="displayLarge">Inkspire</Text>
+        <Text variant="headlineSmall">Welcome to</Text>
+        <Text
+          variant="displayLarge"
+          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+        >
+          Inkspire
+        </Text>
         <Text variant="headlineSmall">find your local tattoo artist</Text>
       </View>
       <View style={styles.wrapper}>

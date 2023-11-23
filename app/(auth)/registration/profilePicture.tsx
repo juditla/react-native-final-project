@@ -4,19 +4,31 @@ import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { apiDomain } from '../../(tabs)/studios';
 import UserContext from '../../UserProvider';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  headerContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginTop: 30,
+  },
+  button: {
+    marginTop: 25,
+    borderRadius: 15,
   },
 });
 
 export default function ProfilePicture() {
-  const [profilePicture, setProfilePicture] = useState(undefined);
+  const [profilePicture, setProfilePicture] = useState<string | undefined>(
+    undefined,
+  );
   const [errorMessage, setErrorMessage] = useState('');
   const userContext = useContext(UserContext);
   const router = useRouter();
@@ -32,9 +44,7 @@ export default function ProfilePicture() {
         },
       );
       const newImage = await response.json();
-      setProfilePicture(newImage);
-
-      return response;
+      setProfilePicture(newImage.avatar);
     } catch (error) {
       setErrorMessage('Something went wrong uploading the picture');
     }
@@ -55,29 +65,57 @@ export default function ProfilePicture() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text variant="bodyLarge">Your profile picture</Text>
-      <Image
-        source={{
-          uri: profilePicture,
-        }}
-        style={{ width: 80, height: 80 }}
-      />
-      <TouchableOpacity onPress={() => pickImage()}>
-        <Text>Choose picture</Text>
-      </TouchableOpacity>
-      <Button
-        onPress={() => {
-          if (userContext?.currentUser?.roleId === 1) {
-            router.push('/registration/artist');
-          } else {
-            router.push('/artists');
-          }
+    <SafeAreaView style={{ flex: 1 }}>
+      <Text
+        variant="headlineMedium"
+        style={{
+          fontFamily: 'MontserratAlternates_600SemiBold',
+          alignSelf: 'center',
+          marginTop: 40,
         }}
       >
-        Continue
-      </Button>
-      <Text>{errorMessage}</Text>
-    </View>
+        Profile picture
+      </Text>
+      {profilePicture ? (
+        <Image
+          source={{
+            uri: profilePicture,
+          }}
+          style={{
+            width: 200,
+            height: 200,
+            borderRadius: 100,
+            marginTop: 40,
+            alignSelf: 'center',
+          }}
+        />
+      ) : undefined}
+      <View style={styles.container}>
+        <Button
+          mode="contained"
+          buttonColor="black"
+          textColor="white"
+          style={styles.button}
+          onPress={() => pickImage()}
+        >
+          Choose picture
+        </Button>
+        <Button
+          style={styles.button}
+          mode="outlined"
+          textColor="black"
+          onPress={() => {
+            if (userContext?.currentUser?.roleId === 1) {
+              router.push('/registration/artist');
+            } else {
+              router.push('/artists');
+            }
+          }}
+        >
+          Continue
+        </Button>
+        <Text>{errorMessage}</Text>
+      </View>
+    </SafeAreaView>
   );
 }

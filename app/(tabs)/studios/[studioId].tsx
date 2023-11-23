@@ -1,10 +1,11 @@
-import { Link, router, Stack, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { Button, Icon, Text } from 'react-native-paper';
@@ -49,6 +50,9 @@ const styles = StyleSheet.create({
   artistRowContainer: {
     flexDirection: 'row',
     gap: 10,
+    alignItems: 'center',
+    // justifyContent: 'space-between',
+    marginBottom: 10,
   },
   noStudioContainer: {
     flex: 1,
@@ -76,7 +80,9 @@ const styles = StyleSheet.create({
 export default function SingleStudio() {
   const { studioId } = useLocalSearchParams();
   const [studio, setStudio] = useState<Studio>();
+  const [studioImages, setStudioImages] = useState([]);
 
+  console.log('images:', studioImages);
   const getStudioById = async () => {
     try {
       const response = await fetch(`${apiDomain}/studios/${studioId}`);
@@ -109,16 +115,20 @@ export default function SingleStudio() {
           />
           <View style={styles.studioContainer}>
             <View style={styles.contentContainer}>
-              <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
+              <Text
+                variant="titleLarge"
+                style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+              >
                 {studio.name.toUpperCase()}
               </Text>
-              <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
-                Location:
+              <Text
+                style={{ textTransform: 'lowercase', color: 'grey' }}
+                variant="bodyLarge"
+              >
+                Location
               </Text>
-              <Text variant="bodyLarge" style={{ color: 'grey' }}>
-                {studio.address}
-              </Text>
-              <Text variant="bodyLarge" style={{ color: 'grey' }}>
+              <Text variant="bodyLarge">{studio.address}</Text>
+              <Text variant="bodyLarge">
                 {studio.postalCode} {studio.city}
               </Text>
               <Button
@@ -137,48 +147,73 @@ export default function SingleStudio() {
             </View>
             <View style={styles.contentContainer}>
               <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
-                Artists:
+                Artists
               </Text>
               <View>
                 {studio.artist.length > 0
                   ? studio.artist.map((artist) => {
                       return (
-                        <Link
-                          key={`artistid-${artist.id}`}
-                          style={
-                            {
-                              //   flexDirection: 'row',
-                              // gap: 10,
-                              //   alignItems: 'center',
-                              //   justifyContent: 'center',
-                            }
+                        <TouchableOpacity
+                          key={`artistid-${artist.userId}`}
+                          onPress={() =>
+                            router.push({
+                              pathname: `artists/${artist.userId}`,
+                              params: { artistId: artist.userId },
+                            })
                           }
-                          href={{
-                            pathname: `artists/${artist.userId}`,
-                            params: { artistId: artist.userId },
-                          }}
                         >
-                          <Image
-                            source={{
-                              uri: artist.user.avatar,
-                            }}
-                            style={{
-                              height: 50,
-                              width: 50,
-                              borderRadius: 50,
-                            }}
-                          />
+                          <View style={styles.artistRowContainer}>
+                            <Image
+                              source={{
+                                uri: artist.user.avatar,
+                              }}
+                              style={{
+                                height: 50,
+                                width: 50,
+                                borderRadius: 50,
+                              }}
+                            />
 
-                          <Text variant="titleMedium">{artist.name}</Text>
-                          <Text variant="titleSmall" style={{ color: 'grey' }}>
-                            {artist.style}
-                          </Text>
-                        </Link>
+                            <Text
+                              variant="titleMedium"
+                              style={{
+                                fontFamily: 'MontserratAlternates_600SemiBold',
+                              }}
+                            >
+                              {artist.name}
+                            </Text>
+                            <Text
+                              variant="titleSmall"
+                              style={{ color: 'grey' }}
+                            >
+                              {artist.style}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
                       );
                     })
-                  : 'no artists'}
+                  : undefined}
               </View>
             </View>
+            {/* <View style={{ width: '100%' }}>
+              {studioImages.length > 0
+                ? studioImages.map((image) => {
+                    return (
+                      <Image
+                        key={`imageId-${image.id}`}
+                        source={{
+                          uri: image.picture,
+                        }}
+                        style={{
+                          height: 200,
+                          width: '100%',
+                          borderRadius: 5,
+                        }}
+                      />
+                    );
+                  })
+                : undefined}
+            </View> */}
           </View>
         </SafeAreaView>
       </ScrollView>

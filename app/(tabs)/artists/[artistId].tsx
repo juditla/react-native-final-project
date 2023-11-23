@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     height: 200,
     width: '100%',
     marginTop: 15,
-    marginBottom: 15,
+    marginBottom: 20,
     borderRadius: 5,
   },
   imageContainer: {
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     gap: 5,
+    justifyContent: 'space-between',
   },
   specialRowContainer: {
     flexDirection: 'row',
@@ -92,7 +93,7 @@ export default function SingleArtist() {
 
   async function conversationHandler(
     userId: number,
-    artistToStartConversationWithId: number,
+    artistToStartConversationWith: Artist,
   ) {
     const token = await getSessionFromAsyncStorage();
     try {
@@ -101,19 +102,23 @@ export default function SingleArtist() {
         method: 'POST',
         body: JSON.stringify({
           userId,
-          artistToStartConversationWithId,
+          artistId: artistToStartConversationWith.id,
           token,
         }),
       });
-
       const conversation = await conversationResponse.json();
-      console.log(conversation);
-      return conversation;
+      router.push({
+        pathname: `/messages/${conversation.id}`,
+        params: {
+          conversationId: conversation.id,
+          conversationPartner: artistToStartConversationWith.user.firstName,
+        },
+      });
     } catch (error) {
       console.error(error);
     }
   }
-  console.log('artist', artist);
+
   useEffect(() => {
     const getArtistByUserId = async () => {
       try {
@@ -153,7 +158,10 @@ export default function SingleArtist() {
                 style={{ height: 70, width: 70, borderRadius: 60 }}
               />
               <View>
-                <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
+                <Text
+                  variant="titleLarge"
+                  style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+                >
                   {artist.user.firstName.toUpperCase()}
                 </Text>
                 <Text variant="bodyLarge" style={{ color: 'grey' }}>
@@ -161,47 +169,53 @@ export default function SingleArtist() {
                 </Text>
               </View>
             </View>
-            <View style={styles.rowContainer}>
-              <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
-                Style:
-              </Text>
-              <Text variant="bodyLarge" style={{ color: 'grey' }}>
-                {artist.style.toLowerCase()}
-              </Text>
-            </View>
-            <View style={styles.rowContainer}>
+            <View>
+              {/* style={styles.rowContainer}> */}
               <View>
                 <Text
-                  style={{ textTransform: 'uppercase' }}
+                  style={{ textTransform: 'lowercase', color: 'grey' }}
                   variant="bodyLarge"
                 >
-                  Studio:
+                  Style
                 </Text>
-                <Link href={`/studios/${artist.studioId}`}>
-                  <Text variant="bodyLarge" style={{ color: 'grey' }}>
-                    {artist.studio.name}
-                  </Text>
-                </Link>
+                <Text
+                  variant="bodyLarge"
+                  // style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+                >
+                  {artist.style.toLowerCase()}
+                </Text>
               </View>
+            </View>
+            <View style={styles.rowContainer}>
+              {artist.studio ? (
+                <View>
+                  <Text
+                    style={{ textTransform: 'lowercase', color: 'grey' }}
+                    variant="bodyLarge"
+                  >
+                    Studio
+                  </Text>
+                  <Link href={`/studios/${artist.studioId}`}>
+                    <Text
+                      variant="bodyLarge"
+                      style={{
+                        fontFamily: 'MontserratAlternates_600SemiBold',
+                        textDecorationLine: 'underline',
+                      }}
+                    >
+                      {artist.studio.name}
+                    </Text>
+                  </Link>
+                </View>
+              ) : undefined}
               <Button
                 style={styles.button}
-                // buttonColor="#474554"
-                onPress={async () =>
+                onPress={async () => {
                   await conversationHandler(
                     userContext!.currentUser!.id,
-                    Number(artist.id),
-                  )
-                    .then((conversation) => {
-                      router.push({
-                        pathname: `/messages/${conversation.id}`,
-                        params: {
-                          conversationId: conversation.id,
-                          conversationPartner: artist.user.firstName,
-                        },
-                      });
-                    })
-                    .catch((error) => error)
-                }
+                    artist,
+                  );
+                }}
                 mode="outlined"
                 textColor="white"
               >
@@ -216,8 +230,8 @@ export default function SingleArtist() {
             </View>
           </View>
           <View style={styles.contentContainer}>
-            <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
-              About:
+            <Text style={{ textTransform: 'lowercase' }} variant="bodyLarge">
+              About
             </Text>
             <Text variant="bodyLarge" style={{ color: 'grey' }}>
               {artist.description}
@@ -227,9 +241,13 @@ export default function SingleArtist() {
             <View style={styles.scrollView}>
               <Text
                 variant="bodyLarge"
-                style={{ textTransform: 'uppercase', alignSelf: 'flex-start' }}
+                style={{
+                  textTransform: 'lowercase',
+                  alignSelf: 'flex-start',
+                  fontFamily: 'MontserratAlternates_600SemiBold',
+                }}
               >
-                My art:
+                My art
               </Text>
               {/* <Divider horizontalInset={true} bold={true} /> */}
               {artist.tattooImages?.map((image) => {
