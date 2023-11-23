@@ -4,6 +4,7 @@ import { Button, Text, TextInput } from 'react-native';
 import { apiDomain } from '../../(tabs)/studios';
 import { getSessionFromAsyncStorage } from '../../../util/session';
 
+// not yet in use
 export default function ArtistRegistrationForm() {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
