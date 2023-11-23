@@ -38,6 +38,10 @@ const styles = StyleSheet.create({
   wrapper: {
     marginTop: 10,
   },
+  headerWrapper: {
+    marginTop: 10,
+    width: 270,
+  },
   button: {
     marginTop: 25,
     borderRadius: 15,
@@ -81,11 +85,12 @@ export default function RegistrationForm() {
 
     // INPUT VALIDATION
     // check if password & confirm password are the same
-    try {
-      passwordForm.safeParse({ password, confirmPassword });
-    } catch (err) {
-      setErrorMessage("The two passwords don't match");
-      console.log(err);
+    const validatedPassword = passwordForm.safeParse({
+      password,
+      confirmPassword,
+    });
+    if (!validatedPassword.success && validatedPassword.error.issues[0]) {
+      setErrorMessage(validatedPassword.error.issues[0].message);
       return;
     }
     // check if user input is correct & only create user with correct input
@@ -113,7 +118,7 @@ export default function RegistrationForm() {
           });
 
           const loginData = await loginResponse.json();
-
+          console.log('logindata', loginData);
           try {
             await AsyncStorage.setItem(
               'session',
@@ -122,8 +127,10 @@ export default function RegistrationForm() {
                 expiresAt: loginData.expiresAt,
               }),
             );
+            console.log('userCOntext', userContext);
             if (userContext) {
-              userContext.updateUserForSession(data.token, () => {
+              console.log('are we getting here?');
+              userContext.updateUserForSession(loginData.token, () => {
                 router.push(`/registration/profilePicture`);
               });
             }
@@ -138,8 +145,13 @@ export default function RegistrationForm() {
   }
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <Text variant="displayMedium">Create account</Text>
+      <View style={styles.headerWrapper}>
+        <Text
+          variant="headlineMedium"
+          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
+        >
+          Create account
+        </Text>
       </View>
       <View style={styles.wrapper}>
         <TextInput
