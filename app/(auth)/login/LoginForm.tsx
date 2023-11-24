@@ -91,6 +91,7 @@ export default function LoginForm() {
       </View>
       <View style={styles.wrapper}>
         <TextInput
+          testID="email"
           label="Email"
           mode="outlined"
           activeOutlineColor="black"
@@ -105,6 +106,7 @@ export default function LoginForm() {
       </View>
       <View style={styles.wrapper}>
         <TextInput
+          testID="password"
           label="Password"
           mode="outlined"
           activeOutlineColor="black"
@@ -135,6 +137,7 @@ export default function LoginForm() {
         accessibilityLabel="Login"
         buttonColor="black"
         textColor="white"
+        testID="login-button"
       >
         Login
       </Button>

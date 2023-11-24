@@ -1,0 +1,22 @@
+appId: com.jula.inkspire
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Inkspire'
+- tapOn:
+    id: 'email'
+- inputRandomEmail
+- tapOn:
+    id: 'password-label-inactive'
+- inputText: 'asdfghjk'
+- tapOn:
+    id: 'login-button'
+- assertVisible: 'E-Mail or password invalid'
+- tapOn:
+    id: 'email'
+- inputText: 'testaccount@test.at'
+- tapOn:
+    id: 'password'
+- inputText: 'asdfghjkl'
+- tapOn:
+    id: 'login-button'
