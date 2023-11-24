@@ -11,7 +11,7 @@ import { apiDomain } from '../studios';
 export type Message = {
   id: number;
   senderId: number;
-  conversationtId: number;
+  conversationId: number;
   createDate: string;
   text: string;
   sender: User;

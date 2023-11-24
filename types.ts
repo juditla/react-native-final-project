@@ -34,6 +34,7 @@ export type User = {
   roleId: number;
   createDate: string;
   avatar: string;
+  password: string;
 };
 
 export type TattooImage = {
