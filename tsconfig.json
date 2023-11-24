@@ -4,11 +4,10 @@
   "compilerOptions": {
     // Based on expo/tsconfig.base.json
     // https://github.com/expo/expo/blob/main/packages/expo/tsconfig.base.json
-    "jsx": "react-native",
+    // "jsx": "react-native",
     "target": "ESNext"
   },
   "include": [
-    "**/.eslintrc.cjs",
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
