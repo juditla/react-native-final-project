@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: xcodebuild build -scheme 'app' -configuration Debug -project 'app.xcodeproj' -destination 'generic/platform=iOS Simulator' CONFIGURATION_BUILD_DIR=$PWD/build
       - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
         with:
