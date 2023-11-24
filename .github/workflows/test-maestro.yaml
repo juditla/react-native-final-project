@@ -11,8 +11,6 @@ jobs:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: 12
