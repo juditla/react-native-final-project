@@ -5,8 +5,9 @@
   "type": "module",
   "main": "expo-router/entry",
   "scripts": {
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "eas-build-on-success": "bash ./eas-build-on-success.sh",
+    "ios": "expo run:ios",
     "start": "expo start",
     "test": "jest",
     "web": "expo start --web"
