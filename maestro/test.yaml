@@ -1,7 +1,10 @@
 appId: com.jula.inkspire
 ---
 - launchApp:
+    appId: com.jula.inkspire
     clearState: true
+# - clearState: com.jula.inkspire
+# - openLink: exp://192.168.0.241:8081
 - assertVisible: 'Inkspire'
 - tapOn:
     id: 'email'
@@ -10,13 +13,20 @@ appId: com.jula.inkspire
     id: 'password-label-inactive'
 - inputText: 'asdfghjk'
 - tapOn:
-    id: 'login-button'
-- assertVisible: 'E-Mail or password invalid'
+    id: 'Return'
 - tapOn:
-    id: 'email'
+    id: 'login-button'
+- assertVisible: 'username or password not valid'
+- longPressOn:
+    point: '82%,49%'
+- tapOn: 'Select All'
+- eraseText
 - inputText: 'testaccount@test.at'
 - tapOn:
     id: 'password'
+- eraseText
 - inputText: 'asdfghjkl'
+- tapOn:
+    id: 'Return'
 - tapOn:
     id: 'login-button'
