@@ -4,7 +4,7 @@ branches: [main]
 
 jobs:
   eas-build:
-    - name: Trigger EAS build for development-sim
+  name: Trigger EAS build for development-sim
   timeout-minutes: 15
   runs-on: ubuntu-latest
   steps:
