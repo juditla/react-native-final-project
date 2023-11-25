@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "react-native-final-project",
+    "name": "inkspire",
     "slug": "react-native-final-project",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -24,6 +24,15 @@
     },
     "web": {},
     "scheme": "final-project",
-    "plugins": ["expo-router"]
+    "plugins": ["expo-router"],
+    "owner": "juditla",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c82badf6-b559-4c4c-942a-f8f8b81e51f0"
+      }
+    }
   }
 }
