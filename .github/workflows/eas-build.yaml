@@ -1,6 +1,5 @@
 name: EAS Builds
 on: push
-branches: [main]
 
 jobs:
   eas-build:
