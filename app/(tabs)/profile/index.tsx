@@ -28,9 +28,7 @@ export default function Index() {
         const response = await fetch(`${apiDomain}/users/${id}`);
         const json = await response.json();
         setUser(json);
-        console.log('USER', user);
         if (user?.roleId === 1) {
-          console.log('getting here');
           getArtistByUserId(user.id)
             .then()
             .catch((error) => error);

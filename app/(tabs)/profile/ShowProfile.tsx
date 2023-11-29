@@ -131,7 +131,8 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
           body: JSON.stringify({ token: session.sessionToken }),
         });
         if (!response.ok) {
-          console.log(await response.json());
+          const error = await response.json();
+          console.log(error);
         } else {
           router.push('/login');
         }

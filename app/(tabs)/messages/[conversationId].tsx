@@ -32,7 +32,6 @@ function modifyAndSortMessagesArray(array: Message[]): IMessage[] {
   const modifiedMessageArray = array.map((message) => {
     return modifyMessage(message);
   });
-  console.log(modifiedMessageArray);
   return sortArrayByDate(modifiedMessageArray);
 }
 

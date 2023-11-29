@@ -29,7 +29,6 @@ export function UserProvider({ children }: Props) {
   const updateUserForSession = (token: string, callback?: () => void) => {
     getValidDatabaseSession(token)
       .then((user) => {
-        console.log('user in getvalidata', user);
         if (user) {
           setCurrentUser(user);
           if (callback) {
@@ -41,7 +40,6 @@ export function UserProvider({ children }: Props) {
         console.log(error);
       })
       .finally(() => {
-        console.log('landing here');
         if (!isInitialLoadingFinished) {
           setIsInitialLoadingFinished(true);
         }

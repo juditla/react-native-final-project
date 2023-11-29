@@ -133,7 +133,6 @@ export default function RegistrationForm() {
             );
 
             if (userContext) {
-              console.log('are we getting here?');
               userContext.updateUserForSession(loginData.token, () => {
                 router.push(`/registration/profilePicture`);
               });
