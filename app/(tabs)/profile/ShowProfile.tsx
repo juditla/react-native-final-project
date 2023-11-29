@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -70,6 +70,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
   },
+  highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
+  editProfilePictureIcon: { position: 'absolute', right: 110, top: 100 },
+  editProfileIcon: {
+    alignSelf: 'flex-end',
+    paddingTop: 10,
+    paddingRight: 10,
+  },
 });
 
 type Props = {
@@ -123,15 +130,13 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
           method: 'DELETE',
           body: JSON.stringify({ token: session.sessionToken }),
         });
-        const data = await response.json();
         if (!response.ok) {
-          // setErrorMessage(data.message);
+          console.log(await response.json());
         } else {
           router.push('/login');
         }
       }
     } catch (error) {
-      console.log(JSON.stringify(error));
       router.push('/login');
     }
     // delete session from AsyncStorage
@@ -147,11 +152,7 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
         <View style={styles.profileSection}>
           <View style={styles.profileContainer}>
             <TouchableOpacity
-              style={{
-                alignSelf: 'flex-end',
-                paddingTop: 10,
-                paddingRight: 10,
-              }}
+              style={styles.editProfileIcon}
               onPress={() => setIsEditing(true)}
             >
               <Icon source="pencil" size={20} />
@@ -164,15 +165,12 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
             />
             <TouchableOpacity
               onPress={() => changeProfilePicture()}
-              style={{ position: 'absolute', right: 110, top: 100 }}
+              style={styles.editProfilePictureIcon}
             >
               <Icon source="cached" size={25} />
             </TouchableOpacity>
 
-            <Text
-              variant="headlineLarge"
-              style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-            >
+            <Text variant="headlineLarge" style={styles.highlightFont}>
               Hello, {user.firstName}
             </Text>
             <Text variant="bodySmall">

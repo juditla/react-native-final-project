@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
   },
+  highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
 });
 
 const renderItem = (item: { item: Studio }) => (
@@ -40,8 +41,6 @@ export default function Index() {
     }
   };
 
-  console.log('studios', studios);
-
   useEffect(() => {
     getStudios()
       .then()
@@ -56,14 +55,10 @@ export default function Index() {
         }}
       />
       <View style={styles.rowContainer}>
-        <Text
-          variant="headlineMedium"
-          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-        >
+        <Text variant="headlineMedium" style={styles.highlightFont}>
           Studios
         </Text>
         <Icon source="filter-variant" size={25} />
-        {/* <FilterComponent /> */}
       </View>
       <FlatList
         data={studios}

@@ -1,5 +1,5 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -25,9 +25,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    // flex: 1,
-    // flexDirection: 'column',
-    // alignItems: 'center',
   },
   contentContainer: {
     backgroundColor: 'white',
@@ -51,7 +48,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     alignItems: 'center',
-    // justifyContent: 'space-between',
     marginBottom: 10,
   },
   noStudioContainer: {
@@ -75,14 +71,29 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     marginLeft: 75,
   },
+  highlightFont: {
+    fontFamily: 'MontserratAlternates_600SemiBold',
+  },
+  lowercaseGrey: {
+    textTransform: 'lowercase',
+    color: 'grey',
+  },
+  imageStyle: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+  },
+  uppercaseText: {
+    textTransform: 'uppercase',
+  },
+  greyText: { color: 'grey' },
+  font20: { fontSize: 20 },
 });
 
 export default function SingleStudio() {
   const { studioId } = useLocalSearchParams();
   const [studio, setStudio] = useState<Studio>();
-  const [studioImages, setStudioImages] = useState([]);
 
-  console.log('images:', studioImages);
   const getStudioById = async () => {
     try {
       const response = await fetch(`${apiDomain}/studios/${studioId}`);
@@ -115,16 +126,10 @@ export default function SingleStudio() {
           />
           <View style={styles.studioContainer}>
             <View style={styles.contentContainer}>
-              <Text
-                variant="titleLarge"
-                style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-              >
+              <Text variant="titleLarge" style={styles.highlightFont}>
                 {studio.name.toUpperCase()}
               </Text>
-              <Text
-                style={{ textTransform: 'lowercase', color: 'grey' }}
-                variant="bodyLarge"
-              >
+              <Text style={styles.lowercaseGrey} variant="bodyLarge">
                 Location
               </Text>
               <Text variant="bodyLarge">{studio.address}</Text>
@@ -146,7 +151,7 @@ export default function SingleStudio() {
               </Button>
             </View>
             <View style={styles.contentContainer}>
-              <Text style={{ textTransform: 'uppercase' }} variant="bodyLarge">
+              <Text style={styles.uppercaseText} variant="bodyLarge">
                 Artists
               </Text>
               <View>
@@ -167,25 +172,16 @@ export default function SingleStudio() {
                               source={{
                                 uri: artist.user.avatar,
                               }}
-                              style={{
-                                height: 50,
-                                width: 50,
-                                borderRadius: 50,
-                              }}
+                              style={styles.imageStyle}
                             />
 
                             <Text
                               variant="titleMedium"
-                              style={{
-                                fontFamily: 'MontserratAlternates_600SemiBold',
-                              }}
+                              style={styles.highlightFont}
                             >
                               {artist.name}
                             </Text>
-                            <Text
-                              variant="titleSmall"
-                              style={{ color: 'grey' }}
-                            >
+                            <Text variant="titleSmall" style={styles.greyText}>
                               {artist.style}
                             </Text>
                           </View>
@@ -195,25 +191,6 @@ export default function SingleStudio() {
                   : undefined}
               </View>
             </View>
-            {/* <View style={{ width: '100%' }}>
-              {studioImages.length > 0
-                ? studioImages.map((image) => {
-                    return (
-                      <Image
-                        key={`imageId-${image.id}`}
-                        source={{
-                          uri: image.picture,
-                        }}
-                        style={{
-                          height: 200,
-                          width: '100%',
-                          borderRadius: 5,
-                        }}
-                      />
-                    );
-                  })
-                : undefined}
-            </View> */}
           </View>
         </SafeAreaView>
       </ScrollView>
@@ -222,7 +199,7 @@ export default function SingleStudio() {
     return (
       <View style={styles.noStudioContainer}>
         <Icon size={30} source="emoticon-sad-outline" />
-        <Text style={{ fontSize: 20 }}>
+        <Text style={styles.font20}>
           Sorry we could not find that tattoo artist...
         </Text>
       </View>

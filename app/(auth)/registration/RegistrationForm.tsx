@@ -58,6 +58,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
+  highlightText: {
+    fontFamily: 'MontserratAlternates_600SemiBold',
+  },
+  centerText: { textAlign: 'center' },
+  helperText: { textAlign: 'center', fontSize: 18, marginTop: 20 },
 });
 
 export default function RegistrationForm() {
@@ -118,7 +123,6 @@ export default function RegistrationForm() {
           });
 
           const loginData = await loginResponse.json();
-          console.log('logindata', loginData);
           try {
             await AsyncStorage.setItem(
               'session',
@@ -127,7 +131,7 @@ export default function RegistrationForm() {
                 expiresAt: loginData.expiresAt,
               }),
             );
-            console.log('userCOntext', userContext);
+
             if (userContext) {
               console.log('are we getting here?');
               userContext.updateUserForSession(loginData.token, () => {
@@ -146,10 +150,7 @@ export default function RegistrationForm() {
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <Text
-          variant="headlineMedium"
-          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-        >
+        <Text variant="headlineMedium" style={styles.highlightText}>
           Create account
         </Text>
       </View>
@@ -188,7 +189,6 @@ export default function RegistrationForm() {
           outlineStyle={styles.inputStyle}
           onChangeText={(val: string) => setLastName(val)}
           value={lastName}
-          // placeholder="Last name"
           keyboardType="default"
           autoComplete="family-name"
         />
@@ -256,17 +256,14 @@ export default function RegistrationForm() {
         Register
       </Button>
       <View style={styles.loginWrapper}>
-        <Text style={{ textAlign: 'center' }}>Already have an account? </Text>
+        <Text style={styles.centerText}>Already have an account? </Text>
         <Link href="/login" asChild>
           <Button mode="text" textColor="black">
             Log in
           </Button>
         </Link>
       </View>
-      <HelperText
-        style={{ textAlign: 'center', fontSize: 18, marginTop: 20 }}
-        type="error"
-      >
+      <HelperText style={styles.helperText} type="error">
         {errorMessage}
       </HelperText>
     </View>

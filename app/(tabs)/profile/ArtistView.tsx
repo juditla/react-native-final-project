@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     gap: 20,
-    // width: '100%',
     backgroundColor: 'white',
     marginHorizontal: 20,
     shadowColor: '#171717',
@@ -32,7 +31,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flexDirection: 'row',
-    // padding: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 10,
@@ -41,10 +39,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   imageSection: {
-    // marginTop: 5,
     alignItems: 'stretch',
     justifyContent: 'space-around',
   },
+  highlightFont: {
+    marginLeft: 10,
+    fontFamily: 'MontserratAlternates_600SemiBold',
+  },
+  gap: { gap: 20 },
 });
 
 export default function ArtistView({ artist }: Props) {
@@ -69,13 +71,7 @@ export default function ArtistView({ artist }: Props) {
       />
       <View>
         <View style={styles.container}>
-          <Text
-            variant="bodyLarge"
-            style={{
-              marginLeft: 10,
-              fontFamily: 'MontserratAlternates_600SemiBold',
-            }}
-          >
+          <Text variant="bodyLarge" style={styles.highlightFont}>
             your images
           </Text>
           {tattooImages && tattooImages.length === 0 ? (
@@ -85,7 +81,7 @@ export default function ArtistView({ artist }: Props) {
           ) : (
             tattooImages?.map((image) => {
               return (
-                <View style={{ gap: 20 }} key={`image-${image.id}`}>
+                <View style={styles.gap} key={`image-${image.id}`}>
                   <View style={styles.imageContainer}>
                     <Image style={styles.image} source={image.picture} />
                     <TouchableOpacity

@@ -13,10 +13,8 @@ type Props = {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     padding: 15,
     gap: 20,
-    // width: '100%',
     backgroundColor: 'white',
     marginHorizontal: 20,
     shadowColor: '#171717',

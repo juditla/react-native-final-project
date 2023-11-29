@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { Link, router, Stack, useLocalSearchParams } from 'expo-router';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Divider, Icon, Text } from 'react-native-paper';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    // margin: 10,
     gap: 5,
   },
   rowContainer: {
@@ -83,6 +82,21 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     marginLeft: 75,
   },
+  imageStyle: { height: 70, width: 70, borderRadius: 60 },
+  highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
+  lowercaseGrey: { textTransform: 'lowercase', color: 'grey' },
+  greyText: { color: 'grey' },
+  linkText: {
+    fontFamily: 'MontserratAlternates_600SemiBold',
+    textDecorationLine: 'underline',
+  },
+  lowercaseHighlightText: {
+    textTransform: 'lowercase',
+    alignSelf: 'flex-start',
+    fontFamily: 'MontserratAlternates_600SemiBold',
+  },
+  lowercaseText: { textTransform: 'lowercase' },
+  font20: { fontSize: 20 },
 });
 
 export default function SingleArtist() {
@@ -155,54 +169,33 @@ export default function SingleArtist() {
                 source={{
                   uri: artist.user.avatar,
                 }}
-                style={{ height: 70, width: 70, borderRadius: 60 }}
+                style={styles.imageStyle}
               />
               <View>
-                <Text
-                  variant="titleLarge"
-                  style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-                >
+                <Text variant="titleLarge" style={styles.highlightFont}>
                   {artist.user.firstName.toUpperCase()}
                 </Text>
-                <Text variant="bodyLarge" style={{ color: 'grey' }}>
+                <Text variant="bodyLarge" style={styles.greyText}>
                   alias '{artist.name}''
                 </Text>
               </View>
             </View>
             <View>
-              {/* style={styles.rowContainer}> */}
               <View>
-                <Text
-                  style={{ textTransform: 'lowercase', color: 'grey' }}
-                  variant="bodyLarge"
-                >
+                <Text style={styles.lowercaseGrey} variant="bodyLarge">
                   Style
                 </Text>
-                <Text
-                  variant="bodyLarge"
-                  // style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-                >
-                  {artist.style.toLowerCase()}
-                </Text>
+                <Text variant="bodyLarge">{artist.style.toLowerCase()}</Text>
               </View>
             </View>
             <View style={styles.rowContainer}>
               {artist.studio ? (
                 <View>
-                  <Text
-                    style={{ textTransform: 'lowercase', color: 'grey' }}
-                    variant="bodyLarge"
-                  >
+                  <Text style={styles.lowercaseGrey} variant="bodyLarge">
                     Studio
                   </Text>
                   <Link href={`/studios/${artist.studioId}`}>
-                    <Text
-                      variant="bodyLarge"
-                      style={{
-                        fontFamily: 'MontserratAlternates_600SemiBold',
-                        textDecorationLine: 'underline',
-                      }}
-                    >
+                    <Text variant="bodyLarge" style={styles.linkText}>
                       {artist.studio.name}
                     </Text>
                   </Link>
@@ -230,26 +223,18 @@ export default function SingleArtist() {
             </View>
           </View>
           <View style={styles.contentContainer}>
-            <Text style={{ textTransform: 'lowercase' }} variant="bodyLarge">
+            <Text style={styles.lowercaseText} variant="bodyLarge">
               About
             </Text>
-            <Text variant="bodyLarge" style={{ color: 'grey' }}>
+            <Text variant="bodyLarge" style={styles.greyText}>
               {artist.description}
             </Text>
           </View>
           <View style={styles.imageContainer}>
             <View style={styles.scrollView}>
-              <Text
-                variant="bodyLarge"
-                style={{
-                  textTransform: 'lowercase',
-                  alignSelf: 'flex-start',
-                  fontFamily: 'MontserratAlternates_600SemiBold',
-                }}
-              >
+              <Text variant="bodyLarge" style={styles.lowercaseHighlightText}>
                 My art
               </Text>
-              {/* <Divider horizontalInset={true} bold={true} /> */}
               {artist.tattooImages?.map((image) => {
                 return (
                   <View style={styles.imageContainer} key={`image-${image.id}`}>
@@ -267,7 +252,7 @@ export default function SingleArtist() {
     return (
       <View style={styles.noArtistContainer}>
         <Icon size={30} source="emoticon-sad-outline" />
-        <Text style={{ fontSize: 20 }}>
+        <Text style={styles.font20}>
           Sorry we could not find that tattoo artist...
         </Text>
       </View>

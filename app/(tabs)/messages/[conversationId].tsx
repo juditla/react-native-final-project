@@ -17,17 +17,6 @@ export type Message = {
   sender: User;
 };
 
-// type GiftedChatMessage = [
-//   {
-//     _id: string;
-//     createdAt: Date;
-//     text: string;
-//     user: {
-//       _id: number;
-//     };
-//   },
-// ];
-
 type SearchParams = {
   conversationId: string;
   conversationPartner: string;
@@ -36,7 +25,6 @@ type SearchParams = {
 const styles = StyleSheet.create({
   chatContainer: {
     display: 'flex',
-    // flexDirection: 'column-reverse',
   },
 });
 
@@ -110,7 +98,6 @@ export default function SingleConversation() {
         options={{
           title: conversationPartner ? conversationPartner : '',
           headerTintColor: 'black',
-          //   headerShown: false,
           headerStyle: {
             backgroundColor: 'transparent',
           },

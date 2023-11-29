@@ -52,6 +52,14 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
   },
+  highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
+  greyText: { color: 'grey' },
+  imageContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
+  imageStyle: { height: 50, width: 50, borderRadius: 60 },
 });
 
 export default function Index() {
@@ -90,10 +98,7 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
-        <Text
-          variant="headlineMedium"
-          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-        >
+        <Text variant="headlineMedium" style={styles.highlightFont}>
           Messages
         </Text>
       </View>
@@ -102,11 +107,7 @@ export default function Index() {
           conversations.map((item) => {
             const conversationPartner =
               item.owner.id === userContext!.currentUser!.id
-                ? // &&
-                  // item.participant.id === userContext.currentUser.id
-                  // ? `${item.owner.firstName} - Yourself`
-                  // : item.owner.id === userContext?.currentUser.id
-                  item.participant
+                ? item.participant
                 : item.owner;
             return (
               <TouchableOpacity
@@ -122,31 +123,25 @@ export default function Index() {
                   })
                 }
               >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    alignItems: 'center',
-                  }}
-                >
+                <View style={styles.imageContainer}>
                   <Image
                     source={{
                       uri: conversationPartner.avatar
                         ? conversationPartner.avatar
                         : 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
                     }}
-                    style={{ height: 50, width: 50, borderRadius: 60 }}
+                    style={styles.imageStyle}
                   />
                   <View>
                     <Text variant="titleMedium">
                       {conversationPartner.firstName}
                     </Text>
-                    <Text variant="titleSmall" style={{ color: 'grey' }}>
+                    <Text variant="titleSmall" style={styles.greyText}>
                       {item.message[0].text}
                     </Text>
                   </View>
                 </View>
-                <Text variant="titleSmall" style={{ color: 'grey' }}>
+                <Text variant="titleSmall" style={styles.greyText}>
                   {convertDate(item.message[0].createDate)}
                 </Text>
               </TouchableOpacity>

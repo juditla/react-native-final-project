@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { apiDomain } from '../../(tabs)/studios';
@@ -22,6 +22,18 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 25,
     borderRadius: 15,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    marginTop: 40,
+    alignSelf: 'center',
+  },
+  highlightText: {
+    fontFamily: 'MontserratAlternates_600SemiBold',
+    alignSelf: 'center',
+    marginTop: 40,
   },
 });
 
@@ -66,14 +78,7 @@ export default function ProfilePicture() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Text
-        variant="headlineMedium"
-        style={{
-          fontFamily: 'MontserratAlternates_600SemiBold',
-          alignSelf: 'center',
-          marginTop: 40,
-        }}
-      >
+      <Text variant="headlineMedium" style={styles.highlightText}>
         Profile picture
       </Text>
       {profilePicture ? (
@@ -81,13 +86,7 @@ export default function ProfilePicture() {
           source={{
             uri: profilePicture,
           }}
-          style={{
-            width: 200,
-            height: 200,
-            borderRadius: 100,
-            marginTop: 40,
-            alignSelf: 'center',
-          }}
+          style={styles.image}
         />
       ) : undefined}
       <View style={styles.container}>

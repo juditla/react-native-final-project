@@ -4,7 +4,7 @@ import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import { Studio } from '../../../types';
 
 type Props = {
-  studio: Studio & { picture: string, id: number};
+  studio: Studio & { picture: string; id: number };
 };
 
 const styles = StyleSheet.create({
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
   },
+  highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
 });
 export default function StudioItem({ studio }: Props) {
   let pictureUri =
@@ -47,7 +48,7 @@ export default function StudioItem({ studio }: Props) {
         />
         <View style={styles.cardContent}>
           <Card.Content>
-            <Title style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}>
+            <Title style={styles.highlightFont}>
               {studio.name.toUpperCase()}
             </Title>
             <Paragraph>

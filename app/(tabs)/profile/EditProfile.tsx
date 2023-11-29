@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     borderRadius: 15,
   },
+  highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
 });
 
 export default function EditProfile({ user, artist, setIsEditing }: Props) {
@@ -74,7 +75,7 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
       );
     } else {
       if (databaseToDeleteFrom === 'users') {
-        router.push('/login'); //   go to login page? ist dann eh nicht mehr angemeldet?
+        router.push('/login');
       } else {
         setIsEditing(false);
       }
@@ -153,10 +154,7 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.wrapper}>
-          <Text
-            variant="headlineMedium"
-            style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-          >
+          <Text variant="headlineMedium" style={styles.highlightFont}>
             Edit your profile
           </Text>
         </View>

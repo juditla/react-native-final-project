@@ -26,6 +26,12 @@ const styles = StyleSheet.create({
   inputStyle: {
     borderRadius: 15,
   },
+  centerText: {
+    textAlign: 'center',
+  },
+  highlightFont: {
+    fontFamily: 'MontserratAlternates_600SemiBold',
+  },
 });
 
 export default function LoginForm() {
@@ -81,10 +87,7 @@ export default function LoginForm() {
     <View>
       <View style={styles.wrapper}>
         <Text variant="headlineSmall">Welcome to</Text>
-        <Text
-          variant="displayLarge"
-          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-        >
+        <Text variant="displayLarge" style={styles.highlightFont}>
           Inkspire
         </Text>
         <Text variant="headlineSmall">find your local tattoo artist</Text>
@@ -142,7 +145,7 @@ export default function LoginForm() {
         Login
       </Button>
       <View style={styles.registrationWrapper}>
-        <Text style={{ textAlign: 'center' }}>Don't have an account?</Text>
+        <Text style={styles.centerText}>Don't have an account?</Text>
         <Link href="/registration" asChild>
           <Button mode="text" textColor="black">
             Sign up

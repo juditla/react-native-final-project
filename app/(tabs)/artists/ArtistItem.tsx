@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
   },
+  highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
 });
 
 export default function ArtistItem({ artist }: Props) {
@@ -47,7 +48,6 @@ export default function ArtistItem({ artist }: Props) {
   return (
     <View style={styles.container}>
       <Card style={styles.container}>
-        {/* <Card.Title title={artist.name} /> */}
         <Card.Cover
           style={styles.container}
           source={{
@@ -56,7 +56,7 @@ export default function ArtistItem({ artist }: Props) {
         />
         <View style={styles.cardContent}>
           <Card.Content>
-            <Title style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}>
+            <Title style={styles.highlightFont}>
               {artist.name.toUpperCase()}
             </Title>
             <Paragraph>{artist.style.toLowerCase()}</Paragraph>

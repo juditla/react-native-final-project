@@ -11,9 +11,6 @@ type Props = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //
-  },
   wrapper: {
     marginTop: 10,
   },
@@ -85,7 +82,7 @@ export default function ChangePassword({ user }: Props) {
     }
   }
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.wrapper}>
         <TextInput
           label="Old password"

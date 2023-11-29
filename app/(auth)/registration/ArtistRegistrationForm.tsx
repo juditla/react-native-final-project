@@ -36,6 +36,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
+  centerText: {
+    textAlign: 'center',
+    fontSize: 18,
+    marginTop: 20,
+  },
 });
 
 export default function ArtistRegistrationForm() {
@@ -51,7 +56,6 @@ export default function ArtistRegistrationForm() {
     // check if there is a valid session,
     const token = await getSessionFromAsyncStorage();
     if (!token) {
-      console.log('no token', token);
       router.push('/login');
     }
 
@@ -108,7 +112,6 @@ export default function ArtistRegistrationForm() {
           outlineStyle={styles.inputStyle}
           onChangeText={(val: string) => setName(val)}
           value={name}
-          // placeholder="Email"
           keyboardType="default"
         />
       </View>
@@ -121,7 +124,6 @@ export default function ArtistRegistrationForm() {
           outlineStyle={styles.inputStyle}
           onChangeText={(val: string) => setStyle(val)}
           value={style}
-          // placeholder="First name"
           keyboardType="default"
         />
       </View>
@@ -135,7 +137,6 @@ export default function ArtistRegistrationForm() {
           numberOfLines={4}
           onChangeText={(val: string) => setDescription(val)}
           value={description}
-          // placeholder="Last name"
           keyboardType="default"
           multiline={true}
         />
@@ -151,10 +152,7 @@ export default function ArtistRegistrationForm() {
       >
         Register
       </Button>
-      <HelperText
-        style={{ textAlign: 'center', fontSize: 18, marginTop: 20 }}
-        type="error"
-      >
+      <HelperText style={styles.centerText} type="error">
         {errorMessage}
       </HelperText>
     </View>

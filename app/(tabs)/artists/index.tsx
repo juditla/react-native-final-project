@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
   },
+  highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
 });
 
 export default function Index() {
@@ -58,10 +59,7 @@ export default function Index() {
         }}
       />
       <View style={styles.rowContainer}>
-        <Text
-          variant="headlineMedium"
-          style={{ fontFamily: 'MontserratAlternates_600SemiBold' }}
-        >
+        <Text variant="headlineMedium" style={styles.highlightFont}>
           Artists
         </Text>
         <Icon source="filter-variant" size={25} />
