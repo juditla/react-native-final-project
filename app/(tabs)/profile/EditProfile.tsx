@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button, Switch, Text, TextInput } from 'react-native-paper';
@@ -215,6 +215,7 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
         >
           Delete profile
         </Button>
+        <Text>{errorMessage}</Text>
         {user.roleId === 1 ? (
           <View>
             <View style={styles.wrapper}>
@@ -278,8 +279,6 @@ export default function EditProfile({ user, artist, setIsEditing }: Props) {
             </Button>
           </View>
         ) : undefined}
-
-        {errorMessage}
       </ScrollView>
     </SafeAreaView>
   );
