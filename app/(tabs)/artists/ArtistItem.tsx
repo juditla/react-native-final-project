@@ -1,5 +1,4 @@
 import { Link } from 'expo-router';
-import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import { Artist } from '../../../types';
