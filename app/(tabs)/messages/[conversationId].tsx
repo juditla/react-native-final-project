@@ -71,9 +71,7 @@ export default function SingleConversation() {
     }
   };
   useEffect(() => {
-    getMessagesByConversationId()
-      .then(() => console.log('there', messages))
-      .catch((error) => error);
+    getMessagesByConversationId().catch((error) => error);
   }, [conversationId]);
 
   const onSend = useCallback(async (message: IMessage[]) => {
