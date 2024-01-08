@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   specialRowContainer: {
     flexDirection: 'row',
@@ -176,7 +177,7 @@ export default function SingleArtist() {
                   {artist.user.firstName.toUpperCase()}
                 </Text>
                 <Text variant="bodyLarge" style={styles.greyText}>
-                  alias '{artist.name}''
+                  alias '{artist.name}'
                 </Text>
               </View>
             </View>
