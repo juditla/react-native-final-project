@@ -137,12 +137,14 @@ export default function Index() {
                       {conversationPartner.firstName}
                     </Text>
                     <Text variant="titleSmall" style={styles.greyText}>
-                      {item.message[0].text}
+                      {item.message[0].text ? item.message[0].text : undefined}
                     </Text>
                   </View>
                 </View>
                 <Text variant="titleSmall" style={styles.greyText}>
-                  {convertDate(item.message[0].createDate)}
+                  {item.message[0].createDate
+                    ? convertDate(item.message[0].createDate)
+                    : undefined}
                 </Text>
               </TouchableOpacity>
 
