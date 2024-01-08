@@ -128,7 +128,7 @@ export default function RegistrationForm() {
               'session',
               JSON.stringify({
                 sessionToken: loginData.token,
-                expiresAt: loginData.expiresAt,
+                expiresAt: loginData.expiryTimestamp,
               }),
             );
 
