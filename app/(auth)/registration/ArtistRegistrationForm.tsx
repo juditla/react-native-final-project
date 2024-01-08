@@ -64,6 +64,7 @@ export default function ArtistRegistrationForm() {
       style,
       description,
       token,
+      userId: userContext?.currentUser?.id,
     };
     const validatedNewArtist = artistRegistrationSchema.safeParse({
       name,
