@@ -181,12 +181,16 @@ export default function SingleArtist() {
                 </Text>
               </View>
             </View>
-            <View>
+            <View style={styles.rowContainer}>
               <View>
                 <Text style={styles.lowercaseGrey} variant="bodyLarge">
                   Style
                 </Text>
                 <Text variant="bodyLarge">{artist.style.toLowerCase()}</Text>
+              </View>
+              <View style={styles.rowContainer}>
+                <Icon size={20} source="star" />
+                <Text>rating.average (rating.count)</Text>
               </View>
             </View>
             <View style={styles.rowContainer}>
