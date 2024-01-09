@@ -1,5 +1,5 @@
-import { Stack } from 'expo-router';
-import React from 'react';
+import { router, Stack } from 'expo-router';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function stackLayout() {
   return (
@@ -7,7 +7,28 @@ export default function stackLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false,
+          title: '',
+          headerTintColor: 'black',
+          headerLeft: () => {
+            return (
+              <Icon.Button
+                name="color-palette"
+                size={30}
+                color="black"
+                backgroundColor="transparent"
+                onPress={() => router.replace('/artists')}
+                underlayColor="transparent"
+                activeOpacity={0.5}
+              >
+                Go back to artists
+              </Icon.Button>
+            );
+          },
+          headerStyle: {
+            backgroundColor: 'transparent',
+          },
+          headerBackTitleVisible: false,
+          headerBackVisible: true,
         }}
       />
     </Stack>
