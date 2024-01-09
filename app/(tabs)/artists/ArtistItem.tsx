@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { Button, Card, Paragraph, Title } from 'react-native-paper';
+import { Button, Card, Icon, Paragraph, Text, Title } from 'react-native-paper';
 import { Artist } from '../../../types';
 
 type Props = {
@@ -36,6 +36,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   highlightFont: { fontFamily: 'MontserratAlternates_600SemiBold' },
+  rating: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
 });
 
 export default function ArtistItem({ artist }: Props) {
@@ -59,6 +64,10 @@ export default function ArtistItem({ artist }: Props) {
               {artist.name.toUpperCase()}
             </Title>
             <Paragraph>{artist.style.toLowerCase()}</Paragraph>
+            <View style={styles.rating}>
+              <Icon size={20} source="star" />
+              <Text>rating.average (rating.count)</Text>
+            </View>
           </Card.Content>
           <Card.Actions>
             <Link
