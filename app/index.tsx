@@ -13,7 +13,8 @@ import {
 import { Redirect } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useContext, useEffect, useState } from 'react';
-import { Text } from 'react-native-paper';
+import { View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import UserContext from './UserProvider';
 
 // keeps Splash Screen visible during fetching
@@ -49,6 +50,16 @@ export default function App() {
   if (isAppReady) {
     return <Redirect href="artists" />;
   } else {
-    return <Text>Loading</Text>;
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ActivityIndicator color="black" />
+      </View>
+    );
   }
 }
