@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { Text } from 'react-native-paper';
+import { View } from 'react-native';
+import { ActivityIndicator, Text } from 'react-native-paper';
 import { Artist, User } from '../../../types';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
@@ -49,7 +50,17 @@ export default function Index() {
   }, [userContext, isEditing, user?.id, user?.roleId]);
 
   if (!user) {
-    return <Text>Loading...</Text>;
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ActivityIndicator color="black" />
+      </View>
+    );
   }
 
   return isEditing ? (
