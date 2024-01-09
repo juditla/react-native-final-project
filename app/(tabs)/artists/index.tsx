@@ -42,9 +42,6 @@ export default function Index() {
         console.error(error);
       }
     };
-    if (!userContext?.currentUser?.id) {
-      router.replace('/login');
-    }
 
     getArtists()
       .then()
