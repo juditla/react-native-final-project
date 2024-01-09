@@ -68,8 +68,12 @@ export default function Index() {
 
   const getConversations = async () => {
     try {
+      if (!userContext?.currentUser?.id) {
+        router.replace('/login');
+        return;
+      }
       const response = await fetch(
-        `${apiDomain}/conversations/${userContext?.currentUser?.id}`,
+        `${apiDomain}/conversations/${userContext.currentUser.id}`,
       );
       const json = await response.json();
       setConversations(json);
@@ -77,9 +81,6 @@ export default function Index() {
       console.error(error);
     }
   };
-  if (!userContext?.currentUser?.id) {
-    router.replace('/login');
-  }
 
   useEffect(() => {
     getConversations()
