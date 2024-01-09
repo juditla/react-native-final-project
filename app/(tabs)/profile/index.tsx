@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
 import { Text } from 'react-native-paper';
 import { Artist, User } from '../../../types';
@@ -42,6 +43,8 @@ export default function Index() {
       getUserById(userContext.currentUser.id)
         .then()
         .catch((error) => error);
+    } else {
+      router.replace('/login');
     }
   }, [userContext, isEditing, user?.id, user?.roleId]);
 
