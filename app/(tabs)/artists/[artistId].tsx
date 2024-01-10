@@ -211,7 +211,10 @@ export default function SingleArtist() {
                 onPress={async () => {
                   // check first if there is a user
                   if (!userContext?.currentUser?.id) {
-                    router.replace('/login');
+                    router.replace({
+                      pathname: '/login',
+                      params: { returnToPath: `/artists/${artist.userId}` },
+                    });
                   } else {
                     await conversationHandler(
                       userContext.currentUser.id,
