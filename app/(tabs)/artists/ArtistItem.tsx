@@ -66,7 +66,9 @@ export default function ArtistItem({ artist }: Props) {
             <Paragraph>{artist.style.toLowerCase()}</Paragraph>
             <View style={styles.rating}>
               <Icon size={20} source="star" />
-              <Text>rating.average (rating.count)</Text>
+              <Text>
+                {artist.ratingAverage} ({artist.ratingCount})
+              </Text>
             </View>
           </Card.Content>
           <Card.Actions>
