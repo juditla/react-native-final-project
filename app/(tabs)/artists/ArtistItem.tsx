@@ -67,7 +67,10 @@ export default function ArtistItem({ artist }: Props) {
             <View style={styles.rating}>
               <Icon size={20} source="star" />
               <Text>
-                {artist.ratingAverage} ({artist.ratingCount})
+                {artist.ratingAverage === 0
+                  ? 'no rating yet'
+                  : artist.ratingAverage}{' '}
+                ({artist.ratingCount})
               </Text>
             </View>
           </Card.Content>

@@ -192,7 +192,10 @@ export default function SingleArtist() {
               <View style={styles.rowContainer}>
                 <Icon size={20} source="star" />
                 <Text>
-                  {artist.ratingAverage} ({artist.ratingCount})
+                  {artist.ratingAverage === 0
+                    ? 'no rating yet'
+                    : artist.ratingAverage}{' '}
+                  ({artist.ratingCount})
                 </Text>
               </View>
             </View>
