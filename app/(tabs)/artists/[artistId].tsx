@@ -107,6 +107,19 @@ export default function SingleArtist() {
   const [artist, setArtist] = useState<Artist>();
   const userContext = useContext(UserContext);
 
+  async function handleOnConnectPressed(artistToConnect: Artist) {
+    // check first if there is a user - redirect to login if not
+    if (!userContext?.currentUser?.id) {
+      router.push({
+        pathname: '/login',
+        params: { returnToPath: `/artists/${artistToConnect.userId}` },
+      });
+    } else {
+      // create conversation
+      await conversationHandler(userContext.currentUser.id, artistToConnect);
+    }
+  }
+
   async function conversationHandler(
     userId: number,
     artistToStartConversationWith: Artist,
@@ -215,19 +228,7 @@ export default function SingleArtist() {
               <Button
                 style={styles.button}
                 onPress={async () => {
-                  // check first if there is a user - redirect to login if not
-                  if (!userContext?.currentUser?.id) {
-                    router.push({
-                      pathname: '/login',
-                      params: { returnToPath: `/artists/${artist.userId}` },
-                    });
-                  } else {
-                    // create conversation
-                    await conversationHandler(
-                      userContext.currentUser.id,
-                      artist,
-                    );
-                  }
+                  await handleOnConnectPressed(artist);
                 }}
                 mode="outlined"
                 textColor="white"
