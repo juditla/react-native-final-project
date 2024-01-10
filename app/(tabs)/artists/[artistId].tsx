@@ -8,6 +8,7 @@ import { Artist } from '../../../types';
 import { getSessionFromAsyncStorage } from '../../../util/session';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
+import RatingComponent from './RatingComponent';
 
 const styles = StyleSheet.create({
   container: {
@@ -105,8 +106,6 @@ export default function SingleArtist() {
   const { artistId } = useLocalSearchParams();
   const [artist, setArtist] = useState<Artist>();
   const userContext = useContext(UserContext);
-  const [rating, setRating] = useState(0);
-  const [ratingDisabled, setRatingDisabled] = useState(false);
 
   async function conversationHandler(
     userId: number,
@@ -133,34 +132,6 @@ export default function SingleArtist() {
       });
     } catch (error) {
       console.error(error);
-    }
-  }
-
-  async function ratingHandler() {
-    if (!userContext?.currentUser?.id) {
-      router.replace({
-        pathname: '/login',
-        params: { returnToPath: `/artists/${artist?.userId}` },
-      });
-    } else {
-      try {
-        const ratingResponse = await fetch(
-          `${apiDomain}/artists/ratings/${artist?.id}`,
-          {
-            headers: { 'Content-Type': 'application/json' },
-            method: 'POST',
-            body: JSON.stringify({
-              rating,
-              userId: userContext.currentUser.id,
-            }),
-          },
-        );
-        if (ratingResponse.ok) {
-          setRatingDisabled(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
     }
   }
 
@@ -280,37 +251,7 @@ export default function SingleArtist() {
             <Text style={styles.lowercaseText} variant="bodyLarge">
               Rate the artist
             </Text>
-            <View style={styles.rowContainer}>
-              {[...Array(5)].map((item, index) => {
-                return (
-                  <Button
-                    key={`value ${index + 1}`}
-                    onPress={() => setRating(index + 1)}
-                  >
-                    <Icon
-                      source={rating > index ? 'star' : 'star-outline'}
-                      size={20}
-                    />
-                  </Button>
-                );
-              })}
-            </View>
-            <View>
-              {rating > 0 && !ratingDisabled ? (
-                <Button
-                  mode="outlined"
-                  textColor="black"
-                  style={{ borderRadius: 10 }}
-                  onPress={async () => await ratingHandler()}
-                >
-                  Rate
-                </Button>
-              ) : (
-                <Button mode="outlined" textColor="black" disabled={true}>
-                  Rate
-                </Button>
-              )}
-            </View>
+            <RatingComponent setArtist={setArtist} artist={artist} />
           </View>
           <View style={styles.imageContainer}>
             <View style={styles.scrollView}>
@@ -321,7 +262,11 @@ export default function SingleArtist() {
                 return (
                   <View style={styles.imageContainer} key={`image-${image.id}`}>
                     <Image style={styles.image} source={image.picture} />
-                    <Divider horizontalInset={true} bold={true} />
+                    <RatingComponent
+                      artist={artist}
+                      setArtist={setArtist}
+                      tattooImage={image}
+                    />
                   </View>
                 );
               })}
