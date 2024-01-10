@@ -71,7 +71,7 @@ export default function LoginForm({ returnToPath }: Props) {
               'session',
               JSON.stringify({
                 sessionToken: data.token,
-                expiresAt: data.expiresAt,
+                expiresAt: data.expiryTimestamp,
               }),
             );
             if (userContext) {
