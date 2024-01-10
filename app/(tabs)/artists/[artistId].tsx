@@ -136,6 +136,34 @@ export default function SingleArtist() {
     }
   }
 
+  async function ratingHandler() {
+    if (!userContext?.currentUser?.id) {
+      router.replace({
+        pathname: '/login',
+        params: { returnToPath: `/artists/${artist?.userId}` },
+      });
+    } else {
+      try {
+        const ratingResponse = await fetch(
+          `${apiDomain}/artists/ratings/${artist?.id}`,
+          {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            body: JSON.stringify({
+              rating,
+              userId: userContext.currentUser.id,
+            }),
+          },
+        );
+        if (ratingResponse.ok) {
+          setRatingDisabled(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
   useEffect(() => {
     const getArtistByUserId = async () => {
       try {
@@ -272,6 +300,7 @@ export default function SingleArtist() {
                   mode="outlined"
                   textColor="black"
                   style={{ borderRadius: 10 }}
+                  onPress={async () => await ratingHandler()}
                 >
                   Rate
                 </Button>
