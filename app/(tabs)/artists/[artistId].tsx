@@ -105,6 +105,8 @@ export default function SingleArtist() {
   const { artistId } = useLocalSearchParams();
   const [artist, setArtist] = useState<Artist>();
   const userContext = useContext(UserContext);
+  const [rating, setRating] = useState(0);
+  const [ratingDisabled, setRatingDisabled] = useState(false);
 
   async function conversationHandler(
     userId: number,
@@ -244,6 +246,41 @@ export default function SingleArtist() {
             <Text variant="bodyLarge" style={styles.greyText}>
               {artist.description}
             </Text>
+          </View>
+          <View style={styles.contentContainer}>
+            <Text style={styles.lowercaseText} variant="bodyLarge">
+              Rate the artist
+            </Text>
+            <View style={styles.rowContainer}>
+              {[...Array(5)].map((item, index) => {
+                return (
+                  <Button
+                    key={`value ${index + 1}`}
+                    onPress={() => setRating(index + 1)}
+                  >
+                    <Icon
+                      source={rating > index ? 'star' : 'star-outline'}
+                      size={20}
+                    />
+                  </Button>
+                );
+              })}
+            </View>
+            <View>
+              {rating > 0 && !ratingDisabled ? (
+                <Button
+                  mode="outlined"
+                  textColor="black"
+                  style={{ borderRadius: 10 }}
+                >
+                  Rate
+                </Button>
+              ) : (
+                <Button mode="outlined" textColor="black" disabled={true}>
+                  Rate
+                </Button>
+              )}
+            </View>
           </View>
           <View style={styles.imageContainer}>
             <View style={styles.scrollView}>
