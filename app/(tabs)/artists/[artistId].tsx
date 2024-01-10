@@ -241,13 +241,14 @@ export default function SingleArtist() {
               <Button
                 style={styles.button}
                 onPress={async () => {
-                  // check first if there is a user
+                  // check first if there is a user - redirect to login if not
                   if (!userContext?.currentUser?.id) {
                     router.push({
                       pathname: '/login',
                       params: { returnToPath: `/artists/${artist.userId}` },
                     });
                   } else {
+                    // create conversation
                     await conversationHandler(
                       userContext.currentUser.id,
                       artist,
