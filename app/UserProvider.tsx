@@ -10,14 +10,14 @@ type CurrentUser = {
   id: number;
 };
 
-type UserContext = {
+type UserContextType = {
   currentUser: CurrentUser | null;
   updateUserForSession: (token: string, callback?: () => void) => void;
   setCurrentUser: (currentUser: CurrentUser | null) => void;
   isInitialLoadingFinished: boolean;
 };
 
-const UserContext = createContext<UserContext | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
 type Props = { children: ReactNode };
 
