@@ -24,6 +24,8 @@ export type Artist = {
     firstName: string;
   };
   studio?: Studio;
+  ratingAverage: number;
+  ratingCount: number;
 };
 
 export type User = {
