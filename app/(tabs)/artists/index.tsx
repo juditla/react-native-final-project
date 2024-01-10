@@ -28,24 +28,31 @@ const styles = StyleSheet.create({
 
 export default function Index() {
   const [artists, setArtists] = useState<Artist[]>([]);
-  const userContext = useContext(UserContext);
   const bottomTabHeight = useBottomTabBarHeight();
 
-  useEffect(() => {
-    const getArtists = async () => {
-      try {
-        const response = await fetch(apiDomain + '/artists');
-        const json = await response.json();
-        setArtists(json);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const getArtists = async () => {
+    try {
+      const response = await fetch(apiDomain + '/artists');
+      const json = await response.json();
+      setArtists(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  useEffect(() => {
     getArtists()
       .then()
       .catch((error) => error);
-  }, [userContext]);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getArtists()
+        .then()
+        .catch((error) => error);
+    }, []),
+  );
 
   return (
     <SafeAreaView style={styles.container}>
