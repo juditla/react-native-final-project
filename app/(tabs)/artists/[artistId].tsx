@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { Link, router, Stack, useLocalSearchParams } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Divider, Icon, Text } from 'react-native-paper';
+import { Button, Icon, Text } from 'react-native-paper';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { Artist } from '../../../types';
 import { getSessionFromAsyncStorage } from '../../../util/session';

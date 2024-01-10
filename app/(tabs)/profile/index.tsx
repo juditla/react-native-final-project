@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { ActivityIndicator, Text } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 import { Artist, User } from '../../../types';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';

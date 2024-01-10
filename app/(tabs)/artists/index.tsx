@@ -1,10 +1,9 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { router, Stack } from 'expo-router';
-import { useContext, useEffect, useState } from 'react';
+import { Stack, useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Icon, Text } from 'react-native-paper';
 import { Artist } from '../../../types';
-import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 import ArtistItem from './ArtistItem';
 

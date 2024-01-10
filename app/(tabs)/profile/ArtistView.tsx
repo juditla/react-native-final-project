@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Divider, Icon, Text } from 'react-native-paper';
 import { Artist } from '../../../types';
