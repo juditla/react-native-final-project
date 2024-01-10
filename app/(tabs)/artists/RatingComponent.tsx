@@ -80,6 +80,7 @@ export default function RatingComponent({
               key={`value ${index + 1}`}
               onPress={() => setRating(index + 1)}
               style={styles.buttonStyle}
+              disabled={ratingDisabled}
             >
               <Icon
                 source={rating > index ? 'star' : 'star-outline'}
