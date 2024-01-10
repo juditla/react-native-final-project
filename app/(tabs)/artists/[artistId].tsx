@@ -190,7 +190,9 @@ export default function SingleArtist() {
               </View>
               <View style={styles.rowContainer}>
                 <Icon size={20} source="star" />
-                <Text>rating.average (rating.count)</Text>
+                <Text>
+                  {artist.ratingAverage} ({artist.ratingCount})
+                </Text>
               </View>
             </View>
             <View style={styles.rowContainer}>
