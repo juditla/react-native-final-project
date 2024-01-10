@@ -78,9 +78,9 @@ export default function LoginForm({ returnToPath }: Props) {
               userContext.updateUserForSession(data.token, () => {
                 //
                 if (returnPathAfterLogin) {
-                  router.replace(returnPathAfterLogin);
+                  router.push(returnPathAfterLogin);
                 } else {
-                  router.replace(`/artists`);
+                  router.push(`/artists`);
                 }
               });
             }

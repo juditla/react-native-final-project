@@ -243,7 +243,7 @@ export default function SingleArtist() {
                 onPress={async () => {
                   // check first if there is a user
                   if (!userContext?.currentUser?.id) {
-                    router.replace({
+                    router.push({
                       pathname: '/login',
                       params: { returnToPath: `/artists/${artist.userId}` },
                     });
