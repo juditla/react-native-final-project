@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Icon } from 'react-native-paper';
 import { Artist, TattooImage } from '../../../types';
