@@ -45,7 +45,7 @@ export default function RatingComponent({
         // implement logic to rate image
       } else {
         try {
-          // API - post rating
+          // API - post artist rating
           const ratingResponse = await fetch(
             `${apiDomain}/artists/ratings/${artist.id}`,
             {
