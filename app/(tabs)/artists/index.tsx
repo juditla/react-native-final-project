@@ -40,12 +40,6 @@ export default function Index() {
     }
   };
 
-  useEffect(() => {
-    getArtists()
-      .then()
-      .catch((error) => error);
-  }, []);
-
   useFocusEffect(
     useCallback(() => {
       getArtists()
