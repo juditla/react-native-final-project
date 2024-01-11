@@ -143,7 +143,7 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
         }
       }
     } catch (error) {
-      router.push('/login');
+      router.replace('/login');
     }
   }
   return (
