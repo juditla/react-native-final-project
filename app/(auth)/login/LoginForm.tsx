@@ -34,13 +34,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function LoginForm() {
+type Props = {
+  returnToPath?: string | undefined;
+};
+
+export default function LoginForm({ returnToPath }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isError, setIsError] = useState(false);
   const userContext = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
+  const returnPathAfterLogin = returnToPath?.slice(1);
 
   async function handleLogin() {
     // input validation
@@ -66,13 +71,18 @@ export default function LoginForm() {
               'session',
               JSON.stringify({
                 sessionToken: data.token,
-                expiresAt: data.expiresAt,
+                expiresAt: data.expiryTimestamp,
               }),
             );
             if (userContext) {
-              userContext.updateUserForSession(data.token, () =>
-                router.replace(`/artists`),
-              );
+              userContext.updateUserForSession(data.token, () => {
+                //
+                if (returnPathAfterLogin) {
+                  router.push(returnPathAfterLogin);
+                } else {
+                  router.push(`/artists`);
+                }
+              });
             }
           } catch (error) {
             console.log(error);

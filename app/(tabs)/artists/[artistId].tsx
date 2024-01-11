@@ -2,12 +2,13 @@ import { Image } from 'expo-image';
 import { Link, router, Stack, useLocalSearchParams } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Divider, Icon, Text } from 'react-native-paper';
+import { Button, Icon, Text } from 'react-native-paper';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { Artist } from '../../../types';
 import { getSessionFromAsyncStorage } from '../../../util/session';
 import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
+import RatingComponent from './RatingComponent';
 
 const styles = StyleSheet.create({
   container: {
@@ -106,6 +107,19 @@ export default function SingleArtist() {
   const [artist, setArtist] = useState<Artist>();
   const userContext = useContext(UserContext);
 
+  async function handleOnConnectPressed(artistToConnect: Artist) {
+    // check first if there is a user - redirect to login if not
+    if (!userContext?.currentUser?.id) {
+      router.push({
+        pathname: '/login',
+        params: { returnToPath: `/artists/${artistToConnect.userId}` },
+      });
+    } else {
+      // create conversation
+      await conversationHandler(userContext.currentUser.id, artistToConnect);
+    }
+  }
+
   async function conversationHandler(
     userId: number,
     artistToStartConversationWith: Artist,
@@ -181,12 +195,21 @@ export default function SingleArtist() {
                 </Text>
               </View>
             </View>
-            <View>
+            <View style={styles.rowContainer}>
               <View>
                 <Text style={styles.lowercaseGrey} variant="bodyLarge">
                   Style
                 </Text>
                 <Text variant="bodyLarge">{artist.style.toLowerCase()}</Text>
+              </View>
+              <View style={styles.rowContainer}>
+                <Icon size={20} source="star" />
+                <Text>
+                  {artist.ratingAverage === 0
+                    ? 'no rating yet'
+                    : artist.ratingAverage}{' '}
+                  ({artist.ratingCount})
+                </Text>
               </View>
             </View>
             <View style={styles.rowContainer}>
@@ -205,10 +228,7 @@ export default function SingleArtist() {
               <Button
                 style={styles.button}
                 onPress={async () => {
-                  await conversationHandler(
-                    userContext!.currentUser!.id,
-                    artist,
-                  );
+                  await handleOnConnectPressed(artist);
                 }}
                 mode="outlined"
                 textColor="white"
@@ -231,6 +251,12 @@ export default function SingleArtist() {
               {artist.description}
             </Text>
           </View>
+          <View style={styles.contentContainer}>
+            <Text style={styles.lowercaseText} variant="bodyLarge">
+              Rate the artist
+            </Text>
+            <RatingComponent setArtist={setArtist} artist={artist} />
+          </View>
           <View style={styles.imageContainer}>
             <View style={styles.scrollView}>
               <Text variant="bodyLarge" style={styles.lowercaseHighlightText}>
@@ -240,7 +266,11 @@ export default function SingleArtist() {
                 return (
                   <View style={styles.imageContainer} key={`image-${image.id}`}>
                     <Image style={styles.image} source={image.picture} />
-                    <Divider horizontalInset={true} bold={true} />
+                    <RatingComponent
+                      artist={artist}
+                      setArtist={setArtist}
+                      tattooImage={image}
+                    />
                   </View>
                 );
               })}

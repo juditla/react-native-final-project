@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useContext, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { apiDomain } from '../../(tabs)/studios';
@@ -16,8 +16,9 @@ const styles = StyleSheet.create({
 
 export default function Login() {
   const userContext = useContext(UserContext);
-  // get session from async storage
+  const { returnToPath } = useLocalSearchParams();
 
+  // get session from async storage
   useEffect(() => {
     const getSessionFromAsyncStorage = async () => {
       const jsonSessionFromAsyncStorage = await AsyncStorage.getItem('session');
@@ -59,7 +60,7 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      <LoginForm />
+      <LoginForm returnToPath={returnToPath} />
     </View>
   );
 }

@@ -1,5 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Icon, Text } from 'react-native-paper';
 import { TattooImage } from '../../../types';

@@ -1,5 +1,5 @@
 import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Bubble, GiftedChat, IMessage, Time } from 'react-native-gifted-chat';
 import { User } from '../../../types';

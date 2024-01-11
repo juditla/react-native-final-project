@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Button, Icon, Text } from 'react-native-paper';
 import { Artist, User } from '../../../types';
+import UserContext from '../../UserProvider';
 import { apiDomain } from '../studios';
 import ArtistView from './ArtistView';
 
@@ -91,6 +92,7 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
       ? user.avatar
       : 'https://images.rawpixel.com/image_png_1300/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png',
   );
+  const userContext = useContext(UserContext);
 
   const handleUpload = async (base64Image: string, id: number) => {
     const response = await fetch(`${apiDomain}/users/profilepicture`, {
@@ -134,17 +136,14 @@ export default function ShowProfile({ user, artist, setIsEditing }: Props) {
           const error = await response.json();
           console.log(error);
         } else {
-          router.push('/login');
+          // delete session in AsyncStorage
+          await AsyncStorage.removeItem('session');
+          // set currentUser to null
+          userContext?.setCurrentUser(null);
         }
       }
     } catch (error) {
-      router.push('/login');
-    }
-    // delete session from AsyncStorage
-    try {
-      await AsyncStorage.removeItem('session');
-    } catch (error) {
-      return console.log('could not delete async storage');
+      router.replace('/login');
     }
   }
   return (

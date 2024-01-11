@@ -15,7 +15,7 @@ export const getSessionFromAsyncStorage = async () => {
     const session = JSON.parse(jsonSessionFromAsyncStorage);
     const now = Date.now();
     // check if token is still valid
-    if (Date.parse(session.expiresAt) > now) {
+    if (session.expiresAt > now) {
       return session.sessionToken;
     } else {
       // call delete session function if not valid but still in async storage
@@ -23,7 +23,6 @@ export const getSessionFromAsyncStorage = async () => {
       return undefined;
     }
   } else {
-    console.log('no valid session');
     return undefined;
   }
 };
