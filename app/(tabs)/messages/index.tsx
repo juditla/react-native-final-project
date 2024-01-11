@@ -107,7 +107,7 @@ export default function Index() {
         {conversations.length > 0 ? (
           conversations.map((item) => {
             const conversationPartner =
-              item.owner.id === userContext!.currentUser!.id
+              item.owner.id === userContext?.currentUser?.id
                 ? item.participant
                 : item.owner;
             return (
